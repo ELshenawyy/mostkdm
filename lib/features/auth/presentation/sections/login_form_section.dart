@@ -39,7 +39,7 @@ class _LoginFormSectionState extends State<LoginFormSection> {
       SizedBox(height: 14),
 
       Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(
             'هل نسيت كلمة المرور؟',

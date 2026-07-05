@@ -52,7 +52,7 @@ class _SignupFormSectionState extends State<SignupFormSection> {
       ),
       SizedBox(height: 14),
       Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text('هل أنت موافق على الشروط والأحكام؟',
               style: AppTextStyle.forgetPasswordStyle),

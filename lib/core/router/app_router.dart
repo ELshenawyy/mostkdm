@@ -5,6 +5,7 @@ import 'package:mostkdm/features/auth/presentation/view/login_view.dart';
 import 'package:mostkdm/features/auth/presentation/view/phone_otp.dart';
 import 'package:mostkdm/features/auth/presentation/view/signup_view.dart';
 import 'package:mostkdm/features/auth/presentation/view/otp_code_view.dart';
+import 'package:mostkdm/features/main/presentation/view/main_view.dart';
 import 'package:mostkdm/features/onBoarding/presentation/view/choose_access.dart';
 import 'package:mostkdm/features/onBoarding/presentation/view/splash_view.dart';
 
@@ -13,7 +14,7 @@ final appRouter = GoRouter(
   routes: [
     GoRoute(
       path: RouteNames.splash,
-      builder: (context, state) => const ChangePasswordView(),
+      builder: (context, state) => const MainView(),
     ),
     GoRoute(
       path: RouteNames.signup,
