@@ -38,4 +38,17 @@ abstract class AppTextStyle {
     fontWeight: FontWeight.w400,
     color: AppColors.textFieldLabel,
   );
+
+  static const TextStyle textBannerHeadline1 = TextStyle(
+    fontFamily: 'Cairo',
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+    color: AppColors.surface,
+  );
+    static const TextStyle textBannerHeadline2 = TextStyle(
+    fontFamily: 'Cairo',
+    fontSize: 14,
+    fontWeight: FontWeight.w700,
+    color: AppColors.surface,
+  );
 }

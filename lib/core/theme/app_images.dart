@@ -5,5 +5,7 @@ abstract class AppImages {
   static const String joinUsIcon = 'assets/icons/joinUsIcon.png';
     static const String shield = 'assets/icons/shield.png';
     static const String lock = 'assets/icons/lock.png';
+        static const String banner = 'assets/images/hand_camera.png';
+
 
 }
