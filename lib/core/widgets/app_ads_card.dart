@@ -37,20 +37,18 @@ class AppAdCard extends StatelessWidget {
           ),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(12),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(12),
                   ),
                   child: Image.asset(
                     image,
-                    width: double.infinity,
-                    height: 160,
-                    fit: BoxFit.cover,
+                    width: 310,
+                    height: 151,
                   ),
                 ),
                 Positioned(

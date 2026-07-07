@@ -39,7 +39,6 @@ class HomeView extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 110),
-
           HomeFeaturedAdsSection(),
         ],
       ),

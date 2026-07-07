@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
+import 'package:mostkdm/features/advertisement/presentation/view/advertisement_view.dart';
 import 'package:mostkdm/features/home/presentation/view/home_view.dart';
 import 'package:mostkdm/features/main/presentation/section/main_nav_bar_section.dart';
 
@@ -15,7 +16,7 @@ class _MainViewState extends State<MainView> {
 
   static const List<Widget> _pages = [
     HomeView(),
-    SizedBox(),
+    AdvertisementView(),
     SizedBox(),
     SizedBox(),
     SizedBox(),
