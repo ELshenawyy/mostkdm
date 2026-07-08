@@ -1,6 +1,6 @@
-// features/search/presentation/sections/search_results_section.dart
-
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/core/widgets/app_ads_card.dart';
 import 'package:mostkdm/core/theme/app_images.dart';
 import 'package:mostkdm/features/home/data/ads_model.dart';
@@ -50,6 +50,7 @@ class SearchResultsSection extends StatelessWidget {
         location: _results[i].location,
         date: _results[i].date,
         views: _results[i].views,
+        onTap: () => context.push(RouteNames.adsDetails, extra: _results[i]),
       ),
     );
   }

@@ -9,4 +9,5 @@ abstract class RouteNames {
   static const subCategory = '/subCategory';
   static const ads = '/ads';
   static const search = '/search';
+  static const adsDetails = '/adsDetails';
 }

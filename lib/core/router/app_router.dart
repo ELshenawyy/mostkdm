@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:mostkdm/core/router/router_names.dart';
+import 'package:mostkdm/features/advertisement/presentation/view/ads_datails_view.dart';
 import 'package:mostkdm/features/auth/presentation/view/change_password_view.dart';
 import 'package:mostkdm/features/auth/presentation/view/login_view.dart';
 import 'package:mostkdm/features/auth/presentation/view/phone_otp.dart';
@@ -59,6 +60,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: RouteNames.search,
       builder: (context, state) => SearchView(),
+    ),
+    GoRoute(
+      path: RouteNames.adsDetails,
+      builder: (context, state) => const AdsDatailsView(),
     ),
   ],
 );
