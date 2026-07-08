@@ -4,17 +4,15 @@ import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/core/widgets/app_search_field.dart';
 import 'package:mostkdm/features/search/presentation/widget/filter_bottom_sheet.dart';
 
-class HomeSearchSection extends StatelessWidget {
-  const HomeSearchSection({super.key});
+class SearchSection extends StatelessWidget {
+  const SearchSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: 12,
-      ),
+      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       child: AppSearchField(
-        style: AppSearchFieldStyle.dark,
+        style: AppSearchFieldStyle.light,
         onFieldTap: () => context.push(RouteNames.search),
         onFilterTap: () {
           showModalBottomSheet(

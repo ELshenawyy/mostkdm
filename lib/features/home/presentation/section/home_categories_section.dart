@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_images.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
@@ -28,18 +30,20 @@ class HomeCategoriesSection extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // header
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('التصنيفات', style: AppTextStyle.buttonText),
-              Text('عرض الكل',
-                  style: AppTextStyle.forgetPasswordStyle
+              GestureDetector(
+                child: Text(
+                  'عرض الكل',
+                  style: AppTextStyle.forgetPasswordStyle,
+                ),
+                onTap: () => context.push(RouteNames.categories),
               ),
             ],
           ),
           const SizedBox(height: 16),
-          // grid
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -52,7 +56,8 @@ class HomeCategoriesSection extends StatelessWidget {
             itemBuilder: (context, i) => CategoriesItemWidget(
               icon: _categories[i]['icon']!,
               label: _categories[i]['label']!,
-              onTap: () {},
+              onTap: () => context.push(RouteNames.subCategory,
+                  extra: _categories[i]['label']),
             ),
           ),
         ],

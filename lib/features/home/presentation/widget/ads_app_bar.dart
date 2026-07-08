@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
 
 class AdsAppBar extends StatelessWidget {
@@ -6,11 +8,13 @@ class AdsAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('الإعلانات المميزة', style: AppTextStyle.buttonText),
-        Text('عرض الكل', style: AppTextStyle.forgetPasswordStyle),
+        const Text('الإعلانات المميزة', style: AppTextStyle.buttonText),
+        GestureDetector(
+          onTap: () => context.push(RouteNames.ads),
+          child: Text('عرض الكل', style: AppTextStyle.forgetPasswordStyle)),
 
       ],
     );

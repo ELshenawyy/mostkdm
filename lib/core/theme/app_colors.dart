@@ -17,4 +17,6 @@ abstract class AppColors {
   static const ghostBtnBorder = Color(0xFFE5E7EB);
 
   static Color primaryHintColorWithOpacity = Color(0xFFF9FAFB).withAlpha(26);
+
+  static const Color errorColor = Color(0xFFF2DBC9);
 }

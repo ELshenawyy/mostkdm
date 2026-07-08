@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mostkdm/core/theme/app_images.dart';
 import 'package:mostkdm/core/widgets/app_ads_card.dart';
 import 'package:mostkdm/features/home/data/ads_model.dart';
-import 'package:mostkdm/features/home/presentation/widget/ads_app_bar.dart';
 
 class HomeFeaturedAdsSection extends StatelessWidget {
   static const _ads = [
@@ -36,10 +35,12 @@ class HomeFeaturedAdsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(
+        left: 16.0,
+        right: 16,
+      ),
       child: Column(
         children: [
-          AdsAppBar(),
           ListView.separated(
             itemCount: _ads.length,
             shrinkWrap: true,
@@ -56,7 +57,6 @@ class HomeFeaturedAdsSection extends StatelessWidget {
                 views: ad.views,
               );
             },
-            
           ),
         ],
       ),

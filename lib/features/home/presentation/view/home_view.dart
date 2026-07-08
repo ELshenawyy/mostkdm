@@ -5,6 +5,7 @@ import 'package:mostkdm/features/home/presentation/section/home_categories_secti
 import 'package:mostkdm/features/home/presentation/section/home_featured_ads_section.dart';
 import 'package:mostkdm/features/home/presentation/section/home_search_bar_section.dart';
 import 'package:mostkdm/features/home/presentation/section/home_top_bar_section.dart';
+import 'package:mostkdm/features/home/presentation/widget/ads_app_bar.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -39,6 +40,10 @@ class HomeView extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 110),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: AdsAppBar(),
+          ),
           HomeFeaturedAdsSection(),
         ],
       ),

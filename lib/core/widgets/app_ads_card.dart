@@ -25,10 +25,12 @@ class AppAdCard extends StatelessWidget {
   });
 
   @override
+
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(12),
