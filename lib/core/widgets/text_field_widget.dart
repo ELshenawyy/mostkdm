@@ -8,8 +8,10 @@ class AppTextField extends StatefulWidget {
   final bool isPassword;
   final IconData? suffixIcon;
   final String? hintText;
+  final Color? fillColor;
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
+  final int? maxLines;
 
   const AppTextField({
     super.key,
@@ -20,6 +22,8 @@ class AppTextField extends StatefulWidget {
     this.hintText,
     this.keyboardType = TextInputType.text,
     this.validator,
+    this.fillColor,
+    this.maxLines,
   });
 
   @override
@@ -40,6 +44,7 @@ class _AppTextFieldState extends State<AppTextField> {
         ),
         const SizedBox(height: 8),
         TextFormField(
+          maxLines: widget.maxLines,
           controller: widget.controller,
           obscureText: widget.isPassword && _obscure,
           keyboardType: widget.keyboardType,
@@ -47,6 +52,8 @@ class _AppTextFieldState extends State<AppTextField> {
           textAlign: TextAlign.right,
           validator: widget.validator,
           decoration: InputDecoration(
+            filled: true,
+            fillColor: widget.fillColor ?? AppColors.backgroundColor,
             hintText: widget.hintText,
             hintStyle: AppTextStyle.textFieldLabel
                 .copyWith(decoration: TextDecoration.none),
@@ -55,8 +62,8 @@ class _AppTextFieldState extends State<AppTextField> {
               horizontal: 14,
               vertical: 25,
             ),
-            suffixIcon:  Icon(
-             widget.suffixIcon,
+            suffixIcon: Icon(
+              widget.suffixIcon,
               color: AppColors.secondaryColor,
               size: 20,
             ),

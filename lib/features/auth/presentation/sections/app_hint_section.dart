@@ -1,9 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
+import 'package:mostkdm/core/theme/app_text_style.dart';
 
-class OtpHintSection extends StatelessWidget {
-  const OtpHintSection({super.key});
+class AppHintSection extends StatelessWidget {
+  const AppHintSection({super.key, required this.title});
+
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -16,16 +18,16 @@ class OtpHintSection extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          const Flexible(
-            child: Text(
-              'قد تستغرق الرسالة بضع دقائق للوصول، تحقق من مجلد الرسائل غير المرغوب فيها',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12, color: AppColors.secondaryColor),
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32.0),
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                style: AppTextStyle.textFieldHeader,
+              ),
             ),
           ),
-          const SizedBox(width: 8),
-          Icon(Icons.info_outline,
-              size: 16, color: AppColors.primaryColor.withValues(alpha: 0.8)),
         ],
       ),
     );

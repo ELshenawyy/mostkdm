@@ -26,7 +26,7 @@ class OtpActionsSection extends StatelessWidget {
             seconds: 55,
             onResend: () {},
           ),
-          OtpHintSection()
+          AppHintSection(title: "💡 قد تستغرق الرسالة بضع دقائق للوصول. تحقق من مجلد الرسائل غير المرغوب فيها",)
         ],
       ],
     );

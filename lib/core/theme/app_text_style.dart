@@ -14,6 +14,12 @@ abstract class AppTextStyle {
     fontWeight: FontWeight.w400,
     color: AppColors.textHintColor,
   );
+  static const TextStyle headline3 = TextStyle(
+    fontFamily: 'Cairo',
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: AppColors.secondaryColor,
+  );
   static const TextStyle buttonText = TextStyle(
     fontFamily: 'Cairo',
     fontSize: 15,

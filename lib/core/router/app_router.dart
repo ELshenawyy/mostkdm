@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:mostkdm/core/router/router_names.dart';
+import 'package:mostkdm/features/advertisement/presentation/view/add_ad_view.dart';
 import 'package:mostkdm/features/advertisement/presentation/view/ads_datails_view.dart';
 import 'package:mostkdm/features/auth/presentation/view/change_password_view.dart';
 import 'package:mostkdm/features/auth/presentation/view/login_view.dart';
@@ -65,5 +66,9 @@ final appRouter = GoRouter(
       path: RouteNames.adsDetails,
       builder: (context, state) => const AdsDatailsView(),
     ),
+    GoRoute(
+  path: RouteNames.addAd,
+  builder: (context, state) => const AddAdView(),
+),
   ],
 );
