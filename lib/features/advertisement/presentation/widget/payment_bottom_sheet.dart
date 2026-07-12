@@ -32,15 +32,16 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
           ),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(
               child: Text('إختيار وسيلة الدفع', style: AppTextStyle.headline1),
             ),
             const SizedBox(height: 8),
             Center(
-              child: Text('قم بإختيار وسيلة الدفع للإشتراك في الباقة',
-                  style: AppTextStyle.headline3),
+              child: Text(
+                'قم بإختيار وسيلة الدفع للإشتراك في الباقة',
+                style: AppTextStyle.headline3,
+              ),
             ),
             const SizedBox(height: 24),
             ...List.generate(
@@ -80,7 +81,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
             AppButton(
               label: 'دفع',
               onTap: () => Navigator.pop(context),
-              kind: AppButtonKind.secondary,
+              kind: AppButtonKind.primary,
             ),
             const SizedBox(height: 16),
           ],

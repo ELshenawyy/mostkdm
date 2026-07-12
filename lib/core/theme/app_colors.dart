@@ -19,4 +19,9 @@ abstract class AppColors {
   static Color primaryHintColorWithOpacity = Color(0xFFF9FAFB).withAlpha(26);
 
   static const Color errorColor = Color(0xFFF2DBC9);
+
+  static const Color errorIconColor = Color(0xFFFF0000);
+
+  
+
 }

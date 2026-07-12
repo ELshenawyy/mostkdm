@@ -5,7 +5,9 @@ import 'package:mostkdm/core/theme/app_text_style.dart';
 
 class LocalAppBar extends StatelessWidget {
   final String title;
-  const LocalAppBar({super.key, required this.title});
+  final IconData? icon;
+  final VoidCallback? onIconTap;
+  const LocalAppBar({super.key, required this.title, this.icon, this.onIconTap});
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +33,27 @@ class LocalAppBar extends StatelessWidget {
           ),
           const Spacer(),
           Text(title,
-          
               style: AppTextStyle.headline1
                   .copyWith(color: AppColors.secondaryColor, fontSize: 16)),
           const Spacer(),
+
+          if (icon != null)
+            GestureDetector(
+              onTap: onIconTap,
+              child: Container(
+                width: 34,
+                height: 34,
+                decoration: BoxDecoration(
+                  color: AppColors.textHintColor.withValues(alpha: 0.10),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  icon,
+                  color: AppColors.errorIconColor,
+                  size: 17.4,
+                ),
+              ),
+            ),
         ],
       ),
     );

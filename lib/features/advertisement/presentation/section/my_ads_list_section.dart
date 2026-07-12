@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mostkdm/core/router/router_names.dart';
+import 'package:mostkdm/core/theme/app_colors.dart';
+import 'package:mostkdm/core/widgets/AppConfirmBottomSheet.dart';
+import 'package:mostkdm/core/widgets/app_button.dart';
 import 'package:mostkdm/features/advertisement/data/ad_models.dart';
 import 'package:mostkdm/features/advertisement/data/dummy.dart';
 import 'package:mostkdm/features/advertisement/presentation/section/no_ads_section.dart';
-import 'package:mostkdm/features/advertisement/presentation/widget/delete_ad_bottom_sheet.dart';
-import 'package:mostkdm/features/advertisement/presentation/widget/edit_ad_bottom_sheet.dart';
 import 'package:mostkdm/features/advertisement/presentation/widget/my_ad_card.dart';
-
 
 class MyAdsListSection extends StatefulWidget {
   const MyAdsListSection({super.key});
@@ -32,7 +32,11 @@ class _MyAdsListSectionState extends State<MyAdsListSection> {
         clipBehavior: Clip.none,
         alignment: Alignment.topCenter,
         children: [
-          DeleteAdBottomSheet(
+          AppConfirmBottomSheet(
+            title: 'حذف الإعلان',
+            subtitle: 'هل أنت متأكد من أنك تريد حذف هذا الإعلان',
+            confirmLabel: 'حذف',
+            confirmKind: AppButtonKind.secondary,
             onConfirm: () => setState(() => _ads.removeAt(index)),
           ),
           Positioned(
@@ -45,8 +49,8 @@ class _MyAdsListSectionState extends State<MyAdsListSection> {
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
               ),
-              child: const Icon(Icons.delete_outline,
-                  color: Colors.red, size: 24),
+              child:
+                  const Icon(Icons.delete_outline, color: Colors.red, size: 24),
             ),
           ),
         ],
@@ -58,7 +62,8 @@ class _MyAdsListSectionState extends State<MyAdsListSection> {
     final isActive = _ads[index]['isActive'] as bool;
 
     if (isActive) {
-    context.push(RouteNames.addAd, extra: _ads[index]['ad'] as AdDetailsModel);
+      context.push(RouteNames.addAd,
+          extra: _ads[index]['ad'] as AdDetailsModel);
     } else {
       showModalBottomSheet(
         context: context,
@@ -68,7 +73,10 @@ class _MyAdsListSectionState extends State<MyAdsListSection> {
           clipBehavior: Clip.none,
           alignment: Alignment.topCenter,
           children: [
-            const EditAdBottomSheet(),
+            AppConfirmBottomSheet(
+              title: 'تعديل الإعلان',
+              subtitle: 'لا يمكنك تعديل هذا الإعلان لأنه موقوف',
+            ),
             Positioned(
               top: 0,
               child: Container(
@@ -77,8 +85,7 @@ class _MyAdsListSectionState extends State<MyAdsListSection> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
-                  border:
-                      Border.all(color: Colors.grey.withValues(alpha: 0.3)),
+                  border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
                 ),
                 child: const Icon(Icons.edit_outlined, size: 24),
               ),
@@ -102,8 +109,7 @@ class _MyAdsListSectionState extends State<MyAdsListSection> {
                   ad: _ads[i]['ad'] as AdDetailsModel,
                   isActive: _ads[i]['isActive'] as bool,
                   onToggle: () => setState(
-                    () => _ads[i]['isActive'] =
-                        !(_ads[i]['isActive'] as bool),
+                    () => _ads[i]['isActive'] = !(_ads[i]['isActive'] as bool),
                   ),
                   onDelete: () => _showDeleteSheet(i),
                   onEdit: () => _showEditSheet(i),

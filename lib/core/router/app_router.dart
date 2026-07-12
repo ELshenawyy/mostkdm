@@ -13,6 +13,7 @@ import 'package:mostkdm/features/home/presentation/view/ads_view.dart';
 import 'package:mostkdm/features/home/presentation/view/categories_view.dart';
 import 'package:mostkdm/features/home/presentation/view/sub_category_view.dart';
 import 'package:mostkdm/features/main/presentation/view/main_view.dart';
+import 'package:mostkdm/features/notification/presentation/view/notification_view.dart';
 import 'package:mostkdm/features/onBoarding/presentation/view/choose_access.dart';
 import 'package:mostkdm/features/onBoarding/presentation/view/splash_view.dart';
 import 'package:mostkdm/features/search/presentation/view/search_view.dart';
@@ -72,6 +73,11 @@ final appRouter = GoRouter(
       path: RouteNames.addAd,
       builder: (context, state) => AddAdView(
         ad: state.extra as AdDetailsModel?,
+      ),
+    ),
+    GoRoute(
+      path: RouteNames.showNotification,
+      builder: (context, state) => NotificationsView(
       ),
     ),
   ],
