@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
+import 'package:mostkdm/features/advertisement/data/ad_models.dart';
 import 'package:mostkdm/features/auth/presentation/sections/app_hint_section.dart';
 
 class CategoryLocationSection extends StatefulWidget {
-  const CategoryLocationSection({super.key});
+    final AdDetailsModel? ad;
+
+  const CategoryLocationSection({super.key, this.ad});
 
   @override
   State<CategoryLocationSection> createState() =>
@@ -15,6 +18,16 @@ class _CategoryLocationSectionState extends State<CategoryLocationSection> {
   String? _mainCategory;
   String? _subCategory;
   String? _city;
+
+  @override
+void initState() {
+  super.initState();
+  if (widget.ad != null) {
+    _city = widget.ad!.city;
+  }
+}
+
+  
 
   Widget _buildDropdown(
     String label,

@@ -2,16 +2,27 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
+import 'package:mostkdm/features/advertisement/data/ad_models.dart';
 import 'package:mostkdm/features/auth/presentation/sections/app_hint_section.dart';
 
 class AddImagesSection extends StatefulWidget {
-  const AddImagesSection({super.key});
+  final AdDetailsModel? ad;
+  const AddImagesSection({super.key, this.ad});
 
   @override
   State<AddImagesSection> createState() => _AddImagesSectionState();
 }
 
 class _AddImagesSectionState extends State<AddImagesSection> {
+  List<String> _images = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.ad != null) {
+      _images = List.from(widget.ad!.images);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +36,7 @@ class _AddImagesSectionState extends State<AddImagesSection> {
           child: DottedBorder(
             color: AppColors.secondaryColor.withValues(alpha: .3),
             strokeWidth: 1.5,
-            dashPattern: const [8, 4], 
+            dashPattern: const [8, 4],
             borderType: BorderType.RRect,
             radius: const Radius.circular(12),
             child: Container(

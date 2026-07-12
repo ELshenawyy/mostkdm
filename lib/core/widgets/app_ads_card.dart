@@ -11,6 +11,7 @@ class AppAdCard extends StatelessWidget {
   final String views;
   final VoidCallback? onTap;
   final VoidCallback? onFavTap;
+  final Widget? bottomWidget;
 
   const AppAdCard({
     super.key,
@@ -22,15 +23,14 @@ class AppAdCard extends StatelessWidget {
     required this.views,
     this.onTap,
     this.onFavTap,
+    this.bottomWidget,
   });
 
   @override
-
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(12),
@@ -44,13 +44,12 @@ class AppAdCard extends StatelessWidget {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(12),
-                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
                   child: Image.asset(
                     image,
-                    width: 310,
+                    width: double.infinity,
                     height: 151,
+                    fit: BoxFit.cover,
                   ),
                 ),
                 Positioned(
@@ -66,8 +65,8 @@ class AppAdCard extends StatelessWidget {
                   bottom: 8,
                   left: 8,
                   child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
                       color: AppColors.secondaryColor,
                       borderRadius: BorderRadius.circular(8),
@@ -91,7 +90,6 @@ class AppAdCard extends StatelessWidget {
                   Row(
                     children: [
                       Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
@@ -104,16 +102,14 @@ class AppAdCard extends StatelessWidget {
                               const Icon(Icons.location_on_outlined,
                                   size: 20, color: AppColors.primaryColor),
                               const SizedBox(width: 4),
-                              Text(
-                                location,
-                                style: AppTextStyle.textFieldLabel
-                                    .copyWith(fontSize: 12),
-                              ),
+                              Text(location,
+                                  style: AppTextStyle.textFieldLabel
+                                      .copyWith(fontSize: 12)),
                             ],
                           ),
                         ],
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Column(
                         children: [
                           Row(
@@ -121,11 +117,9 @@ class AppAdCard extends StatelessWidget {
                               const Icon(Icons.access_time,
                                   size: 20, color: AppColors.primaryColor),
                               const SizedBox(width: 4),
-                              Text(
-                                date,
-                                style: AppTextStyle.textFieldLabel
-                                    .copyWith(fontSize: 12),
-                              ),
+                              Text(date,
+                                  style: AppTextStyle.textFieldLabel
+                                      .copyWith(fontSize: 12)),
                             ],
                           ),
                           Row(
@@ -133,11 +127,9 @@ class AppAdCard extends StatelessWidget {
                               const Icon(Icons.remove_red_eye_outlined,
                                   size: 20, color: AppColors.primaryColor),
                               const SizedBox(width: 4),
-                              Text(
-                                views,
-                                style: AppTextStyle.textFieldLabel
-                                    .copyWith(fontSize: 12),
-                              ),
+                              Text(views,
+                                  style: AppTextStyle.textFieldLabel
+                                      .copyWith(fontSize: 12)),
                             ],
                           ),
                         ],
@@ -147,6 +139,14 @@ class AppAdCard extends StatelessWidget {
                 ],
               ),
             ),
+            // bottomWidget
+            if (bottomWidget != null) ...[
+              const Divider(height: 1),
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: bottomWidget!,
+              ),
+            ],
           ],
         ),
       ),

@@ -1,13 +1,14 @@
-// features/add_ad/presentation/sections/contact_methods_section.dart
-
 import 'package:flutter/material.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
 import 'package:mostkdm/core/widgets/text_field_widget.dart';
+import 'package:mostkdm/features/advertisement/data/ad_models.dart';
 import 'package:mostkdm/features/auth/presentation/sections/app_hint_section.dart';
 
 class ContactMethodsSection extends StatefulWidget {
-  const ContactMethodsSection({super.key});
+    final AdDetailsModel? ad;
+
+  const ContactMethodsSection({super.key, this.ad});
 
   @override
   State<ContactMethodsSection> createState() => _ContactMethodsSectionState();
@@ -18,6 +19,15 @@ class _ContactMethodsSectionState extends State<ContactMethodsSection> {
   bool _messages = false;
   bool _calls = false;
   final _phoneController = TextEditingController();
+
+  @override
+void initState() {
+  super.initState();
+  if (widget.ad != null) {
+    // لما يبقى عندك phone في الـ model
+    // _phoneController.text = widget.ad!.phone;
+  }
+}
 
   @override
   void dispose() {

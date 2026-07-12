@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mostkdm/core/widgets/app_button.dart';
+import 'package:mostkdm/features/advertisement/data/ad_models.dart';
 import 'package:mostkdm/features/advertisement/presentation/section/add_images_section.dart';
 import 'package:mostkdm/features/advertisement/presentation/section/basic_info_section.dart';
 import 'package:mostkdm/features/advertisement/presentation/section/category_location_section.dart';
@@ -8,7 +10,8 @@ import 'package:mostkdm/features/advertisement/presentation/section/subscription
 import 'package:mostkdm/features/advertisement/presentation/widget/step_indicator.dart';
 
 class AddAdStepperSection extends StatefulWidget {
-  const AddAdStepperSection({super.key});
+  final AdDetailsModel? ad;
+  const AddAdStepperSection({super.key, this.ad});
 
   @override
   State<AddAdStepperSection> createState() => _AddAdStepperSectionState();
@@ -51,8 +54,10 @@ class _AddAdStepperSectionState extends State<AddAdStepperSection> {
         Padding(
           padding: const EdgeInsets.all(16),
           child: AppButton(
-            label: 'التالي',
-            onTap: _nextStep,
+            label: _currentStep == _totalSteps ? 'حفظ' : 'التالي', 
+            onTap: _currentStep == _totalSteps
+                ? () => context.pop() 
+                : _nextStep,
             kind: AppButtonKind.secondary,
           ),
         ),
