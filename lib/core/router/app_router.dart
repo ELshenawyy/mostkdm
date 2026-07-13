@@ -8,6 +8,8 @@ import 'package:mostkdm/features/auth/presentation/view/login_view.dart';
 import 'package:mostkdm/features/auth/presentation/view/phone_otp.dart';
 import 'package:mostkdm/features/auth/presentation/view/signup_view.dart';
 import 'package:mostkdm/features/auth/presentation/view/otp_code_view.dart';
+import 'package:mostkdm/features/chat/data/models/chat_model.dart';
+import 'package:mostkdm/features/chat/presentation/view/chat_details_view.dart';
 import 'package:mostkdm/features/home/presentation/section/home_featured_ads_section.dart';
 import 'package:mostkdm/features/home/presentation/view/ads_view.dart';
 import 'package:mostkdm/features/home/presentation/view/categories_view.dart';
@@ -68,7 +70,7 @@ final appRouter = GoRouter(
       path: RouteNames.adsDetails,
       builder: (context, state) => const AdsDatailsView(),
     ),
-  
+
     GoRoute(
       path: RouteNames.addAd,
       builder: (context, state) => AddAdView(
@@ -77,7 +79,12 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: RouteNames.showNotification,
-      builder: (context, state) => NotificationsView(
+      builder: (context, state) => NotificationsView(),
+    ),
+    GoRoute(
+      path: RouteNames.chatDetails,
+      builder: (context, state) => ChatDetailsView(
+        chat: state.extra as ChatModel,
       ),
     ),
   ],
