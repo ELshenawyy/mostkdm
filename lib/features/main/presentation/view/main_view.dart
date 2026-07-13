@@ -9,6 +9,7 @@ import 'package:mostkdm/features/chat/presentation/view/chat_view.dart';
 import 'package:mostkdm/features/home/presentation/view/ads_view.dart';
 import 'package:mostkdm/features/home/presentation/view/home_view.dart';
 import 'package:mostkdm/features/main/presentation/section/main_nav_bar_section.dart';
+import 'package:mostkdm/features/settings/presentation/view/more_view.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -25,7 +26,7 @@ class _MainViewState extends State<MainView> {
     MyAdsView(),
     SizedBox(),
     ChatsView(),
-        SizedBox(),
+        MoreView(),
 
   ];
 

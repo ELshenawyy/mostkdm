@@ -14,4 +14,8 @@ abstract class RouteNames {
 
   static const showNotification = '/showNotification';
   static const chatDetails = '/chatDetails';
+
+static const more = '/more';
+static const profile = '/profile';
+static const editProfile = '/editProfile';
 }

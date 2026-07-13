@@ -19,6 +19,9 @@ import 'package:mostkdm/features/notification/presentation/view/notification_vie
 import 'package:mostkdm/features/onBoarding/presentation/view/choose_access.dart';
 import 'package:mostkdm/features/onBoarding/presentation/view/splash_view.dart';
 import 'package:mostkdm/features/search/presentation/view/search_view.dart';
+import 'package:mostkdm/features/settings/presentation/view/edit_profile_view.dart';
+import 'package:mostkdm/features/settings/presentation/view/more_view.dart';
+import 'package:mostkdm/features/settings/presentation/view/profile_view.dart';
 
 final appRouter = GoRouter(
   initialLocation: RouteNames.splash,
@@ -87,5 +90,19 @@ final appRouter = GoRouter(
         chat: state.extra as ChatModel,
       ),
     ),
+
+    // app_router.dart
+GoRoute(
+  path: RouteNames.more,
+  builder: (context, state) => const MoreView(),
+),
+GoRoute(
+  path: RouteNames.profile,
+  builder: (context, state) => const ProfileView(),
+),
+GoRoute(
+  path: RouteNames.editProfile,
+  builder: (context, state) => const EditProfileView(),
+),
   ],
 );

@@ -7,10 +7,22 @@ class LocalAppBar extends StatelessWidget {
   final String title;
   final IconData? icon;
   final VoidCallback? onIconTap;
-  const LocalAppBar({super.key, required this.title, this.icon, this.onIconTap});
+  final bool isLight;
+  const LocalAppBar({
+    super.key,
+    required this.title,
+    this.icon,
+    this.onIconTap,  this.isLight = false,
+  });
 
   @override
-  Widget build(BuildContext context) {
+ Widget build(BuildContext context) {
+    final textColor = isLight ? AppColors.surface : AppColors.secondaryColor;
+    final iconBgColor = isLight
+        ? AppColors.surface.withValues(alpha: 0.15)
+        : AppColors.textHintColor.withValues(alpha: 0.10);
+    final iconColor = isLight ? AppColors.surface : AppColors.secondaryColor;
+
     return Padding(
       padding: const EdgeInsets.only(top: 12, left: 16, right: 16),
       child: Row(
@@ -21,12 +33,12 @@ class LocalAppBar extends StatelessWidget {
               width: 34,
               height: 34,
               decoration: BoxDecoration(
-                color: AppColors.textHintColor.withValues(alpha: 0.10),
+                color: iconBgColor,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.arrow_back_outlined,
-                color: AppColors.secondaryColor,
+                color: iconColor,
                 size: 17.4,
               ),
             ),
@@ -34,9 +46,8 @@ class LocalAppBar extends StatelessWidget {
           const Spacer(),
           Text(title,
               style: AppTextStyle.headline1
-                  .copyWith(color: AppColors.secondaryColor, fontSize: 16)),
+                  .copyWith(color: textColor, fontSize: 16)),
           const Spacer(),
-
           if (icon != null)
             GestureDetector(
               onTap: onIconTap,
@@ -44,7 +55,7 @@ class LocalAppBar extends StatelessWidget {
                 width: 34,
                 height: 34,
                 decoration: BoxDecoration(
-                  color: AppColors.textHintColor.withValues(alpha: 0.10),
+                  color: iconBgColor,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
