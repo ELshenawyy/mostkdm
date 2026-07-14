@@ -27,7 +27,7 @@ class MoreListSection extends StatelessWidget {
         MoreItem(
           title: 'المحفظة',
           icon: Icons.wallet_outlined,
-          onTap: () {},
+          onTap: () => context.push(RouteNames.wallet),
           subtitle: 'عرض المحفظة',
         ),
         const SizedBox(height: 8),

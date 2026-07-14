@@ -18,4 +18,9 @@ abstract class RouteNames {
 static const more = '/more';
 static const profile = '/profile';
 static const editProfile = '/editProfile';
+
+static const wallet = '/wallet';
+static const bankAccount = '/bankAccount';
+
+
 }

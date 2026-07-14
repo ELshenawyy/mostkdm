@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/features/settings/presentation/widgets/profile_state_item.dart';
 
 class ProfileStatsSection extends StatelessWidget {

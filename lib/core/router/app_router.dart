@@ -22,6 +22,9 @@ import 'package:mostkdm/features/search/presentation/view/search_view.dart';
 import 'package:mostkdm/features/settings/presentation/view/edit_profile_view.dart';
 import 'package:mostkdm/features/settings/presentation/view/more_view.dart';
 import 'package:mostkdm/features/settings/presentation/view/profile_view.dart';
+import 'package:mostkdm/features/wallet/presentation/view/bank_account_view.dart';
+
+import 'package:mostkdm/features/wallet/presentation/view/wallet_view.dart';
 
 final appRouter = GoRouter(
   initialLocation: RouteNames.splash,
@@ -104,5 +107,14 @@ GoRoute(
   path: RouteNames.editProfile,
   builder: (context, state) => const EditProfileView(),
 ),
+GoRoute(
+  path: RouteNames.wallet,
+  builder: (context, state) => const WalletView(),
+),
+GoRoute(
+  path: RouteNames.bankAccount,
+  builder: (context, state) => const BankAccountView(),
+),
+
   ],
 );
