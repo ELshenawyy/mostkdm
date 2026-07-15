@@ -34,7 +34,7 @@ class MoreListSection extends StatelessWidget {
         MoreItem(
           title: 'الباقات والإشتراكات',
           icon: Icons.card_membership_outlined,
-          onTap: () {},
+          onTap: () => context.push(RouteNames.subscriptions),
           subtitle: 'إشترك فى باقة مميزة',
         ),
         const SizedBox(height: 8),

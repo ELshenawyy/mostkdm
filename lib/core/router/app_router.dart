@@ -22,6 +22,8 @@ import 'package:mostkdm/features/search/presentation/view/search_view.dart';
 import 'package:mostkdm/features/settings/presentation/view/edit_profile_view.dart';
 import 'package:mostkdm/features/settings/presentation/view/more_view.dart';
 import 'package:mostkdm/features/settings/presentation/view/profile_view.dart';
+import 'package:mostkdm/features/subscription/presentation/view/package_details_view.dart';
+import 'package:mostkdm/features/subscription/presentation/view/subscriptions_view.dart';
 import 'package:mostkdm/features/wallet/presentation/view/bank_account_view.dart';
 
 import 'package:mostkdm/features/wallet/presentation/view/wallet_view.dart';
@@ -114,6 +116,19 @@ GoRoute(
 GoRoute(
   path: RouteNames.bankAccount,
   builder: (context, state) => const BankAccountView(),
+),
+GoRoute(
+  path: RouteNames.subscriptions,
+  builder: (context, state) => const SubscriptionsView(),
+),
+GoRoute(
+  path: RouteNames.packageDetails,
+  builder: (context, state) => PackageDetailsView(
+    isActive: (state.extra ?? false) as bool,
+
+  ),
+
+  
 ),
 
   ],

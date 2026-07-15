@@ -22,5 +22,8 @@ static const editProfile = '/editProfile';
 static const wallet = '/wallet';
 static const bankAccount = '/bankAccount';
 
+static const subscriptions = '/subscriptions';
+static const packageDetails = '/packageDetails';
+
 
 }
