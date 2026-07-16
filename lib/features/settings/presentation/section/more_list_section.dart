@@ -3,6 +3,7 @@ import 'package:mostkdm/core/router/router_names.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
+import 'package:mostkdm/features/policies/data/policy_data.dart';
 import 'package:mostkdm/features/settings/presentation/widgets/more_item.dart';
 
 class MoreListSection extends StatelessWidget {
@@ -41,7 +42,7 @@ class MoreListSection extends StatelessWidget {
         MoreItem(
           title: 'المفضلة والمتابعة',
           icon: Icons.favorite_outline,
-          onTap: ()=> context.push(RouteNames.favorites),
+          onTap: () => context.push(RouteNames.favorites),
           subtitle: 'عرض المفضلة والمتابعة',
         ),
         const SizedBox(height: 16),
@@ -61,9 +62,23 @@ class MoreListSection extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         MoreItem(
-          title: 'الشروط & السياسة',
-          icon: Icons.description_outlined,
-          onTap: () {},
+          title: 'سياسة الخصوصية',
+          icon: Icons.privacy_tip_outlined,
+          onTap: () => context.push(RouteNames.policy, extra: {
+            'title': PolicyData.privacyPolicyTitle,
+            'content': PolicyData.privacyPolicyContent,
+            'icon': PolicyData.privacyPolicyIcon
+          }),
+        ),
+        const SizedBox(height: 8),
+        MoreItem(
+          title: 'شروط الاستخدام',
+          icon: Icons.article_outlined,
+          onTap: () => context.push(RouteNames.policy, extra: {
+            'title': PolicyData.termsOfUseTitle,
+            'content': PolicyData.termsOfUseContent,
+            'icon': PolicyData.termsOfUseIcon
+          }),
         ),
         const SizedBox(height: 8),
         MoreItem(

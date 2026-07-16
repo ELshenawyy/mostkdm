@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/features/advertisement/data/ad_models.dart';
@@ -23,6 +24,7 @@ import 'package:mostkdm/features/onBoarding/presentation/view/splash_view.dart';
 import 'package:mostkdm/features/search/presentation/view/search_view.dart';
 import 'package:mostkdm/features/settings/presentation/view/edit_profile_view.dart';
 import 'package:mostkdm/features/settings/presentation/view/more_view.dart';
+import 'package:mostkdm/features/policies/presentation/policy_view.dart';
 import 'package:mostkdm/features/settings/presentation/view/profile_view.dart';
 import 'package:mostkdm/features/subscription/presentation/view/package_details_view.dart';
 import 'package:mostkdm/features/subscription/presentation/view/subscriptions_view.dart';
@@ -146,5 +148,17 @@ final appRouter = GoRouter(
       path: RouteNames.commission,
       builder: (context, state) => const CommissionView(),
     ),
+    GoRoute(
+  path: RouteNames.policy,
+  builder: (context, state) {
+    final args = state.extra as Map<String, dynamic>;
+    return PolicyView(
+      title: args['title'] as String,
+      content: args['content'] as String,
+      icon: args['icon'] as String,
+    );
+  },
+),
+    
   ],
 );

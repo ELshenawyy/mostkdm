@@ -29,5 +29,7 @@ static const favorites = '/favorites';
 
 static const commission = '/commission';
 
+static const policy = '/policy';
+
 
 }
