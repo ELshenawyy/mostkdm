@@ -3,7 +3,11 @@ abstract class RouteNames {
   static const chooseAccess = '/chooseAccess';
   static const login = '/login';
   static const signup = '/signup';
-  static const phoneOtp = '/otp';
+  static const forgetPassword = '/otp';
+  static const sendotp = '/sendotp';
+
+  static const changePassword = '/changePassword';
+
   static const mainView = '/mainView';
   static const categories = '/categories';
   static const subCategory = '/subCategory';
@@ -15,21 +19,19 @@ abstract class RouteNames {
   static const showNotification = '/showNotification';
   static const chatDetails = '/chatDetails';
 
-static const more = '/more';
-static const profile = '/profile';
-static const editProfile = '/editProfile';
+  static const more = '/more';
+  static const profile = '/profile';
+  static const editProfile = '/editProfile';
 
-static const wallet = '/wallet';
-static const bankAccount = '/bankAccount';
+  static const wallet = '/wallet';
+  static const bankAccount = '/bankAccount';
 
-static const subscriptions = '/subscriptions';
-static const packageDetails = '/packageDetails';
-static const notifications = '/notifications';
-static const favorites = '/favorites';
+  static const subscriptions = '/subscriptions';
+  static const packageDetails = '/packageDetails';
+  static const notifications = '/notifications';
+  static const favorites = '/favorites';
 
-static const commission = '/commission';
+  static const commission = '/commission';
 
-static const policy = '/policy';
-
-
+  static const policy = '/policy';
 }

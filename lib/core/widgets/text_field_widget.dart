@@ -45,7 +45,7 @@ class _AppTextFieldState extends State<AppTextField> {
         ),
         const SizedBox(height: 8),
         TextFormField(
-          maxLines: widget.maxLines,
+          maxLines:  widget.isPassword ? 1 : widget.maxLines,
           controller: widget.controller,
           obscureText: widget.isPassword && _obscure,
           keyboardType: widget.keyboardType,

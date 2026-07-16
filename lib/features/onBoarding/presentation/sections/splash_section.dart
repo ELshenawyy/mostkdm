@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/core/theme/app_images.dart';
 import 'package:mostkdm/features/onBoarding/presentation/widgets/feature_card.dart';
 
@@ -11,6 +15,13 @@ class SplashSection extends StatefulWidget {
 
 class _SplashSectionState extends State<SplashSection> {
   @override
+  void initState() {
+    super.initState();
+    Timer(const Duration(seconds: 3), () {
+      if (mounted) context.go(RouteNames.chooseAccess);
+    });
+  }
+
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
       Image.asset(
@@ -22,18 +33,18 @@ class _SplashSectionState extends State<SplashSection> {
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: const [
-          FeatureCard(icon: Icons.bolt_outlined, title: 'سرعة وأداء'),
-          SizedBox(width: 8),
           FeatureCard(icon: Icons.shield_outlined, title: 'أمان موثوق'),
+          SizedBox(width: 8),
+          FeatureCard(icon: Icons.bolt_outlined, title: 'سرعة وأداء'),
         ],
       ),
       SizedBox(height: 8),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: const [
-          FeatureCard(icon: Icons.star_outline, title: 'جودة عالية'),
-          SizedBox(width: 8),
           FeatureCard(icon: Icons.trending_down, title: 'أفضل الأسعار'),
+          SizedBox(width: 8),
+          FeatureCard(icon: Icons.star_outline, title: 'جودة عالية'),
         ],
       ),
     ]);

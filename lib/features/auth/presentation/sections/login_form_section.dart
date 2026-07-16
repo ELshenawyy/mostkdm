@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
 import 'package:mostkdm/core/widgets/text_field_widget.dart';
 
@@ -41,9 +43,12 @@ class _LoginFormSectionState extends State<LoginFormSection> {
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text(
-            'هل نسيت كلمة المرور؟',
-            style: AppTextStyle.forgetPasswordStyle
+          GestureDetector(
+            onTap: () => context.go(RouteNames.forgetPassword),
+            child: Text(
+              'هل نسيت كلمة المرور؟',
+              style: AppTextStyle.forgetPasswordStyle
+            ),
           ),
         ],
       )

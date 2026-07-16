@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+
 import 'package:go_router/go_router.dart';
 import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/features/advertisement/data/ad_models.dart';
@@ -37,7 +37,7 @@ final appRouter = GoRouter(
   routes: [
     GoRoute(
       path: RouteNames.splash,
-      builder: (context, state) => const MainView(),
+      builder: (context, state) => const SplashView(),
     ),
     GoRoute(
       path: RouteNames.signup,
@@ -51,11 +51,21 @@ final appRouter = GoRouter(
       path: RouteNames.chooseAccess,
       builder: (context, state) => const ChooseAccess(),
     ),
-    // app_router.dart
     GoRoute(
-      path: RouteNames.phoneOtp,
+      path: RouteNames.forgetPassword,
+      builder: (context, state) => const PhoneOtp(),
+    ),
+    
+    GoRoute(
+      path: RouteNames.sendotp,
       builder: (context, state) => const OtpcodeView(),
     ),
+    
+    GoRoute(
+      path: RouteNames.changePassword,
+      builder: (context, state) => const ChangePasswordView(),
+    ),
+
     GoRoute(
       path: RouteNames.categories,
       builder: (context, state) => const CategoriesView(),

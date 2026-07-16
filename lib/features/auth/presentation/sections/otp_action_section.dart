@@ -1,5 +1,7 @@
 // otp_action_section.dart
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/core/widgets/app_button.dart';
 import 'package:mostkdm/features/auth/presentation/sections/app_hint_section.dart';
 import 'package:mostkdm/features/auth/presentation/widgets/app_resend_timer.dart';
@@ -14,7 +16,7 @@ class OtpActionsSection extends StatelessWidget {
       children: [
         AppButton(
           label: 'تحقق',
-          onTap: () {},
+          onTap: () => context.go(RouteNames.changePassword),
           kind: isCompleted ? AppButtonKind.secondary : AppButtonKind.ghost,
           icon: isCompleted ? null : Icons.shield_outlined,
           
