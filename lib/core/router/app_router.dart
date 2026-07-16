@@ -10,6 +10,8 @@ import 'package:mostkdm/features/auth/presentation/view/signup_view.dart';
 import 'package:mostkdm/features/auth/presentation/view/otp_code_view.dart';
 import 'package:mostkdm/features/chat/data/models/chat_model.dart';
 import 'package:mostkdm/features/chat/presentation/view/chat_details_view.dart';
+import 'package:mostkdm/features/commission/presentation/view/commission_view.dart';
+import 'package:mostkdm/features/favorite/presentation/view/favorites_view.dart';
 import 'package:mostkdm/features/home/presentation/section/home_featured_ads_section.dart';
 import 'package:mostkdm/features/home/presentation/view/ads_view.dart';
 import 'package:mostkdm/features/home/presentation/view/categories_view.dart';
@@ -76,7 +78,13 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: RouteNames.adsDetails,
-      builder: (context, state) => const AdsDatailsView(),
+      builder: (context, state) {
+        final adId = state.extra as String;
+
+        return AdsDatailsView(
+          adId: adId,
+        );
+      },
     ),
 
     GoRoute(
@@ -97,39 +105,46 @@ final appRouter = GoRouter(
     ),
 
     // app_router.dart
-GoRoute(
-  path: RouteNames.more,
-  builder: (context, state) => const MoreView(),
-),
-GoRoute(
-  path: RouteNames.profile,
-  builder: (context, state) => const ProfileView(),
-),
-GoRoute(
-  path: RouteNames.editProfile,
-  builder: (context, state) => const EditProfileView(),
-),
-GoRoute(
-  path: RouteNames.wallet,
-  builder: (context, state) => const WalletView(),
-),
-GoRoute(
-  path: RouteNames.bankAccount,
-  builder: (context, state) => const BankAccountView(),
-),
-GoRoute(
-  path: RouteNames.subscriptions,
-  builder: (context, state) => const SubscriptionsView(),
-),
-GoRoute(
-  path: RouteNames.packageDetails,
-  builder: (context, state) => PackageDetailsView(
-    isActive: (state.extra ?? false) as bool,
+    GoRoute(
+      path: RouteNames.more,
+      builder: (context, state) => const MoreView(),
+    ),
+    GoRoute(
+      path: RouteNames.profile,
+      builder: (context, state) => const ProfileView(),
+    ),
+    GoRoute(
+      path: RouteNames.editProfile,
+      builder: (context, state) => const EditProfileView(),
+    ),
+    GoRoute(
+      path: RouteNames.wallet,
+      builder: (context, state) => const WalletView(),
+    ),
+    GoRoute(
+      path: RouteNames.bankAccount,
+      builder: (context, state) => const BankAccountView(),
+    ),
+    GoRoute(
+      path: RouteNames.subscriptions,
+      builder: (context, state) => const SubscriptionsView(),
+    ),
+    GoRoute(
+      path: RouteNames.packageDetails,
+      builder: (context, state) => PackageDetailsView(
+        isActive: (state.extra ?? false) as bool,
+      ),
+    ),
 
-  ),
-
-  
-),
-
+    GoRoute(
+        path: RouteNames.favorites,
+        builder: (context, state) => FavoritesView()),
+         GoRoute(
+        path: RouteNames.notifications,
+        builder: (context, state) => NotificationsView()),
+    GoRoute(
+      path: RouteNames.commission,
+      builder: (context, state) => const CommissionView(),
+    ),
   ],
 );

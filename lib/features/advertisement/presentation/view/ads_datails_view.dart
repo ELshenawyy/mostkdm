@@ -7,15 +7,21 @@ import 'package:mostkdm/features/advertisement/presentation/section/ad_title_pri
 import 'package:mostkdm/features/advertisement/presentation/section/header_section.dart';
 
 class AdsDatailsView extends StatelessWidget {
-  const AdsDatailsView({super.key});
+    final String adId;
+
+  const AdsDatailsView({super.key, required this.adId});
 
   @override
   Widget build(BuildContext context) {
+
+    final ad = dummyAds.firstWhere(
+      (e) => e.id == adId,
+    );
     return Scaffold(
       body: SingleChildScrollView(
         child: Stack(
           children: [
-            AdImageSliderSection(ad: dummyAd),
+            AdImageSliderSection(ad: ad),
             Padding(
               padding: const EdgeInsets.only(top: 300),
               child: Container(
@@ -30,11 +36,11 @@ class AdsDatailsView extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
-                    AdTitlePriceSection(ad: dummyAd),
+                    AdTitlePriceSection(ad: ad),
                     const SizedBox(height: 20),
-                    AdDescriptionSection(ad: dummyAd),
+                    AdDescriptionSection(ad: ad),
                     const SizedBox(height: 20),
-                    SellerSection(ad: dummyAd),
+                    SellerSection(ad: ad),
                     const SizedBox(height: 20),
                     HeaderSection(label: "إعلانات مشابهة"),
                   ],

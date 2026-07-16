@@ -24,6 +24,10 @@ static const bankAccount = '/bankAccount';
 
 static const subscriptions = '/subscriptions';
 static const packageDetails = '/packageDetails';
+static const notifications = '/notifications';
+static const favorites = '/favorites';
+
+static const commission = '/commission';
 
 
 }

@@ -26,8 +26,7 @@ class _MainViewState extends State<MainView> {
     MyAdsView(),
     SizedBox(),
     ChatsView(),
-        MoreView(),
-
+    MoreView(),
   ];
 
   @override
@@ -35,7 +34,7 @@ class _MainViewState extends State<MainView> {
     return Scaffold(
       body: _pages[_currentIndex],
       floatingActionButton: FloatingActionButton(
-  onPressed: () => context.push(RouteNames.addAd), 
+        onPressed: () => context.push(RouteNames.addAd),
         backgroundColor: AppColors.secondaryColor,
         shape: const CircleBorder(),
         child: const Icon(Icons.add, color: Colors.white, size: 40),

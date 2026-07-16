@@ -10,6 +10,8 @@ class AppButton extends StatelessWidget {
   final AppButtonKind kind;
   final bool isLoading;
   final double? width;
+    final double? height;
+
   final IconData? icon;
 
   const AppButton({
@@ -19,7 +21,7 @@ class AppButton extends StatelessWidget {
     this.kind = AppButtonKind.primary,
     this.isLoading = false,
     this.width = double.infinity,
-    this.icon,
+    this.icon, this.height = 65,
   });
 
   _ButtonColors get _colors => switch (kind) {
@@ -50,7 +52,7 @@ class AppButton extends StatelessWidget {
     final colors = _colors;
     return SizedBox(
       width: width,
-      height: 65,
+      height: height,
       child: ElevatedButton(
         onPressed: isLoading ? null : onTap,
         style: ElevatedButton.styleFrom(

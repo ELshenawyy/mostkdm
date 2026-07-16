@@ -12,6 +12,7 @@ class AppAdCard extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onFavTap;
   final Widget? bottomWidget;
+  final bool isFavorite;
 
   const AppAdCard({
     super.key,
@@ -24,6 +25,7 @@ class AppAdCard extends StatelessWidget {
     this.onTap,
     this.onFavTap,
     this.bottomWidget,
+    this.isFavorite = false,
   });
 
   @override
@@ -57,7 +59,7 @@ class AppAdCard extends StatelessWidget {
                   left: 16,
                   child: GestureDetector(
                     onTap: onFavTap,
-                    child: const Icon(Icons.favorite_border,
+                    child:  Icon(isFavorite ? Icons.favorite : Icons.favorite_border,
                         size: 18, color: AppColors.surface),
                   ),
                 ),
@@ -65,8 +67,8 @@ class AppAdCard extends StatelessWidget {
                   bottom: 8,
                   left: 8,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
                       color: AppColors.secondaryColor,
                       borderRadius: BorderRadius.circular(8),

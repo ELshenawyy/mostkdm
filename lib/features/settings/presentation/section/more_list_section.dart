@@ -41,7 +41,7 @@ class MoreListSection extends StatelessWidget {
         MoreItem(
           title: 'المفضلة والمتابعة',
           icon: Icons.favorite_outline,
-          onTap: () {},
+          onTap: ()=> context.push(RouteNames.favorites),
           subtitle: 'عرض المفضلة والمتابعة',
         ),
         const SizedBox(height: 16),
@@ -51,13 +51,13 @@ class MoreListSection extends StatelessWidget {
         MoreItem(
           title: 'الإشعارات',
           icon: Icons.notifications_outlined,
-          onTap: () {},
+          onTap: () => context.push(RouteNames.notifications),
         ),
         const SizedBox(height: 8),
         MoreItem(
           title: 'دفع المعلومة',
           icon: Icons.payment_outlined,
-          onTap: () {},
+          onTap: () => context.push(RouteNames.commission),
         ),
         const SizedBox(height: 8),
         MoreItem(

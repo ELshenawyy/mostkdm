@@ -17,11 +17,14 @@ class MyAdsListSection extends StatefulWidget {
 }
 
 class _MyAdsListSectionState extends State<MyAdsListSection> {
-  final List<Map<String, dynamic>> _ads = [
-    {'ad': dummyAd, 'isActive': true},
-    {'ad': dummyAd, 'isActive': false},
-    {'ad': dummyAd, 'isActive': true},
-  ];
+  final List<Map<String, dynamic>> _ads = dummyAds
+    .map(
+      (ad) => {
+        'ad': ad,
+        'isActive': true,
+      },
+    )
+    .toList();
 
   void _showDeleteSheet(int index) {
     showModalBottomSheet(

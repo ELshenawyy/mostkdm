@@ -23,6 +23,7 @@ class MyAdCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppAdCard(
+      
       image: ad.images.first,
       title: ad.title,
       price: ad.price.toStringAsFixed(0),

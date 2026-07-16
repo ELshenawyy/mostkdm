@@ -7,11 +7,11 @@ class AdsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: SingleChildScrollView(
           child: Column(
         children: [
-          Padding(
+          const Padding(
             padding: EdgeInsets.only(top: 20.0),
             child: LocalAppBar(
               title: "الإعلانات",

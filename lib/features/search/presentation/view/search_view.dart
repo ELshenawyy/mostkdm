@@ -24,7 +24,7 @@ class _SearchViewState extends State<SearchView> {
         SearchSection(),
         Expanded(
           child: _hasResults
-              ? const SingleChildScrollView(
+              ?  SingleChildScrollView(
                   child: SearchResultsSection(),
                 )
               : const SearchEmptySection(),

@@ -1,38 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mostkdm/core/router/router_names.dart';
-import 'package:mostkdm/core/theme/app_images.dart';
 import 'package:mostkdm/core/widgets/app_ads_card.dart';
-import 'package:mostkdm/features/home/data/ads_model.dart';
+import 'package:mostkdm/features/advertisement/data/dummy.dart';
 
 class HomeFeaturedAdsSection extends StatelessWidget {
-  static const _ads = [
-    AdsModel(
-      image: AppImages.car,
-      title: 'تويوتا كامرى 2024',
-      price: '95,000',
-      location: 'الرياض، الدرعية، حى السلامة',
-      date: 'منذ 2 يوم',
-      views: '260 مشاهدة',
-    ),
-    AdsModel(
-      image: AppImages.banner,
-      title: ' كاميرا 2026',
-      price: '40,000',
-      location: 'الرياض، الدرعية، حى السلامة',
-      date: 'منذ 1 يوم',
-      views: '260 مشاهدة',
-    ),
-    AdsModel(
-      image: AppImages.car,
-      title: 'تويوتا كامرى 2024',
-      price: '95,000',
-      location: 'الرياض، الدرعية، حى السلامة',
-      date: 'منذ 8 يوم',
-      views: '260 مشاهدة',
-    ),
-  ];
-  const HomeFeaturedAdsSection({super.key});
+   HomeFeaturedAdsSection({super.key});
+  final ads = dummyAds;
 
   @override
   Widget build(BuildContext context) {
@@ -44,23 +18,27 @@ class HomeFeaturedAdsSection extends StatelessWidget {
       child: Column(
         children: [
           ListView.separated(
-            itemCount: _ads.length,
+            itemCount: ads.length,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             separatorBuilder: (_, __) => const SizedBox(height: 12),
             itemBuilder: (context, index) {
-              final ad = _ads[index];
+              final ad = ads[index];
+
               return AppAdCard(
-                image: ad.image,
+                image: ad.images.first,
                 title: ad.title,
-                price: ad.price,
-                location: ad.location,
-                date: ad.date,
-                views: ad.views,
-                onTap: () => context.push(RouteNames.adsDetails, extra: ad),
+                price: ad.price.toString(),
+                location: ad.city,
+                date: 'منذ ${ad.daysAgo} يوم',
+                views: '${ad.views} مشاهدة',
+                onTap: () => context.push(
+                  RouteNames.adsDetails,
+                  extra: ad.id,
+                ),
               );
             },
-          ),
+          )
         ],
       ),
     );

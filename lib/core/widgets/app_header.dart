@@ -16,8 +16,8 @@ class AppHeader extends StatelessWidget {
       decoration: const BoxDecoration(
         color: AppColors.secondaryColor,
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(20),
-          bottomRight: Radius.circular(20),
+          bottomLeft: Radius.circular(50),
+          bottomRight: Radius.circular(50),
         ),
       ),
       child: SafeArea(child: child),

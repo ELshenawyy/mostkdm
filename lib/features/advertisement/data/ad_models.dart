@@ -9,8 +9,8 @@ class SellerModel {
     required this.memberSince,
   });
 }
-
 class AdDetailsModel {
+  final String id;
   final String title;
   final double price;
   final String city;
@@ -24,6 +24,7 @@ class AdDetailsModel {
   final String description;
 
   const AdDetailsModel({
+    required this.id,
     required this.title,
     required this.price,
     required this.city,
