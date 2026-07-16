@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mostkdm/core/utils/app_validator.dart';
 import 'package:mostkdm/core/widgets/text_field_widget.dart';
 
 class OtpFormSection extends StatefulWidget {
@@ -25,6 +26,7 @@ class _LoginFormSectionState extends State<OtpFormSection> {
         controller: _phoneController,
         suffixIcon: Icons.phone_outlined,
         hintText: '05xxxxxxxx',
+        validator: AppValidators.phone,
       ),
   
       SizedBox(height: 14),

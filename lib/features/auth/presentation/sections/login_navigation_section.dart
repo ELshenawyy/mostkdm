@@ -4,7 +4,8 @@ import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/core/widgets/app_button.dart';
 
 class LoginNavigationSection extends StatelessWidget {
-  const LoginNavigationSection({super.key});
+  final VoidCallback onLogin; 
+  const LoginNavigationSection({super.key, required this.onLogin});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class LoginNavigationSection extends StatelessWidget {
         children: [
           AppButton(
             label: 'تسجيل الدخول',
-            onTap: () {},  //TODO
+            onTap: onLogin,
             kind: AppButtonKind.primary,
           ),
           SizedBox(height: 15),

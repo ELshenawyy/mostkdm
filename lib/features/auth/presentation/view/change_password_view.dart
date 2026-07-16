@@ -26,7 +26,7 @@ class ChangePasswordView extends StatelessWidget {
               PasswordFormSection(),
               AppButton(
                 label: 'حفظ',
-                onTap: () => context.go(RouteNames.signup),
+                onTap: () => context.go(RouteNames.login),
                 kind: AppButtonKind.secondary,
               ),
             ],

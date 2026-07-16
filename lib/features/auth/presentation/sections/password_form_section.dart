@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mostkdm/core/utils/app_validator.dart';
 
 import '../../../../core/widgets/text_field_widget.dart';
 
@@ -23,6 +24,7 @@ class _PasswordFormSectionState extends State<PasswordFormSection> {
           controller: _oldPasswordController,
           hintText: '********',
           suffixIcon: Icons.lock_outlined,
+          validator: AppValidators.password,
         ),
         AppTextField(
           label: ' كلمة المرور الجديدة',
@@ -30,6 +32,7 @@ class _PasswordFormSectionState extends State<PasswordFormSection> {
           controller: _newPasswordController,
           hintText: '********',
           suffixIcon: Icons.lock_outlined,
+          validator: AppValidators.password,
         ),
         AppTextField(
           label: ' تأكيد كلمة المرور الجديدة',
@@ -37,6 +40,7 @@ class _PasswordFormSectionState extends State<PasswordFormSection> {
           controller: _newPasswordController,
           hintText: '********',
           suffixIcon: Icons.lock_outlined,
+          validator: AppValidators.password,
         ),
       ],
     );

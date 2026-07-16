@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
+import 'package:mostkdm/core/utils/app_validator.dart';
 import 'package:mostkdm/core/widgets/text_field_widget.dart';
 
 class LoginFormSection extends StatefulWidget {
@@ -30,6 +31,7 @@ class _LoginFormSectionState extends State<LoginFormSection> {
         controller: _usernameController,
         suffixIcon: Icons.phone_outlined,
         hintText: '05xxxxxxxx',
+        validator: AppValidators.phone,
       ),
       AppTextField(
         label: 'كلمة المرور',
@@ -37,6 +39,7 @@ class _LoginFormSectionState extends State<LoginFormSection> {
         controller: _passwordController,
         suffixIcon: Icons.lock_outlined,
         hintText: '********',
+        validator: AppValidators.password,
       ),
       SizedBox(height: 14),
 
