@@ -63,12 +63,12 @@ class _AppTextFieldState extends State<AppTextField> {
               horizontal: 14,
               vertical: 25,
             ),
-            suffixIcon: Icon(
+            prefixIcon: Icon(
               widget.suffixIcon,
               color: AppColors.secondaryColor,
               size: 20,
             ),
-            prefixIcon: widget.isPassword
+            suffixIcon: widget.isPassword
                 ? GestureDetector(
                     onTap: () => setState(() => _obscure = !_obscure),
                     child: Icon(

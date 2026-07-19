@@ -1,4 +1,3 @@
-
 import 'package:go_router/go_router.dart';
 import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/features/advertisement/data/ad_models.dart';
@@ -55,12 +54,14 @@ final appRouter = GoRouter(
       path: RouteNames.forgetPassword,
       builder: (context, state) => const PhoneOtp(),
     ),
-    
+
     GoRoute(
       path: RouteNames.sendotp,
-      builder: (context, state) => const OtpcodeView(),
+      builder: (context, state) => OtpcodeView(
+        phoneNumber: state.extra as String,
+      ),
     ),
-    
+
     GoRoute(
       path: RouteNames.changePassword,
       builder: (context, state) => const ChangePasswordView(),
@@ -151,7 +152,7 @@ final appRouter = GoRouter(
     GoRoute(
         path: RouteNames.favorites,
         builder: (context, state) => FavoritesView()),
-         GoRoute(
+    GoRoute(
         path: RouteNames.notifications,
         builder: (context, state) => NotificationsView()),
     GoRoute(
@@ -159,16 +160,15 @@ final appRouter = GoRouter(
       builder: (context, state) => const CommissionView(),
     ),
     GoRoute(
-  path: RouteNames.policy,
-  builder: (context, state) {
-    final args = state.extra as Map<String, dynamic>;
-    return PolicyView(
-      title: args['title'] as String,
-      content: args['content'] as String,
-      icon: args['icon'] as String,
-    );
-  },
-),
-    
+      path: RouteNames.policy,
+      builder: (context, state) {
+        final args = state.extra as Map<String, dynamic>;
+        return PolicyView(
+          title: args['title'] as String,
+          content: args['content'] as String,
+          icon: args['icon'] as String,
+        );
+      },
+    ),
   ],
 );
