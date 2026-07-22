@@ -2,26 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
-import 'package:mostkdm/core/theme/app_images.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
+import 'package:mostkdm/features/home/data/models/category_model.dart';
 import 'package:mostkdm/features/home/presentation/widget/categories_item_widget.dart';
 
 class HomeCategoriesSection extends StatelessWidget {
-  const HomeCategoriesSection({super.key});
+  final List<CategoryModel> categories; // ← جديد
 
-  static const _categories = [
-    {'icon': AppImages.shield, 'label': 'سيارات'},
-    {'icon': AppImages.shield, 'label': 'أثاث'},
-    {'icon': AppImages.shield, 'label': 'ألعاب'},
-    {'icon': AppImages.shield, 'label': 'إلكترونيات'},
-    {'icon': AppImages.shield, 'label': 'أزياء'},
-    {'icon': AppImages.shield, 'label': 'عقارات'},
-    {'icon': AppImages.shield, 'label': 'خدمات'},
-    {'icon': AppImages.shield, 'label': 'كتب'},
-  ];
+  const HomeCategoriesSection({super.key, required this.categories});
 
   @override
   Widget build(BuildContext context) {
+    if (categories.isEmpty) return const SizedBox.shrink();
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -35,11 +28,11 @@ class HomeCategoriesSection extends StatelessWidget {
             children: [
               Text('التصنيفات', style: AppTextStyle.buttonText),
               GestureDetector(
+                onTap: () => context.push(RouteNames.categories),
                 child: Text(
                   'عرض الكل',
                   style: AppTextStyle.forgetPasswordStyle,
                 ),
-                onTap: () => context.push(RouteNames.categories),
               ),
             ],
           ),
@@ -52,12 +45,14 @@ class HomeCategoriesSection extends StatelessWidget {
               mainAxisSpacing: 12,
               crossAxisSpacing: 8,
             ),
-            itemCount: _categories.length,
+            itemCount: categories.length,
             itemBuilder: (context, i) => CategoriesItemWidget(
-              icon: _categories[i]['icon']!,
-              label: _categories[i]['label']!,
-              onTap: () => context.push(RouteNames.subCategory,
-                  extra: _categories[i]['label']),
+              image: categories[i].image, // ← network image
+              label: categories[i].name,
+              onTap: () => context.push(
+                RouteNames.subCategory,
+                extra: categories[i].name,
+              ),
             ),
           ),
         ],

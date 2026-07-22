@@ -3,7 +3,7 @@ import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
 
 class CategoryListItem extends StatelessWidget {
-  final String icon;
+  final String image;
   final String title;
   final int count;
   final VoidCallback? onTap;
@@ -11,7 +11,7 @@ class CategoryListItem extends StatelessWidget {
 
   const CategoryListItem({
     super.key,
-    required this.icon,
+    required this.image,
     required this.title,
     required this.count,
     this.onTap,
@@ -36,7 +36,7 @@ class CategoryListItem extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Image.asset(icon, width: 40, height: 40),
+            Image.asset(image, width: 40, height: 40),
             const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,

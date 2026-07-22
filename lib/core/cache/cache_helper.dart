@@ -1,3 +1,5 @@
+// core/cache/cache_helper.dart
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CacheHelper {
@@ -6,8 +8,6 @@ class CacheHelper {
   CacheHelper._internal();
 
   SharedPreferences? _prefs;
-
-  static const String _tokenKey = 'token';
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -29,15 +29,15 @@ class CacheHelper {
     await _prefs!.clear();
   }
 
-  Future<void> saveToken(String token) async {
-    await setString(_tokenKey, token);
-  }
+String? getToken() {
+  return _prefs?.getString('token'); // ← مش _prefs!
+}
 
-  Future<void> deleteToken() async {
-    await remove(_tokenKey);
-  }
+Future<void> saveToken(String token) async {
+  await _prefs?.setString('token', token); // ← مش _prefs!
+}
 
-  String? getToken() {
-    return getString(_tokenKey);
-  }
+Future<void> deleteToken() async {
+  await _prefs?.remove('token'); // ← مش _prefs!
+}
 }

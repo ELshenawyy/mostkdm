@@ -10,8 +10,8 @@ class DioClient {
   void setToken(String? token) => _memoryToken = token;
 
   Future<void> init() async {
-    _memoryToken = CacheHelper().getString('token');
-  }
+  _memoryToken = CacheHelper().getToken();
+}
 
   late final Dio _dio = Dio(
     BaseOptions(
