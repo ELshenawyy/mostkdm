@@ -23,7 +23,13 @@ class _SignupViewState extends State<SignupView> {
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthOtpSent) {
-            context.go(RouteNames.sendotp, extra: state.phone);
+            context.go(
+              RouteNames.sendotp,
+              extra: {
+                'phone': state.phone,
+                'isForgetPassword': false,
+              },
+            );
           }
 
           if (state is AuthError) {

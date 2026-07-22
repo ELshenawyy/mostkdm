@@ -8,8 +8,11 @@ import '../../../../core/widgets/text_field_widget.dart';
 
 class PasswordFormSection extends StatefulWidget {
   final GlobalKey<FormState> formKey;
+  final String? phone;
+  final String? code;
 
-  const PasswordFormSection({super.key, required this.formKey});
+  const PasswordFormSection(
+      {super.key, required this.formKey, this.phone, this.code});
 
   @override
   State<PasswordFormSection> createState() => _PasswordFormSectionState();
@@ -35,14 +38,15 @@ class _PasswordFormSectionState extends State<PasswordFormSection> {
         return Column(
           spacing: 15,
           children: [
-            AppTextField(
-              label: 'كلمة المرور القديمة',
-              isPassword: true,
-              controller: _oldPasswordController,
-              hintText: '********',
-              suffixIcon: Icons.lock_outlined,
-              validator: AppValidators.password,
-            ),
+            if (widget.phone == null)
+              AppTextField(
+                label: 'كلمة المرور القديمة',
+                isPassword: true,
+                controller: _oldPasswordController,
+                hintText: '********',
+                suffixIcon: Icons.lock_outlined,
+                validator: AppValidators.password,
+              ),
             AppTextField(
               label: ' كلمة المرور الجديدة',
               isPassword: true,
@@ -54,24 +58,32 @@ class _PasswordFormSectionState extends State<PasswordFormSection> {
             AppTextField(
               label: ' تأكيد كلمة المرور الجديدة',
               isPassword: true,
-              controller: _newPasswordController,
+              controller: _confirmPasswordController,
               hintText: '********',
               suffixIcon: Icons.lock_outlined,
-              validator: (v) =>
-                  AppValidators.confirmPassword(v, _newPasswordController.text),
+              validator: AppValidators.password,
+              onChanged: (_) => widget.formKey.currentState?.validate(),
             ),
             AppButton(
-              label: 'حفظ',
-              isLoading: state is AuthLoading,
-              onTap: () {
-                if (widget.formKey.currentState!.validate()) {
-                  context.read<AuthBloc>().add(LoginEvent(
-                        phone: '',
-                        password: _newPasswordController.text,
-                      ));
-                }
-              },
-            ),
+  label: 'حفظ',
+  isLoading: state is AuthLoading,
+  onTap: () {
+    if (widget.formKey.currentState!.validate()) {
+      if (widget.phone != null) {
+        context.read<AuthBloc>().add(ResetPasswordEvent(
+          phone: widget.phone!,
+          code: widget.code!,
+          password: _newPasswordController.text,
+        ));
+      } else {
+        context.read<AuthBloc>().add(ChangePasswordEvent(
+          oldPassword: _oldPasswordController.text,
+          newPassword: _newPasswordController.text,
+        ));
+      }
+    }
+  },
+),
           ],
         );
       },

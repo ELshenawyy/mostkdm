@@ -3,7 +3,6 @@ import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
 
 class AppTextField extends StatefulWidget {
-  
   final String label;
   final TextEditingController controller;
   final bool isPassword;
@@ -13,6 +12,7 @@ class AppTextField extends StatefulWidget {
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
   final int? maxLines;
+  final void Function(String)? onChanged;
 
   const AppTextField({
     super.key,
@@ -25,6 +25,7 @@ class AppTextField extends StatefulWidget {
     this.validator,
     this.fillColor,
     this.maxLines,
+    this.onChanged,
   });
 
   @override
@@ -45,13 +46,14 @@ class _AppTextFieldState extends State<AppTextField> {
         ),
         const SizedBox(height: 8),
         TextFormField(
-          maxLines:  widget.isPassword ? 1 : widget.maxLines,
+          maxLines: widget.isPassword ? 1 : widget.maxLines,
           controller: widget.controller,
           obscureText: widget.isPassword && _obscure,
           keyboardType: widget.keyboardType,
           textDirection: TextDirection.rtl,
           textAlign: TextAlign.right,
           validator: widget.validator,
+          onChanged: widget.onChanged,
           decoration: InputDecoration(
             filled: true,
             fillColor: widget.fillColor ?? AppColors.backgroundColor,

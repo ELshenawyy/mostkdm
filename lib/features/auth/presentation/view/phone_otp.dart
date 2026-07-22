@@ -24,7 +24,10 @@ class _PhoneOtpState extends State<PhoneOtp> {
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthOtpSent) {
-            context.go(RouteNames.sendotp, extra: state.phone);
+            context.go(RouteNames.sendotp, extra: {
+              'phone': state.phone,
+              "isForgotPassword": true,
+            });
           }
 
           if (state is AuthError) {
@@ -46,7 +49,9 @@ class _PhoneOtpState extends State<PhoneOtp> {
                     subtitle: 'سنرسل لك رمز التحقق',
                     imagePath: AppImages.lock,
                   ),
-                  OtpFormSection(formKey: _formKey,),
+                  OtpFormSection(
+                    formKey: _formKey,
+                  ),
                 ],
               ),
             ),

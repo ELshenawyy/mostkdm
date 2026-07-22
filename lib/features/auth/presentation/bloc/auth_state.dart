@@ -34,3 +34,7 @@ class AuthOtpSent extends AuthState {
   @override
   List<Object> get props => [phone];
 }
+
+class AuthOtpResent extends AuthState {
+  const AuthOtpResent();
+}

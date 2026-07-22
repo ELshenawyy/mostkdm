@@ -12,13 +12,13 @@ class AppValidators {
   }
 
   static String? phone(String? value) {
-    if (value == null || value.trim().isEmpty) return 'هذا الحقل مطلوب';
+    if (value == null || value.isEmpty) return 'هذا الحقل مطلوب';
     if (value.length < 9) return 'رقم الهاتف غير صحيح';
     return null;
   }
 
   static String? password(String? value) {
-    if (value == null || value.trim().isEmpty) return 'هذا الحقل مطلوب';
+    if (value == null || value.isEmpty) return 'هذا الحقل مطلوب';
     if (value.length < 8) return 'كلمة المرور يجب أن تكون 8 أحرف على الأقل';
     return null;
   }

@@ -6,8 +6,15 @@ import 'package:mostkdm/features/auth/presentation/widgets/app_otp_field.dart';
 
 class OtpCheckSection extends StatefulWidget {
   final String phone;
+  final bool isForgetPassword;
+  final void Function(String otp)? onSuccess;
 
-  const OtpCheckSection({super.key, required this.phone});
+  const OtpCheckSection({
+    super.key,
+    required this.phone,
+    this.isForgetPassword = false,
+    this.onSuccess,
+  });
 
   @override
   State<OtpCheckSection> createState() => _OtpCheckSectionState();
@@ -39,13 +46,37 @@ class _OtpCheckSectionState extends State<OtpCheckSection> {
         AppOtpField(
           controller: _otpController,
           onCompleted: (_) {
-            context.read<AuthBloc>().add(OtpEvent(
-                  phone: widget.phone,
-                  otp: _otpController.text,
-                ));
+            widget.onSuccess?.call(_otpController.text);
+
+            if (widget.isForgetPassword) {
+              context.read<AuthBloc>().add(VerifyForgotOtpEvent(
+                    phone: widget.phone,
+                    otp: _otpController.text,
+                  ));
+            } else {
+              context.read<AuthBloc>().add(OtpEvent(
+                    phone: widget.phone,
+                    otp: _otpController.text,
+                  ));
+            }
           },
         ),
-        OtpActionsSection(isCompleted: _isCompleted),
+        OtpActionsSection(
+            isCompleted: _isCompleted,
+            phone: widget.phone,
+            onVerify: () {
+              if (widget.isForgetPassword) {
+                context.read<AuthBloc>().add(VerifyForgotOtpEvent(
+                      phone: widget.phone,
+                      otp: _otpController.text,
+                    ));
+              } else {
+                context.read<AuthBloc>().add(OtpEvent(
+                      phone: widget.phone,
+                      otp: _otpController.text,
+                    ));
+              }
+            }),
       ],
     );
   }

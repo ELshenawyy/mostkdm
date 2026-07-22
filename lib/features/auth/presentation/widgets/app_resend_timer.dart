@@ -1,4 +1,3 @@
-// core/widgets/app_resend_timer.dart
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
@@ -83,7 +82,7 @@ class _AppResendTimerState extends State<AppResendTimer> {
             child: const Text(
               'إعادة إرسال الرمز',
               style: TextStyle(
-                color: AppColors.secondaryBtnText,
+                color: AppColors.primaryColor,
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
               ),

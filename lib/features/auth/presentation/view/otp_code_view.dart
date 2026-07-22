@@ -9,14 +9,21 @@ import 'package:mostkdm/features/auth/presentation/sections/otp_check_section.da
 
 class OtpcodeView extends StatefulWidget {
   final String phoneNumber;
-  const OtpcodeView({super.key, required this.phoneNumber});
+  final bool isForgetPassword;
+
+  const OtpcodeView({
+    super.key,
+    required this.phoneNumber,
+    this.isForgetPassword = false,
+  });
 
   @override
   State<OtpcodeView> createState() => _OtpcodeViewState();
 }
 
 class _OtpcodeViewState extends State<OtpcodeView> {
-  final _formKey = GlobalKey<FormState>();
+  String _otpCode = '';
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -24,7 +31,14 @@ class _OtpcodeViewState extends State<OtpcodeView> {
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
-            context.go(RouteNames.mainView);
+            if (widget.isForgetPassword) {
+              context.go(RouteNames.changePassword, extra: {
+                'phone': widget.phoneNumber,
+                'code': _otpCode,
+              });
+            } else {
+              context.go(RouteNames.mainView);
+            }
           }
           if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -44,6 +58,8 @@ class _OtpcodeViewState extends State<OtpcodeView> {
                     imagePath: AppImages.shield),
                 OtpCheckSection(
                   phone: widget.phoneNumber,
+                  isForgetPassword: widget.isForgetPassword,
+                  onSuccess: (otp) => setState(() => _otpCode = otp),
                 ),
               ],
             ),

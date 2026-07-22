@@ -8,7 +8,9 @@ import 'package:mostkdm/features/auth/presentation/sections/login_header_section
 import 'package:mostkdm/features/auth/presentation/sections/password_form_section.dart';
 
 class ChangePasswordView extends StatefulWidget {
-  const ChangePasswordView({super.key});
+  final String? phone;
+  final String? code;
+  const ChangePasswordView({super.key, this.phone, this.code});
 
   @override
   State<ChangePasswordView> createState() => _ChangePasswordViewState();
@@ -36,18 +38,23 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
           body: Padding(
             padding: EdgeInsets.all(16.0),
             child: SingleChildScrollView(
-              child: Column(
-                spacing: 30,
-                children: [
-                  HeaderSection(
-                    title: 'تغيير كلمة المرور',
-                    subtitle: 'قم بتغيير كلمة المرور الخاصة بك',
-                    imagePath: AppImages.lock,
-                  ),
-                  PasswordFormSection(
-                    formKey: _formKey,
-                  ),
-                ],
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  spacing: 30,
+                  children: [
+                    HeaderSection(
+                      title: 'تغيير كلمة المرور',
+                      subtitle: 'قم بتغيير كلمة المرور الخاصة بك',
+                      imagePath: AppImages.lock,
+                    ),
+                    PasswordFormSection(
+                      formKey: _formKey,
+                      phone: widget.phone,
+                      code: widget.code,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

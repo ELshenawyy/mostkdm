@@ -56,16 +56,27 @@ final appRouter = GoRouter(
     ),
 
     GoRoute(
-      path: RouteNames.sendotp,
-      builder: (context, state) => OtpcodeView(
-        phoneNumber: state.extra as String,
-      ),
-    ),
+  path: RouteNames.sendotp,
+  builder: (context, state) {
+    final args = state.extra as Map<String, dynamic>;
+    return OtpcodeView(
+      phoneNumber: args['phone'] as String,
+      isForgetPassword: args['isForgotPassword'] as bool? ?? false,
+    );
+  },
+),
+    
 
     GoRoute(
-      path: RouteNames.changePassword,
-      builder: (context, state) => const ChangePasswordView(),
-    ),
+  path: RouteNames.changePassword,
+  builder: (context, state) {
+    final args = state.extra as Map<String, dynamic>?;
+    return ChangePasswordView(
+      phone: args?['phone'] as String?,
+      code: args?['code'] as String?,
+    );
+  },
+),
 
     GoRoute(
       path: RouteNames.categories,

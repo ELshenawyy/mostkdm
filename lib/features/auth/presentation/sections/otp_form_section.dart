@@ -40,14 +40,11 @@ class _LoginFormSectionState extends State<OtpFormSection> {
             AppButton(
               label: 'إرسال',
               isLoading: state is AuthLoading,
+              kind: AppButtonKind.secondary,
               onTap: () {
                 if (widget.formKey.currentState!.validate()) {
                   context.read<AuthBloc>().add(
-                        SignupEvent(
-                          name: '',
-                          phone: _phoneController.text,
-                          password: '',
-                        ),
+                        ForgotPasswordEvent(phone: _phoneController.text),
                       );
                 }
               },
