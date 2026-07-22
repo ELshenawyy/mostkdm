@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:mostkdm/core/cache/cache_helper.dart';
 import 'package:mostkdm/core/network/dio_client.dart';
 import 'package:mostkdm/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:mostkdm/features/auth/data/repository/auth_repository.dart';
@@ -21,8 +22,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<ForgotPasswordEvent>(_onForgotPassword);
     on<VerifyForgotOtpEvent>(_onVerifyForgotOtp);
     on<ResendOtpEvent>(_onResendOtp);
-      on<ResetPasswordEvent>(_onResetPassword);
-
+    on<ResetPasswordEvent>(_onResetPassword);
   }
 
   Future<void> _onLogin(
@@ -30,42 +30,34 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(const AuthLoading());
-    print('===== LOGIN =====');
-    print('phone: "${event.phone}"');
-    print('password: "${event.password}"');
-    try {
-      final auth = await _repository.login(
-        phone: event.phone,
-        password: event.password,
-      );
-      print('token before save: ${auth.token}');
-
-      await DioClient().saveToken(auth.token);
-      final saved = await DioClient().getToken();
-      print('token after save: $saved');
-
-      emit(const AuthSuccess());
-    } catch (e) {
-      print('error: $e');
-      emit(AuthError(e.toString()));
-    }
+    final result = await _repository.login(
+      phone: event.phone,
+      password: event.password,
+    );
+    await result.fold(
+      (error) async => emit(AuthError(error.message)),
+      (auth) async {
+        await CacheHelper().saveToken(auth.token);
+        DioClient().setToken(auth.token);
+        emit(const AuthSuccess());
+      },
+    );
   }
 
   Future<void> _onSignup(
     SignupEvent event,
     Emitter<AuthState> emit,
   ) async {
-    emit(AuthLoading());
-    try {
-      final phone = await _repository.signup(
-        name: event.name,
-        phone: event.phone,
-        password: event.password,
-      );
-      emit(AuthOtpSent(phone));
-    } catch (e) {
-      emit(AuthError(e.toString()));
-    }
+    emit(const AuthLoading());
+    final result = await _repository.signup(
+      name: event.name,
+      phone: event.phone,
+      password: event.password,
+    );
+    result.fold(
+      (error) => emit(AuthError(error.message)),
+      (phone) => emit(AuthOtpSent(phone)),
+    );
   }
 
   Future<void> _onVerifyOtp(
@@ -73,36 +65,33 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(const AuthLoading());
-    try {
-      final token = await _repository.verifyOtp(
-        phone: event.phone,
-        otp: event.otp,
-      );
-      print('token from verifyOtp: $token'); // ← هنا
-
-      await DioClient().saveToken(token);
-      final saved = await DioClient().getToken();
-      print('token saved: $saved'); // ← هنا
-      emit(const AuthSuccess());
-    } catch (e) {
-      emit(AuthError(e.toString()));
-    }
+    final result = await _repository.verifyOtp(
+      phone: event.phone,
+      otp: event.otp,
+    );
+    await result.fold(
+      (error) async => emit(AuthError(error.message)),
+      (token) async {
+        await CacheHelper().saveToken(token);
+        DioClient().setToken(token);
+        emit(const AuthSuccess());
+      },
+    );
   }
 
   Future<void> _onChangePassword(
     ChangePasswordEvent event,
     Emitter<AuthState> emit,
   ) async {
-    emit(AuthLoading());
-    try {
-      await _repository.changePassword(
-        oldPassword: event.oldPassword,
-        newPassword: event.newPassword,
-      );
-      emit(AuthSuccess());
-    } catch (e) {
-      emit(AuthError(e.toString()));
-    }
+    emit(const AuthLoading());
+    final result = await _repository.changePassword(
+      oldPassword: event.oldPassword,
+      newPassword: event.newPassword,
+    );
+    result.fold(
+      (error) => emit(AuthError(error.message)),
+      (_) => emit(const AuthSuccess()),
+    );
   }
 
   Future<void> _onForgotPassword(
@@ -110,13 +99,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(const AuthLoading());
-    try {
-      final phone = await _repository.forgotPassword(phone: event.phone);
-
-      emit(AuthOtpSent(phone));
-    } catch (e) {
-      emit(AuthError(e.toString()));
-    }
+    final result = await _repository.forgotPassword(phone: event.phone);
+    result.fold(
+      (error) => emit(AuthError(error.message)),
+      (phone) => emit(AuthOtpSent(phone)),
+    );
   }
 
   Future<void> _onVerifyForgotOtp(
@@ -124,18 +111,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(const AuthLoading());
-    try {
-      final token = await _repository.verifyForgotOtp(
-        phone: event.phone,
-        otp: event.otp,
-      );
-      await DioClient().saveToken(token);
-    
-
-      emit(const AuthSuccess());
-    } catch (e) {
-      emit(AuthError(e.toString()));
-    }
+    final result = await _repository.verifyForgotOtp(
+      phone: event.phone,
+      otp: event.otp,
+    );
+    await result.fold(
+      (error) async => emit(AuthError(error.message)),
+      (token) async {
+        await CacheHelper().saveToken(token);
+        DioClient().setToken(token);
+        emit(const AuthSuccess());
+      },
+    );
   }
 
   Future<void> _onResendOtp(
@@ -143,44 +130,42 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(const AuthLoading());
-    try {
-      await _repository.resendOtp(phone: event.phone);
-      emit(const AuthOtpResent());
-    } catch (e) {
-      emit(AuthError(e.toString()));
-    }
+    final result = await _repository.resendOtp(phone: event.phone);
+     result.fold(
+
+      (error) => emit(AuthError(error.message)),
+      (_) => emit(const AuthSuccess()),);
   }
 
-Future<void> _onResetPassword(
-  ResetPasswordEvent event,
-  Emitter<AuthState> emit,
-) async {
-  emit(const AuthLoading());
-  try {
-     await  _repository.resetPassword(
+  Future<void> _onResetPassword(
+    ResetPasswordEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthLoading());
+    final result = await _repository.resetPassword(
       phone: event.phone,
       code: event.code,
       password: event.password,
     );
-    emit(const AuthSuccess());
-  } catch (e) {
-        print('reset error: $e');
-
-    emit(AuthError(e.toString()));
+    result.fold(
+      (error) => emit(AuthError(error.message)),
+      (_) => emit(const AuthSuccess()),
+    );
   }
-}
-
 
   Future<void> _onLogout(
     LogoutEvent event,
     Emitter<AuthState> emit,
   ) async {
-    emit(AuthLoading());
-    try {
-      await _repository.logout();
-      emit(AuthSuccess());
-    } catch (e) {
-      emit(AuthError(e.toString()));
-    }
+    emit(const AuthLoading());
+    final result = await _repository.logout();
+    await result.fold(
+      (error) async => emit(AuthError(error.message)),
+      (_) async {
+        await CacheHelper().deleteToken();
+        DioClient().setToken(null);
+        emit(const AuthSuccess());
+      },
+    );
   }
 }

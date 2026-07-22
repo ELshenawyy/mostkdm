@@ -18,7 +18,7 @@ class CategoriesView extends StatelessWidget {
               title: "التصنيفات",
             ),
           ),
-          Expanded(child: CategoryListSection()),
+        //  Expanded(child: CategoryListSection()),
         ],
       ),
     );

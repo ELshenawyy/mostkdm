@@ -1,45 +1,35 @@
-import 'package:dio/dio.dart';
+import 'package:mostkdm/core/network/api_consumer.dart';
 import 'package:mostkdm/core/network/api_endpoints.dart';
-import 'package:mostkdm/core/network/dio_client.dart';
+import 'package:mostkdm/core/network/dio_consumer.dart';
 import '../models/auth_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<AuthModel> login({required String mobile, required String password});
-  Future<String> signup(
-      {required String name, required String phone, required String password});
+  Future<String> signup({required String name, required String phone, required String password});
   Future<String> verifyOtp({required String phone, required String otp});
-
-  Future<void> changePassword(
-      {required String oldPassword, required String newPassword});
-
+  Future<void> changePassword({required String oldPassword, required String newPassword});
   Future<String> forgotPassword({required String phone});
-
   Future<void> resendOtp({required String phone});
-
   Future<String> verifyForgotOtp({required String phone, required String otp});
-  Future<void> resetPassword({
-  required String phone,
-  required String code,
-  required String password,
-});
-
+  Future<void> resetPassword({required String phone, required String code, required String password});
   Future<void> logout();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  final Dio _dio = DioClient().dio;
+  final ApiConsumer _api = DioConsumer();
+
 
   @override
+
   Future<AuthModel> login({
     required String mobile,
     required String password,
   }) async {
-    final response = await _dio.post(
+    final response = await _api.post(
       ApiEndpoints.login,
       data: {'mobile': mobile, 'password': password},
     );
-
-    return AuthModel.fromJson(response.data);
+    return AuthModel.fromJson(response);
   }
 
   @override
@@ -48,41 +38,24 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String phone,
     required String password,
   }) async {
-    final response = await _dio.post(
+    final response = await _api.post(
       ApiEndpoints.signup,
-      data: {
-        'name': name,
-        'mobile': phone,
-        'password': password,
-      },
+      data: {'name': name, 'mobile': phone, 'password': password},
     );
-
-    return response.data['data']['mobile'] ?? phone;
+    return response['data']['mobile'] ?? phone;
   }
 
   @override
+
   Future<String> verifyOtp({
     required String phone,
     required String otp,
   }) async {
-    try {
-      final response = await _dio.post(
-        ApiEndpoints.verifyOtp,
-        data: {
-          'mobile': phone,
-          'code': otp,
-        },
-      );
-     
-
-      if (response.data['status'] == false) {
-        throw response.data['message'] ?? 'كود غير صحيح';
-      }
-
-      return response.data['data']['access_token'] ?? '';
-    } on DioException catch (e) {
-      throw e.response?.data['message'] ?? 'كود غير صحيح';
-    }
+    final response = await _api.post(
+      ApiEndpoints.verifyOtp,
+      data: {'mobile': phone, 'code': otp},
+    );
+    return response['data']['access_token'] ?? '';
   }
 
   @override
@@ -90,7 +63,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String oldPassword,
     required String newPassword,
   }) async {
-    await _dio.post(
+    await _api.post(
       ApiEndpoints.changePassword,
       data: {
         'old_password': oldPassword,
@@ -102,14 +75,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<String> forgotPassword({required String phone}) async {
-    final response = await _dio.post(
+    final response = await _api.post(
       ApiEndpoints.forgotPassword,
       data: {'mobile': phone},
     );
-    if (response.data['status'] == false) {
-      throw response.data['message'] ?? 'حدث خطأ';
-    }
-    return response.data['data']['mobile'] ?? phone;
+    return response['data']['mobile'] ?? phone;
   }
 
   @override
@@ -117,27 +87,19 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String phone,
     required String otp,
   }) async {
-    final response = await _dio.post(
+    final response = await _api.post(
       ApiEndpoints.verifyForgotOtp,
       data: {'mobile': phone, 'code': otp},
     );
-
-    if (response.data['status'] == false) {
-      throw response.data['message'] ?? 'كود غير صحيح';
-    }
-
-    return response.data['data']['access_token'] ?? '';
+    return response['data']['access_token'] ?? '';
   }
 
   @override
   Future<void> resendOtp({required String phone}) async {
-    final response = await _dio.post(
+    await _api.post(
       ApiEndpoints.resendOtp,
       data: {'mobile': phone},
     );
-    if (response.data['status'] == false) {
-      throw response.data['message'] ?? 'حدث خطأ';
-    }
   }
 
   @override
@@ -146,7 +108,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String code,
     required String password,
   }) async {
-    final response = await _dio.post(
+    await _api.post(
       ApiEndpoints.resetPassword,
       data: {
         'mobile': phone,
@@ -156,13 +118,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         'password_confirmation': password,
       },
     );
-    if (response.data['status'] == false) {
-      throw response.data['message'] ?? 'حدث خطأ';
-    }
   }
 
   @override
   Future<void> logout() async {
-    await _dio.post(ApiEndpoints.logout);
+    await _api.post(ApiEndpoints.logout);
   }
 }

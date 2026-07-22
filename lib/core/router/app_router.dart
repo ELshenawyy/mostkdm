@@ -90,12 +90,12 @@ final appRouter = GoRouter(
       path: RouteNames.ads,
       builder: (context, state) => const AdsView(),
     ),
-    GoRoute(
-      path: RouteNames.subCategory,
-      builder: (context, state) => SubCategoryView(
-        title: state.extra as String? ?? '',
-      ),
-    ),
+    // GoRoute(
+    //   path: RouteNames.subCategory,
+    //   builder: (context, state) => SubCategoryView(
+    //     title: state.extra as String? ?? '',
+    //   ),
+    // ),
     GoRoute(
       path: RouteNames.search,
       builder: (context, state) => SearchView(),
