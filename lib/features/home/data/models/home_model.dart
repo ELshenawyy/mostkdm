@@ -1,5 +1,5 @@
-import 'package:mostkdm/features/home/data/models/ads_model.dart';
-import 'package:mostkdm/features/home/data/models/category_model.dart';
+import 'package:mostkdm/features/advertisement/data/models/ad_model.dart';
+import 'package:mostkdm/features/advertisement/data/models/category_model.dart';
 import 'package:mostkdm/features/home/data/models/slider_model.dart';
 
 class HomeModel {
@@ -14,15 +14,16 @@ class HomeModel {
   });
 
   factory HomeModel.fromJson(Map<String, dynamic> json) {
-    final data = json['data'];
+    final data = json['data'] ?? {};
+    
     return HomeModel(
-      sliders: (data['sliders'] as List)
+      sliders: (data['sliders'] as List? ?? [])
           .map((e) => SliderModel.fromJson(e))
           .toList(),
-      categories: (data['categories'] as List)
+      categories: (data['categories'] as List? ?? [])
           .map((e) => CategoryModel.fromJson(e))
           .toList(),
-      featuredAds: (data['featured_ads'] as List)
+      featuredAds: (data['featured_ads'] as List? ?? [])
           .map((e) => AdModel.fromJson(e))
           .toList(),
     );

@@ -47,11 +47,19 @@ class AppAdCard extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(12)),
-                  child: Image.asset(
+                  child: Image.network(
                     image,
                     width: double.infinity,
                     height: 151,
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      height: 151,
+                      color: AppColors.backgroundColor,
+                      child: const Icon(
+                        Icons.image_not_supported_outlined,
+                        size: 40,
+                      ),
+                    ),
                   ),
                 ),
                 Positioned(
@@ -59,16 +67,19 @@ class AppAdCard extends StatelessWidget {
                   left: 16,
                   child: GestureDetector(
                     onTap: onFavTap,
-                    child:  Icon(isFavorite ? Icons.favorite : Icons.favorite_border,
-                        size: 18, color: AppColors.surface),
+                    child: Icon(
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                      size: 18,
+                      color: AppColors.surface,
+                    ),
                   ),
                 ),
                 Positioned(
                   bottom: 8,
                   left: 8,
                   child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
                       color: AppColors.secondaryColor,
                       borderRadius: BorderRadius.circular(8),
@@ -86,62 +97,85 @@ class AppAdCard extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(10),
-              child: Column(
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            title,
-                            style: AppTextStyle.textBannerHeadline2
-                                .copyWith(color: AppColors.secondaryColor),
-                          ),
-                          Row(
-                            children: [
-                              const Icon(Icons.location_on_outlined,
-                                  size: 20, color: AppColors.primaryColor),
-                              const SizedBox(width: 4),
-                              Text(location,
-                                  style: AppTextStyle.textFieldLabel
-                                      .copyWith(fontSize: 12)),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      Column(
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.access_time,
-                                  size: 20, color: AppColors.primaryColor),
-                              const SizedBox(width: 4),
-                              Text(date,
-                                  style: AppTextStyle.textFieldLabel
-                                      .copyWith(fontSize: 12)),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Icon(Icons.remove_red_eye_outlined,
-                                  size: 20, color: AppColors.primaryColor),
-                              const SizedBox(width: 4),
-                              Text(views,
-                                  style: AppTextStyle.textFieldLabel
-                                      .copyWith(fontSize: 12)),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
+                  Expanded(
+                    flex: 3,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: AppTextStyle.textBannerHeadline2
+                              .copyWith(color: AppColors.secondaryColor),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                        Row(
+                          children: [
+                            const Icon(Icons.location_on_outlined,
+                                size: 16, color: AppColors.primaryColor),
+                            const SizedBox(width: 4),
+                            Expanded(
+                              child: Text(
+                                location,
+                                style: AppTextStyle.textFieldLabel
+                                    .copyWith(fontSize: 12),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.access_time,
+                                size: 16, color: AppColors.primaryColor),
+                            const SizedBox(width: 4),
+                            Flexible(
+                              child: Text(
+                                date,
+                                style: AppTextStyle.textFieldLabel
+                                    .copyWith(fontSize: 12),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.remove_red_eye_outlined,
+                                size: 16, color: AppColors.primaryColor),
+                            const SizedBox(width: 4),
+                            Flexible(
+                              child: Text(
+                                views,
+                                style: AppTextStyle.textFieldLabel
+                                    .copyWith(fontSize: 12),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-            // bottomWidget
             if (bottomWidget != null) ...[
               const Divider(height: 1),
               Padding(

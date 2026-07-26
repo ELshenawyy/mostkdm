@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mostkdm/core/widgets/local_app_bar.dart';
-import 'package:mostkdm/features/advertisement/data/ad_models.dart';
+import 'package:mostkdm/features/advertisement/data/models/ad_details_model.dart';
 import 'package:mostkdm/features/advertisement/presentation/section/add_ad_stepper_section.dart';
 
 class AddAdView extends StatelessWidget {

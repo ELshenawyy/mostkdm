@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
 import 'package:mostkdm/core/widgets/text_field_widget.dart';
-import 'package:mostkdm/features/advertisement/data/ad_models.dart';
+import 'package:mostkdm/features/advertisement/data/models/ad_details_model.dart';
 import 'package:mostkdm/features/auth/presentation/sections/app_hint_section.dart';
 
 class BasicInfoSection extends StatefulWidget {

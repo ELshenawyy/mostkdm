@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mostkdm/features/home/data/datasource/home_remote_data_source.dart';
-import 'package:mostkdm/features/home/data/models/ads_model.dart';
+import 'package:mostkdm/features/advertisement/data/models/ad_model.dart';
 
 import 'package:mostkdm/features/home/data/models/home_model.dart';
 import 'package:mostkdm/features/home/data/repository/home_repository.dart';

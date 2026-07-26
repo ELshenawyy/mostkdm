@@ -6,7 +6,14 @@ enum AppSearchFieldStyle { light, dark }
 class AppSearchField extends StatelessWidget {
   final String hint;
   final VoidCallback? onFilterTap;
+
+ 
   final VoidCallback? onFieldTap;
+
+  final TextEditingController? controller;
+  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
+  final bool autofocus;
 
   final AppSearchFieldStyle style;
 
@@ -16,6 +23,10 @@ class AppSearchField extends StatelessWidget {
     this.onFilterTap,
     this.style = AppSearchFieldStyle.light,
     this.onFieldTap,
+    this.controller,
+    this.onChanged,
+    this.onSubmitted,
+    this.autofocus = false,
   });
 
   Color get _fillColor => style == AppSearchFieldStyle.light
@@ -30,32 +41,41 @@ class AppSearchField extends StatelessWidget {
       ? AppColors.textHintColor
       : AppColors.surface;
 
+  bool get _isInteractive => controller != null;
+
   @override
   Widget build(BuildContext context) {
+    final field = TextField(
+      controller: controller,
+      autofocus: autofocus,
+      onChanged: onChanged,
+      onSubmitted: onSubmitted,
+      textInputAction: TextInputAction.search,
+      textAlign: TextAlign.right,
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle:
+            TextStyle(color: _textColor, fontSize: 14, fontFamily: 'Cairo'),
+        prefixIcon: Icon(Icons.search, color: _iconColor, size: 24),
+        filled: true,
+        fillColor: _fillColor,
+        contentPadding: const EdgeInsets.symmetric(vertical: 16),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide.none,
+        ),
+      ),
+    );
+
     return Row(
       children: [
         Expanded(
-          child: GestureDetector(
-            onTap: onFieldTap,
-            child: AbsorbPointer(
-              child: TextField(
-                textAlign: TextAlign.right,
-                decoration: InputDecoration(
-                  hintText: hint,
-                  hintStyle: TextStyle(
-                      color: _textColor, fontSize: 14, fontFamily: 'Cairo'),
-                  prefixIcon: Icon(Icons.search, color: _iconColor, size: 24),
-                  filled: true,
-                  fillColor: _fillColor,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 16),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide.none,
-                  ),
+          child: _isInteractive
+              ? field
+              : GestureDetector(
+                  onTap: onFieldTap,
+                  child: AbsorbPointer(child: field),
                 ),
-              ),
-            ),
-          ),
         ),
         const SizedBox(width: 6),
         GestureDetector(

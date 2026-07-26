@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:mostkdm/core/widgets/app_ads_card.dart';
-import 'package:mostkdm/features/home/data/models/ads_model.dart';
+import 'package:mostkdm/features/advertisement/data/models/ad_model.dart';
 
 class SubCategoryListSection extends StatelessWidget {
     final List<AdModel>  ads;

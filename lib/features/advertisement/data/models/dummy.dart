@@ -1,5 +1,6 @@
 import 'package:mostkdm/core/theme/app_images.dart';
-import 'package:mostkdm/features/advertisement/data/ad_models.dart';
+import 'package:mostkdm/features/advertisement/data/models/ad_details_model.dart';
+import 'package:mostkdm/features/advertisement/data/models/seller_model.dart';
 
 final List<AdDetailsModel> dummyAds = [
   AdDetailsModel(
@@ -10,9 +11,9 @@ final List<AdDetailsModel> dummyAds = [
     views: 2487,
     daysAgo: 10,
     images: [
-      AppImages.carAdd,
-      AppImages.carAdd,
-      AppImages.carAdd,
+      AppImages.car,
+      AppImages.car,
+      AppImages.car,
     ],
     specifications: {
       'الموديل': 'هوندا أكسنت',
@@ -38,7 +39,25 @@ final List<AdDetailsModel> dummyAds = [
     views: 3500,
     daysAgo: 2,
     images: [
-      AppImages.carAdd,
+      AppImages.car,
+    ],
+    specifications: {},
+    seller: const SellerModel(
+      name: 'محمد',
+      image: AppImages.banner,
+      memberSince: 'منذ سنتين',
+    ),
+    description: "كامري بحالة ممتازة",
+  ),
+  AdDetailsModel(
+    id: "2",
+    title: 'تويوتا كامري 2024',
+    price: 95000,
+    city: 'الرياض',
+    views: 3500,
+    daysAgo: 2,
+    images: [
+      AppImages.car,
     ],
     specifications: {},
     seller: const SellerModel(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mostkdm/core/router/router_names.dart';
-import 'package:mostkdm/features/home/data/models/category_model.dart';
+import 'package:mostkdm/features/advertisement/data/models/category_model.dart';
 import 'package:mostkdm/features/home/presentation/bloc/home_bloc.dart';
 import 'package:mostkdm/features/home/presentation/widget/category_list_item.dart';
 

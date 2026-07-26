@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
-import 'package:mostkdm/features/home/data/models/category_model.dart';
+import 'package:mostkdm/features/advertisement/data/models/category_model.dart';
 import 'package:mostkdm/features/home/presentation/widget/categories_item_widget.dart';
 
 class HomeCategoriesSection extends StatelessWidget {

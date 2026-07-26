@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mostkdm/features/advertisement/data/dummy.dart';
+import 'package:mostkdm/features/advertisement/data/models/dummy.dart';
 import 'package:mostkdm/features/advertisement/presentation/section/ad_image_slider_section.dart';
 import 'package:mostkdm/features/advertisement/presentation/section/seller_info_section.dart';
 import 'package:mostkdm/features/advertisement/presentation/section/ad_description_section.dart';

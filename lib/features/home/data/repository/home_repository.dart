@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:mostkdm/core/errors/app_exception.dart';
 import 'package:mostkdm/features/home/data/datasource/home_remote_data_source.dart';
-import 'package:mostkdm/features/home/data/models/ads_model.dart';
+import 'package:mostkdm/features/advertisement/data/models/ad_model.dart';
 import '../models/home_model.dart';
 
 abstract class HomeRepository {

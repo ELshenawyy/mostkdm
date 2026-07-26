@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/core/widgets/app_ads_card.dart';
-import 'package:mostkdm/features/advertisement/data/ad_models.dart';
-import 'package:mostkdm/features/advertisement/data/dummy.dart';
+import 'package:mostkdm/features/advertisement/data/models/ad_details_model.dart';
+import 'package:mostkdm/features/advertisement/data/models/dummy.dart';
 import 'package:mostkdm/features/favorite/presentation/section/favorites_empty_section.dart';
 
 class FavoriteAdsSection extends StatefulWidget {

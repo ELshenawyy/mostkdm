@@ -1,14 +1,5 @@
-class SellerModel {
-  final String name;
-  final String image;
-  final String memberSince;
+import 'package:mostkdm/features/advertisement/data/models/seller_model.dart';
 
-  const SellerModel({
-    required this.name,
-    required this.image,
-    required this.memberSince,
-  });
-}
 class AdDetailsModel {
   final String id;
   final String title;

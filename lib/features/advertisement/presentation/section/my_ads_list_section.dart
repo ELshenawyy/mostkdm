@@ -4,8 +4,8 @@ import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/widgets/AppConfirmBottomSheet.dart';
 import 'package:mostkdm/core/widgets/app_button.dart';
-import 'package:mostkdm/features/advertisement/data/ad_models.dart';
-import 'package:mostkdm/features/advertisement/data/dummy.dart';
+import 'package:mostkdm/features/advertisement/data/models/ad_details_model.dart';
+import 'package:mostkdm/features/advertisement/data/models/dummy.dart';
 import 'package:mostkdm/features/advertisement/presentation/section/no_ads_section.dart';
 import 'package:mostkdm/features/advertisement/presentation/widget/my_ad_card.dart';
 

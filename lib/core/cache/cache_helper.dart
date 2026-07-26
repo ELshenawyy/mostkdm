@@ -14,19 +14,19 @@ class CacheHelper {
   }
 
   Future<void> setString(String key, String value) async {
-    await _prefs!.setString(key, value);
+    await _prefs?.setString(key, value);
   }
 
   String? getString(String key) {
-    return _prefs!.getString(key);
+    return _prefs?.getString(key);
   }
 
   Future<void> remove(String key) async {
-    await _prefs!.remove(key);
+    await _prefs?.remove(key);
   }
 
   Future<void> clear() async {
-    await _prefs!.clear();
+    await _prefs?.clear();
   }
 
 String? getToken() {

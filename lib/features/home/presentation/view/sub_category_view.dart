@@ -26,7 +26,7 @@ class SubCategoryView extends StatelessWidget {
                 if (state is HomeSuccess) {
                   return SubCategoryListSection(
                     ads: state.home.featuredAds
-                        .where((ad) => ad.category?['name'] == title)
+                        .where((ad) => ad.category?.name == title)
                         .toList(),
                   );
                 }

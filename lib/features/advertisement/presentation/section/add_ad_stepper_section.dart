@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mostkdm/core/widgets/app_button.dart';
-import 'package:mostkdm/features/advertisement/data/ad_models.dart';
+import 'package:mostkdm/features/advertisement/data/models/ad_details_model.dart';
 import 'package:mostkdm/features/advertisement/presentation/section/add_images_section.dart';
 import 'package:mostkdm/features/advertisement/presentation/section/basic_info_section.dart';
 import 'package:mostkdm/features/advertisement/presentation/section/category_location_section.dart';

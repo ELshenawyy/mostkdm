@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/widgets/app_ads_card.dart';
 import 'package:mostkdm/core/widgets/app_button.dart';
-import 'package:mostkdm/features/advertisement/data/ad_models.dart';
+import 'package:mostkdm/features/advertisement/data/models/ad_details_model.dart';
 
 class MyAdCard extends StatelessWidget {
   final AdDetailsModel ad;

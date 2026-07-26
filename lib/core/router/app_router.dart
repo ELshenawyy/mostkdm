@@ -1,6 +1,7 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mostkdm/core/router/router_names.dart';
-import 'package:mostkdm/features/advertisement/data/ad_models.dart';
+import 'package:mostkdm/features/advertisement/data/models/ad_details_model.dart';
 import 'package:mostkdm/features/advertisement/presentation/view/add_ad_view.dart';
 import 'package:mostkdm/features/advertisement/presentation/view/ads_datails_view.dart';
 import 'package:mostkdm/features/auth/presentation/view/change_password_view.dart';
@@ -12,6 +13,7 @@ import 'package:mostkdm/features/chat/data/models/chat_model.dart';
 import 'package:mostkdm/features/chat/presentation/view/chat_details_view.dart';
 import 'package:mostkdm/features/commission/presentation/view/commission_view.dart';
 import 'package:mostkdm/features/favorite/presentation/view/favorites_view.dart';
+import 'package:mostkdm/features/home/presentation/bloc/home_bloc.dart';
 import 'package:mostkdm/features/home/presentation/section/home_featured_ads_section.dart';
 import 'package:mostkdm/features/home/presentation/view/ads_view.dart';
 import 'package:mostkdm/features/home/presentation/view/categories_view.dart';
@@ -36,7 +38,7 @@ final appRouter = GoRouter(
   routes: [
     GoRoute(
       path: RouteNames.splash,
-      builder: (context, state) => const SplashView(),
+      builder: (context, state) => const MainView(),
     ),
     GoRoute(
       path: RouteNames.signup,
@@ -90,12 +92,14 @@ final appRouter = GoRouter(
       path: RouteNames.ads,
       builder: (context, state) => const AdsView(),
     ),
-    // GoRoute(
-    //   path: RouteNames.subCategory,
-    //   builder: (context, state) => SubCategoryView(
-    //     title: state.extra as String? ?? '',
-    //   ),
-    // ),
+    // في app_router.dart
+GoRoute(
+  path: RouteNames.subCategory,
+  builder: (context, state) => BlocProvider.value(
+    value: context.read<HomeBloc>(), // ← مش هينفع لأن مختلف route
+    child: SubCategoryView(title: state.extra as String),
+  ),
+),
     GoRoute(
       path: RouteNames.search,
       builder: (context, state) => SearchView(),

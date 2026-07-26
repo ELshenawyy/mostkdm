@@ -1,7 +1,7 @@
 import 'package:mostkdm/core/network/api_consumer.dart';
 import 'package:mostkdm/core/network/api_endpoints.dart';
 import 'package:mostkdm/core/network/dio_consumer.dart';
-import 'package:mostkdm/features/home/data/models/ads_model.dart';
+import 'package:mostkdm/features/advertisement/data/models/ad_model.dart';
 import '../models/home_model.dart';
 
 abstract class HomeRemoteDataSource {

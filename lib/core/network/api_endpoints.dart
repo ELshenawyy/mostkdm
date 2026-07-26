@@ -18,12 +18,14 @@ class ApiEndpoints {
   static const String search = '/homes/search';
   static const String searchHistory = '/v1/homes/hestory_search';
   static const String deleteSearchHistory = '/v1/homes/delete_istory_search';
-  static String deleteSearchHistoryById(int id) => '$deleteSearchHistory/$id';  
+  static String deleteSearchHistoryById(int id) => '$deleteSearchHistory/$id';
   static const String topKeyWords = '/topkeywords';
 
   // categories
-static const String categories = '/categories';
-static const String categoriesWithAdsCount = '/categories/with-ads-count';
-static String categoryAds(int id) => '/categories/$id/ads';
+  static const String categories = '/categories';
+  static const String categoriesWithAdsCount = '/categories/with-ads-count';
+  static String categoryAds(int id) => '/categories/$id/ads';
   static String subCategories(int id) => '/categories/$id/sub-categories';
+  static const String cities = '/v1/cities';
+  static const String adsFilter = '/ads/filter';
 }

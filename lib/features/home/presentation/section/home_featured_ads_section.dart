@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/core/widgets/app_ads_card.dart';
-import 'package:mostkdm/features/home/data/models/ads_model.dart';
+import 'package:mostkdm/features/advertisement/data/models/ad_model.dart';
 
 class HomeFeaturedAdsSection extends StatelessWidget {
   final List<AdModel> ads; 
@@ -25,7 +25,7 @@ class HomeFeaturedAdsSection extends StatelessWidget {
             itemBuilder: (context, index) {
               final ad = ads[index];
               return AppAdCard(
-                image: ad.cover, // ← cover من الـ API
+                image: ad.cover, 
                 title: ad.title,
                 price: ad.price,
                 location: ad.location,
