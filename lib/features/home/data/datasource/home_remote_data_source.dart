@@ -21,7 +21,6 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
  Future<HomeModel> getHome() async {
   final response = await _api.get(ApiEndpoints.home);
   final home = HomeModel.fromJson(response);
-  print('PARSED sliders: ${home.sliders.length}, featuredAds: ${home.featuredAds.length}');
   return home;
 }
 

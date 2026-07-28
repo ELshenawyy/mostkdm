@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
@@ -36,7 +37,19 @@ class CategoryListItem extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Image.asset(image, width: 40, height: 40),
+            image.isEmpty?
+              const Icon(
+                Icons.category_outlined,
+                size: 40,
+                color: AppColors.textFieldLabel,
+              ) :
+            CachedNetworkImage(
+              width: 40,
+              height: 40,
+              fit: BoxFit.cover,
+              imageUrl: image,
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+            ),
             const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,

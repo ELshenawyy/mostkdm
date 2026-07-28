@@ -47,11 +47,11 @@ class HomeCategoriesSection extends StatelessWidget {
             ),
             itemCount: categories.length,
             itemBuilder: (context, i) => CategoriesItemWidget(
-              image: categories[i].image, // ← network image
+              image: categories[i].image, 
               label: categories[i].name,
               onTap: () => context.push(
                 RouteNames.subCategory,
-                extra: categories[i].name,
+                extra: categories[i],
               ),
             ),
           ),

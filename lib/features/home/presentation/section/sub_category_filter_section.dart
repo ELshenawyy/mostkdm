@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
+import 'package:mostkdm/features/advertisement/data/models/category_model.dart';
 
 class SubCategoryFilterSection extends StatefulWidget {
-  const SubCategoryFilterSection({super.key});
+  final List<CategoryModel> subCategories;
+  final void Function(int? subCategoryId) onSelected;
+
+  const SubCategoryFilterSection({
+    super.key,
+    required this.subCategories,
+    required this.onSelected,
+  });
 
   @override
   State<SubCategoryFilterSection> createState() =>
@@ -10,25 +18,32 @@ class SubCategoryFilterSection extends StatefulWidget {
 }
 
 class _SubCategoryFilterSectionState extends State<SubCategoryFilterSection> {
-  int _selectedIndex = 0;
-
-  static const _filters = ['الكل', 'مرسيدس', 'كيا', 'نيسان', 'توياتا', 'سوناتا'];
+  int? _selectedId;
 
   @override
   Widget build(BuildContext context) {
+    final chips = <(String label, int? id)>[
+      ('الكل', null),
+      ...widget.subCategories.map((sc) => (sc.name, sc.id)),
+    ];
+
     return SizedBox(
       height: 40,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         scrollDirection: Axis.horizontal,
-        itemCount: _filters.length,
+        itemCount: chips.length,
         separatorBuilder: (_, __) => const SizedBox(width: 8),
         itemBuilder: (context, i) {
-          final isSelected = i == _selectedIndex;
+          final (label, id) = chips[i];
+          final isSelected = id == _selectedId;
           return FilterChip(
-            label: Text(_filters[i]),
+            label: Text(label),
             selected: isSelected,
-            onSelected: (_) => setState(() => _selectedIndex = i),
+            onSelected: (_) {
+              setState(() => _selectedId = id);
+              widget.onSelected(id);
+            },
             selectedColor: AppColors.primaryColor,
             backgroundColor: AppColors.surface,
             labelStyle: TextStyle(

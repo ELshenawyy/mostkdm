@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/features/advertisement/data/models/ad_details_model.dart';
+import 'package:mostkdm/features/advertisement/data/models/category_model.dart';
 import 'package:mostkdm/features/advertisement/presentation/view/add_ad_view.dart';
 import 'package:mostkdm/features/advertisement/presentation/view/ads_datails_view.dart';
 import 'package:mostkdm/features/auth/presentation/view/change_password_view.dart';
@@ -15,7 +16,7 @@ import 'package:mostkdm/features/commission/presentation/view/commission_view.da
 import 'package:mostkdm/features/favorite/presentation/view/favorites_view.dart';
 import 'package:mostkdm/features/home/presentation/bloc/home_bloc.dart';
 import 'package:mostkdm/features/home/presentation/section/home_featured_ads_section.dart';
-import 'package:mostkdm/features/home/presentation/view/ads_view.dart';
+import 'package:mostkdm/features/advertisement/presentation/view/ads_view.dart';
 import 'package:mostkdm/features/home/presentation/view/categories_view.dart';
 import 'package:mostkdm/features/home/presentation/view/sub_category_view.dart';
 import 'package:mostkdm/features/main/presentation/view/main_view.dart';
@@ -95,9 +96,8 @@ final appRouter = GoRouter(
     // في app_router.dart
 GoRoute(
   path: RouteNames.subCategory,
-  builder: (context, state) => BlocProvider.value(
-    value: context.read<HomeBloc>(), // ← مش هينفع لأن مختلف route
-    child: SubCategoryView(title: state.extra as String),
+  builder: (context, state) => SubCategoryView(
+    category: state.extra as CategoryModel,
   ),
 ),
     GoRoute(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
 import 'package:mostkdm/core/widgets/app_header.dart';
-import 'package:mostkdm/core/widgets/local_app_bar.dart';
 import '../section/my_ads_list_section.dart';
 
 class MyAdsView extends StatelessWidget {

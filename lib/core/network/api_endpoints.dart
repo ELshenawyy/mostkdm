@@ -24,7 +24,7 @@ class ApiEndpoints {
   // categories
   static const String categories = '/categories';
   static const String categoriesWithAdsCount = '/categories/with-ads-count';
-  static String categoryAds(int id) => '/categories/$id/ads';
+  static String categoryAds(int categoryId) => '/categories/$categoryId/ads';
   static String subCategories(int id) => '/categories/$id/sub-categories';
   static const String cities = '/v1/cities';
   static const String adsFilter = '/ads/filter';
@@ -32,6 +32,8 @@ class ApiEndpoints {
 
     // ads
   static const String ads = '/ads';
+  static const String allAds = '/v1/ads';
   static String adDetails(String id) => '/ads/$id';
+  
 
 }
