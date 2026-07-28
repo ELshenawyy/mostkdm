@@ -18,10 +18,12 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   HomeRemoteDataSourceImpl({ApiConsumer? api}) : _api = api ?? DioConsumer();
 
   @override
-  Future<HomeModel> getHome() async {
-    final response = await _api.get(ApiEndpoints.home);
-    return HomeModel.fromJson(response);
-  }
+ Future<HomeModel> getHome() async {
+  final response = await _api.get(ApiEndpoints.home);
+  final home = HomeModel.fromJson(response);
+  print('PARSED sliders: ${home.sliders.length}, featuredAds: ${home.featuredAds.length}');
+  return home;
+}
 
   @override
   Future<List<AdModel>> search({required String keyword}) async {

@@ -38,7 +38,7 @@ class _FavoriteAdsSectionState extends State<FavoriteAdsSection> {
           price: ad.price.toString(),
           location: ad.city,
           date: 'منذ ${ad.daysAgo} يوم',
-          views: '${ad.views} مشاهدة',
+          views: '${ad.visistedCount} مشاهدة',
           isFavorite: true,
           onFavTap: () => setState(() => _favoriteIds.remove(ad.id)),
           onTap: () => context.push(

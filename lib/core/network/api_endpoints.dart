@@ -28,4 +28,10 @@ class ApiEndpoints {
   static String subCategories(int id) => '/categories/$id/sub-categories';
   static const String cities = '/v1/cities';
   static const String adsFilter = '/ads/filter';
+
+
+    // ads
+  static const String ads = '/ads';
+  static String adDetails(String id) => '/ads/$id';
+
 }

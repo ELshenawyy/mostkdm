@@ -1,7 +1,7 @@
-// features/ad_details/presentation/widgets/ad_slider.dart
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:mostkdm/core/theme/app_colors.dart';
 
 class AdSlider extends StatefulWidget {
   final List<String> images;
@@ -20,11 +20,19 @@ class _AdSliderState extends State<AdSlider> {
     return CarouselSlider.builder(
       itemCount: widget.images.length,
       itemBuilder: (context, index, _) => SizedBox(
+        key: ValueKey(widget.images[index]),
         height: 350,
         width: double.infinity,
-        child: Image.asset(
-          widget.images[index],
+        child: CachedNetworkImage(
+          imageUrl: widget.images[index],
           fit: BoxFit.cover,
+          placeholder: (context, url) => const Center(
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+          errorWidget: (context, url, error) => Container(
+            color: AppColors.backgroundColor,
+            child: const Icon(Icons.image_not_supported_outlined, size: 40),
+          ),
         ),
       ),
       options: CarouselOptions(

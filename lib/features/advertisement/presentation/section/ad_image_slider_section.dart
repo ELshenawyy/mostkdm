@@ -20,6 +20,7 @@ class _AdImageSliderSectionState extends State<AdImageSliderSection> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 350,
+      width: double.infinity,
       child: ClipRRect(
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(45),

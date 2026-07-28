@@ -19,12 +19,11 @@ class AdTitlePriceSection extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 8),
-
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              '${ad.price.toStringAsFixed(0)} @',
+              '${ad.price} @',
               style: AppTextStyle.headline1.copyWith(
                 color: AppColors.primaryColor,
               ),
@@ -40,45 +39,39 @@ class AdTitlePriceSection extends StatelessWidget {
               ),
               child: const Text(
                 'نشط',
-                style: AppTextStyle.textBannerHeadline2,),
+                style: AppTextStyle.textBannerHeadline2,
               ),
-            
+            ),
           ],
         ),
         const SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // الموقع
-            Row(
-              children: [
-                Text(ad.city,
-                    style: const TextStyle(fontSize: 12, color: Colors.grey)),
-                const SizedBox(width: 4),
-                const Icon(Icons.location_on_outlined,
-                    size: 14, color: Colors.grey),
-              ],
+            SizedBox(
+              width: 90,
+              child: Text(
+                ad.city,
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
+            const SizedBox(width: 4),
+            const Icon(Icons.location_on_outlined,
+                size: 14, color: AppColors.primaryColor),
             const SizedBox(width: 12),
-            Row(
-              children: [
-                Text('منذ ${ad.daysAgo} ساعة',
-                    style: const TextStyle(fontSize: 12, color: Colors.grey)),
-                const SizedBox(width: 4),
-                const Icon(Icons.access_time,
-                    size: 14, color: AppColors.primaryColor),
-              ],
-            ),
+            Text('منذ ${ad.daysAgo} ساعة',
+                style: const TextStyle(fontSize: 12, color: Colors.grey)),
+            const SizedBox(width: 4),
+            const Icon(Icons.access_time,
+                size: 14, color: AppColors.primaryColor),
             const SizedBox(width: 12),
-            Row(
-              children: [
-                Text('${ad.views}',
-                    style: const TextStyle(fontSize: 12, color: Colors.grey)),
-                const SizedBox(width: 4),
-                const Icon(Icons.remove_red_eye_outlined,
-                    size: 14, color: AppColors.primaryColor),
-              ],
-            ),
+            Text('${ad.visistedCount} مشاهدة',
+                style: const TextStyle(fontSize: 12, color: Colors.grey)),
+            const SizedBox(width: 4),
+            const Icon(Icons.remove_red_eye_outlined,
+                size: 14, color: AppColors.primaryColor),
           ],
         ),
       ],

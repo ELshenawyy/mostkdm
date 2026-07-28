@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:mostkdm/core/errors/app_exception.dart';
 import 'package:mostkdm/core/errors/error_model.dart';
@@ -63,15 +65,25 @@ class DioConsumer implements ApiConsumer {
     }
   }
 
-  dynamic _handleResponse(Response response) {
-    if (response.data['status'] == false) {
-      throw AppException(
-        message: response.data['message'] ?? 'حدث خطأ',
-        statusCode: response.statusCode,
-      );
-    }
-    return response.data;
+
+
+dynamic _handleResponse(Response response) {
+  dynamic data = response.data;
+
+  // بعض الـ endpoints بترجع الـ body كـ String خام لو الـ Content-Type
+  // header مش صح من السيرفر، فبنتأكد ونحولها بنفسنا هنا.
+  if (data is String) {
+    data = jsonDecode(data);
   }
+
+  if (data['status'] == false) {
+    throw AppException(
+      message: data['message'] ?? 'حدث خطأ',
+      statusCode: response.statusCode,
+    );
+  }
+  return data;
+}
 
   AppException _handleDioError(DioException e) {
     final data = e.response?.data;

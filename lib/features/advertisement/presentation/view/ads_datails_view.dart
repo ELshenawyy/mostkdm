@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mostkdm/features/advertisement/data/models/dummy.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mostkdm/features/advertisement/data/datasource/ad_details_remote_data_source.dart';
+import 'package:mostkdm/features/advertisement/data/repository/ad_details_repository.dart';
+import 'package:mostkdm/features/advertisement/presentation/bloc/ad_details_bloc.dart';
 import 'package:mostkdm/features/advertisement/presentation/section/ad_image_slider_section.dart';
 import 'package:mostkdm/features/advertisement/presentation/section/seller_info_section.dart';
 import 'package:mostkdm/features/advertisement/presentation/section/ad_description_section.dart';
@@ -7,47 +10,60 @@ import 'package:mostkdm/features/advertisement/presentation/section/ad_title_pri
 import 'package:mostkdm/features/advertisement/presentation/section/header_section.dart';
 
 class AdsDatailsView extends StatelessWidget {
-    final String adId;
+  final String adId;
 
   const AdsDatailsView({super.key, required this.adId});
 
   @override
   Widget build(BuildContext context) {
-
-    final ad = dummyAds.firstWhere(
-      (e) => e.id == adId,
-    );
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            AdImageSliderSection(ad: ad),
-            Padding(
-              padding: const EdgeInsets.only(top: 300),
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(12),
-                  ),
-                ),
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    AdTitlePriceSection(ad: ad),
-                    const SizedBox(height: 20),
-                    AdDescriptionSection(ad: ad),
-                    const SizedBox(height: 20),
-                    SellerSection(ad: ad),
-                    const SizedBox(height: 20),
-                    HeaderSection(label: "إعلانات مشابهة"),
-                  ],
-                ),
-              ),
+    return BlocProvider(
+      create: (context) => AdDetailsBloc(
+          AdDetailsRepositoryImpl(AdDetailsRemoteDataSourceImpl()))
+        ..add(GetAdDetailsEvent(adId: adId)),
+      child: Builder(
+        builder: (context) => Scaffold(
+          body: BlocBuilder<AdDetailsBloc, AdDetailsState>(
+            builder: (context, state) {
+              return switch (state) {
+                  AdDetailsInitial() || AdDetailsLoading() =>
+                    const Center(child: CircularProgressIndicator()),
+                  AdDetailsError(:final message) =>
+                    Center(child: Text(message)),
+                  AdDetailsLoaded(:final adDetailsModel) =>
+                    SingleChildScrollView(
+                      child: Stack(
+                        children: [
+                          AdImageSliderSection(ad: adDetailsModel),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 300),
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 16),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12),
+                                ),
+                              ),
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                spacing: 20,
+                                children: [
+                                  AdTitlePriceSection(ad: adDetailsModel),
+                                  AdDescriptionSection(ad: adDetailsModel),
+                                  SellerSection(ad: adDetailsModel),
+                                  HeaderSection(label: "إعلانات مشابهة"),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                };
+              },
             ),
-          ],
+          
         ),
       ),
     );

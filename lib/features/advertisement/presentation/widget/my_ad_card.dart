@@ -26,10 +26,10 @@ class MyAdCard extends StatelessWidget {
       
       image: ad.images.first,
       title: ad.title,
-      price: ad.price.toStringAsFixed(0),
+      price: ad.price.toString(),
       location: ad.city,
       date: 'منذ ${ad.daysAgo} يوم',
-      views: '${ad.views} مشاهدة',
+      views: '${ad.visistedCount} مشاهدة',
       bottomWidget: Row(
         children: [
           // edit

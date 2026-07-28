@@ -1,7 +1,7 @@
-// features/advertisement/presentation/sections/seller_section.dart
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
+import 'package:mostkdm/core/theme/app_images.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
 import 'package:mostkdm/core/widgets/app_button.dart';
 import 'package:mostkdm/features/advertisement/data/models/ad_details_model.dart';
@@ -37,15 +37,30 @@ class SellerSection extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 24,
-                backgroundImage: AssetImage(ad.seller.image),
+                backgroundColor: AppColors.backgroundColor,
+                backgroundImage: ad.seller.image.isEmpty
+                    ? null
+                    : CachedNetworkImageProvider(ad.seller.image),
+                child: ad.seller.image.isEmpty
+                    ? const Icon(Icons.person_outline,
+                        color: AppColors.textHintColor)
+                    : null,
               ),
               SizedBox(width: 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(ad.seller.name, style: AppTextStyle.textFieldHeader),
+                  SizedBox(
+                    width: 100,
+                    child: Text(
+                      ad.seller.name,
+                      style: AppTextStyle.textFieldHeader,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ),
                   Text(
-                    '${ad.seller.memberSince} إعلان آخر',
+                    '${ad.seller.adsCount} إعلان آخر',
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ],
