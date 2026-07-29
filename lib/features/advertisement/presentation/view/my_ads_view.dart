@@ -1,57 +1,67 @@
 import 'package:flutter/material.dart';
-import 'package:mostkdm/core/theme/app_colors.dart';
-import 'package:mostkdm/core/theme/app_text_style.dart';
-import 'package:mostkdm/core/widgets/app_header.dart';
-import '../section/my_ads_list_section.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mostkdm/core/widgets/local_app_bar.dart';
+import 'package:mostkdm/features/advertisement/presentation/bloc/my_ads_bloc.dart';
+import 'package:mostkdm/features/advertisement/presentation/section/my_ads_list_section.dart';
 
+/// Composition بحتة -- كل الـ UI الفعلي (الكارت، تأكيد الحذف، الحالة
+/// الفاضية) في MyAdsListSection/NoAdsSection/MyAdCard. هنا بس بنبني
+/// الـ Bloc ونوصل الـ state بالـ section المناسبة.
 class MyAdsView extends StatelessWidget {
   const MyAdsView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => MyAdsBloc()..add(const GetMyAdsEvent()),
+      child: const _MyAdsViewBody(),
+    );
+  }
+}
+
+class _MyAdsViewBody extends StatelessWidget {
+  const _MyAdsViewBody();
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            AppHeader(
-              height: 160,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryHintColorWithOpacity,
-                        shape: BoxShape.circle,
+      body: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 20.0),
+            child: LocalAppBar(title: 'إعلاناتي'),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: BlocBuilder<MyAdsBloc, MyAdsState>(
+                builder: (context, state) {
+                  return switch (state) {
+                    MyAdsInitial() ||
+                    MyAdsLoading() =>
+                      const Padding(
+                        padding: EdgeInsets.only(top: 100),
+                        child: Center(child: CircularProgressIndicator()),
                       ),
-                      width: 40,
-                      height: 40,
-                      child: const Icon(Icons.arrow_back_ios,
-                          color: AppColors.surface, size: 20),
-                    ),
-                    const Spacer(),
-                    Text(
-                      'إعلاناتى',
-                      style: AppTextStyle.textBannerHeadline1,
-                    ),
-                    const Spacer(),
-                    const SizedBox(width: 40),
-                  ],
-                ),
+                    MyAdsError(:final message) => Padding(
+                        padding: const EdgeInsets.only(top: 100),
+                        child: Center(child: Text(message)),
+                      ),
+                    MyAdsLoaded(:final ads) => MyAdsListSection(
+                        ads: ads,
+                        onToggle: (adId) => context
+                            .read<MyAdsBloc>()
+                            .add(ToggleMyAdActiveEvent( adId: adId)),
+                        onDelete: (adId) => context
+                            .read<MyAdsBloc>()
+                            .add(DeleteMyAdEvent(adId:  adId)),
+                      ),
+                  };
+                },
               ),
             ),
-            SizedBox(height: 32),
-            Transform.translate(
-              offset: const Offset(0, -80),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: const MyAdsListSection(),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

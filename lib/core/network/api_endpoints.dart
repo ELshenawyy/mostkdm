@@ -29,11 +29,13 @@ class ApiEndpoints {
   static const String cities = '/v1/cities';
   static const String adsFilter = '/ads/filter';
 
-
-    // ads
+  // ads
   static const String ads = '/ads';
   static const String allAds = '/v1/ads';
   static String adDetails(String id) => '/ads/$id';
   
 
+  static const String myAds = '/v1/user/ads';
+  static String toggleAdActive(int id) => '/v1/ads/$id/toggle-active';
+  static String userAd(int id) => '/v1/ads/$id';
 }

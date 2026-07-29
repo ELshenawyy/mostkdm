@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/widgets/app_ads_card.dart';
 import 'package:mostkdm/core/widgets/app_button.dart';
-import 'package:mostkdm/features/advertisement/data/models/ad_details_model.dart';
+import 'package:mostkdm/features/advertisement/data/models/ad_model.dart';
 
 class MyAdCard extends StatelessWidget {
-  final AdDetailsModel ad;
+  final AdModel ad;
   final bool isActive;
   final VoidCallback? onToggle;
   final VoidCallback? onDelete;
@@ -23,13 +23,12 @@ class MyAdCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppAdCard(
-      
-      image: ad.images.first,
+      image: ad.images.isNotEmpty ? ad.images.first : ad.cover,
       title: ad.title,
-      price: ad.price.toString(),
-      location: ad.city,
+      price: ad.price,
+      location: ad.location,
       date: 'منذ ${ad.daysAgo} يوم',
-      views: '${ad.visistedCount} مشاهدة',
+      views: '${ad.visitedCount} مشاهدة',
       bottomWidget: Row(
         children: [
           // edit
@@ -60,14 +59,11 @@ class MyAdCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          // زرار إيقاف/تشغيل
           Expanded(
             child: AppButton(
               label: isActive ? 'إيقاف الإعلان' : 'تشغيل الإعلان',
               onTap: onToggle,
-              kind: isActive
-                  ? AppButtonKind.primary
-                  : AppButtonKind.secondary,
+              kind: isActive ? AppButtonKind.primary : AppButtonKind.secondary,
             ),
           ),
         ],

@@ -7,7 +7,6 @@ import 'package:mostkdm/core/theme/app_colors.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CacheHelper().init(); 
-    print('CacheHelper initialized: ${CacheHelper().getString('test')}'); // ← هنا
 
   await DioClient().init();
   runApp(const MyApp());

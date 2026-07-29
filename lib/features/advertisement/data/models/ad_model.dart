@@ -18,6 +18,30 @@ class AdModel {
   final CategoryModel? category;
   final CategoryModel? subCategory;
 
+  AdModel copyWith({
+    bool? isActive,
+    String? isActiveLabel,
+  }) {
+    return AdModel(
+      id: id,
+      title: title,
+      cover: cover,
+      description: description,
+      price: price,
+      isActive: isActive ?? this.isActive,
+      isActiveLabel: isActiveLabel ?? this.isActiveLabel,
+      visitedCount: visitedCount,
+      location: location,
+      latitude: latitude,
+      longitude: longitude,
+      isFavourite: isFavourite,
+      createdAt: createdAt,
+      images: images,
+      category: category,
+      subCategory: subCategory,
+    );
+  }
+
   const AdModel({
     required this.id,
     required this.title,
@@ -36,26 +60,33 @@ class AdModel {
     this.category,
     this.subCategory,
   });
+  int get daysAgo {
+    try {
+      return DateTime.now().difference(DateTime.parse(createdAt)).inDays;
+    } catch (_) {
+      return 0;
+    }
+  }
 
   factory AdModel.fromJson(Map<String, dynamic> json) {
     // دالة مساعدة لتحويل أي شكل للـ category لـ CategoryModel بأمان
     CategoryModel? parseCategory(dynamic input) {
       if (input == null) return null;
-      
+
       if (input is Map<String, dynamic>) {
         return CategoryModel(
-          id: input['id'] is int 
-              ? input['id'] 
+          id: input['id'] is int
+              ? input['id']
               : (int.tryParse(input['id']?.toString() ?? '') ?? 0),
           name: input['name']?.toString() ?? '',
           image: input['image']?.toString() ?? '',
           isActive: input['is_active'] is bool ? input['is_active'] : true,
-          adsCount: input['ads_count'] is int 
-              ? input['ads_count'] 
+          adsCount: input['ads_count'] is int
+              ? input['ads_count']
               : (int.tryParse(input['ads_count']?.toString() ?? '') ?? 0),
         );
       }
-      
+
       // لو الـ API راجع String بس (زي الـ Search API)
       if (input is String && input.isNotEmpty) {
         return CategoryModel(
@@ -66,12 +97,14 @@ class AdModel {
           adsCount: 0,
         );
       }
-      
+
       return null;
     }
 
     return AdModel(
-      id: json['id'] is int ? json['id'] : (int.tryParse(json['id']?.toString() ?? '') ?? 0),
+      id: json['id'] is int
+          ? json['id']
+          : (int.tryParse(json['id']?.toString() ?? '') ?? 0),
       title: json['title']?.toString() ?? '',
       cover: json['cover']?.toString() ?? '',
       description: json['description']?.toString() ?? '',

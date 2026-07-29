@@ -118,7 +118,7 @@ GoRoute(
     GoRoute(
       path: RouteNames.addAd,
       builder: (context, state) => AddAdView(
-        ad: state.extra as AdDetailsModel?,
+        adId: state.extra as String?,
       ),
     ),
     GoRoute(
