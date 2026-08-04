@@ -8,10 +8,10 @@ part 'categories_state.dart';
 
 class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
   final CategoriesRepository _repository;
-  
- CategoriesBloc({CategoriesRepository? repository})
-      : _repository = repository ?? CategoriesRepositoryImpl(),
-        super( CategoriesInitial()) {
+
+  CategoriesBloc({required CategoriesRepository repository})
+      : _repository = repository,
+        super(CategoriesInitial()) {
     on<GetCategoriesEvent>(_getCategories);
   }
 

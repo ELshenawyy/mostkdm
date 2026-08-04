@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mostkdm/core/di/service_locator.dart';
 import 'package:mostkdm/core/widgets/local_app_bar.dart';
 import 'package:mostkdm/features/advertisement/data/models/category_model.dart';
 import 'package:mostkdm/features/home/presentation/bloc/sub_categories_bloc.dart';
@@ -17,7 +18,7 @@ class SubCategoryView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) =>
-          SubCategoryBloc()..add(GetCategoryAdsEvent(categoryId: category.id)),
+          getIt<SubCategoryBloc>()..add(GetCategoryAdsEvent(categoryId: category.id)),
       child: _SubCategoryViewBody(category: category),
     );
   }

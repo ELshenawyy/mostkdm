@@ -13,31 +13,33 @@ class MyAdsBloc extends Bloc<MyAdsEvent, MyAdsState> {
 
   MyAdsBloc({MyAdsRepository? repository})
       : _repository = repository ?? MyAdsRepositoryImpl(),
-        super(MyAdsInitial()) {
+        super(const MyAdsInitial()) {
     on<GetMyAdsEvent>(_onGetMyAds);
-    on<ToggleMyAdActiveEvent>(_onToggleMyAdActive);
-    on<DeleteMyAdEvent>(_onDeleteMyAd);
+    on<ToggleMyAdActiveEvent>(_onToggleAdActive);
+    on<DeleteMyAdEvent>(_onDeleteAd);
   }
 
   Future<void> _onGetMyAds(
     GetMyAdsEvent event,
     Emitter<MyAdsState> emit,
   ) async {
-    emit(MyAdsLoading());
+    emit(const MyAdsLoading());
     final result = await _repository.getMyAds();
     result.fold(
       (error) => emit(MyAdsError(error.message)),
       (ads) {
-        emit(MyAdsLoaded(ads));
+        _ads = ads;
+        emit(MyAdsLoaded(_ads));
       },
     );
   }
 
-  Future<void> _onToggleMyAdActive(
+  Future<void> _onToggleAdActive(
     ToggleMyAdActiveEvent event,
     Emitter<MyAdsState> emit,
   ) async {
     final index = _ads.indexWhere((ad) => ad.id == event.adId);
+
     if (index == -1) return;
 
     final previousAd = _ads[index];
@@ -56,7 +58,7 @@ class MyAdsBloc extends Bloc<MyAdsEvent, MyAdsState> {
     );
   }
 
-  Future<void> _onDeleteMyAd(
+  Future<void> _onDeleteAd(
     DeleteMyAdEvent event,
     Emitter<MyAdsState> emit,
   ) async {

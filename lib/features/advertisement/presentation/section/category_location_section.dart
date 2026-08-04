@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
-import 'package:mostkdm/features/advertisement/data/models/ad_details_model.dart';
+import 'package:mostkdm/features/advertisement/data/models/category_model.dart';
+import 'package:mostkdm/features/advertisement/presentation/bloc/add_ad_bloc.dart';
 import 'package:mostkdm/features/auth/presentation/sections/app_hint_section.dart';
+import 'package:mostkdm/features/search/data/models/city_model.dart';
 
 class CategoryLocationSection extends StatefulWidget {
-    final AdDetailsModel? ad;
-
-  const CategoryLocationSection({super.key, this.ad});
+  const CategoryLocationSection({super.key});
 
   @override
   State<CategoryLocationSection> createState() =>
@@ -15,33 +16,34 @@ class CategoryLocationSection extends StatefulWidget {
 }
 
 class _CategoryLocationSectionState extends State<CategoryLocationSection> {
-  String? _mainCategory;
-  String? _subCategory;
-  String? _city;
-
   @override
-void initState() {
-  super.initState();
-  if (widget.ad != null) {
-    _city = widget.ad!.city;
+  void initState() {
+    super.initState();
+    // نجيب الأقسام + المدن مرة واحدة أول ما الخطوة تفتح. لو المستخدم
+    // كان مختار قسم رئيسي بالفعل (رجع من خطوة تانية)، نجيب أقسامه
+    // الفرعية كمان.
+    final bloc = context.read<AddAdBloc>();
+    bloc.add(const LoadLookupDataEvent());
+    final categoryId = bloc.state.categoryId;
+    if (categoryId != null) {
+      bloc.add(LoadSubCategoriesForCategoryEvent(categoryId));
+    }
   }
-}
 
-  
-
-  Widget _buildDropdown(
-    String label,
-    String hint,
-    String? value,
-    List<String> items,
-    void Function(String?) onChanged,
-  ) {
+  Widget _buildDropdown<T>({
+    required String label,
+    required String hint,
+    required T? value,
+    required List<T> items,
+    required String Function(T) itemLabel,
+    required void Function(T?) onChanged,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: AppTextStyle.textFieldLabel),
         const SizedBox(height: 12),
-        DropdownButtonFormField<String>(
+        DropdownButtonFormField<T>(
           value: value,
           hint: Text(hint, textAlign: TextAlign.right),
           isExpanded: true,
@@ -54,7 +56,7 @@ void initState() {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: AppColors.primaryColor,
                 width: 1,
               ),
@@ -64,7 +66,7 @@ void initState() {
               .map((e) => DropdownMenuItem(
                     alignment: Alignment.centerRight,
                     value: e,
-                    child: Text(e, textAlign: TextAlign.right),
+                    child: Text(itemLabel(e), textAlign: TextAlign.right),
                   ))
               .toList(),
           onChanged: onChanged,
@@ -75,39 +77,88 @@ void initState() {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 16,
-      children: [
-        Text(
-          'التصنيف و الموقع',
-          style: AppTextStyle.headline3,
-        ),
-        _buildDropdown(
-          'التصنيف الرئيسي',
-          'اختر التصنيف الرئيسي',
-          _mainCategory,
-          ['سيارات', 'أثاث', 'إلكترونيات', 'عقارات', 'أزياء'],
-          (val) => setState(() => _mainCategory = val),
-        ),
-        _buildDropdown(
-          'التصنيف الفرعي',
-          'اختر التصنيف الفرعي',
-          _subCategory,
-          ['تويوتا', 'كيا', 'مرسيدس', 'هوندا'],
-          (val) => setState(() => _subCategory = val),
-        ),
-        _buildDropdown(
-          'الموقع',
-          'اختر الموقع',
-          _city,
-          ['الرياض', 'جدة', 'مكة', 'الدمام'],
-          (val) => setState(() => _city = val),
-        ),
-        AppHintSection(
-            title:
-                "💡 نصيحة : إختيار التصنيف يساعد المشترين فىالوصول إلى إعلانك بكل سهولة")
-      ],
+    return BlocBuilder<AddAdBloc, AddAdState>(
+      builder: (context, state) {
+        final selectedCategory = state.categoryId == null
+            ? null
+            : state.categories
+                .where((c) => c.id == state.categoryId)
+                .firstOrNull;
+        final selectedSubCategory = state.subCategoryId == null
+            ? null
+            : state.subCategories
+                .where((c) => c.id == state.subCategoryId)
+                .firstOrNull;
+        final selectedCity = state.cityId == null
+            ? null
+            : state.cities.where((c) => c.id == state.cityId).firstOrNull;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 16,
+          children: [
+            Text('التصنيف و الموقع', style: AppTextStyle.headline3),
+            _buildDropdown<CategoryModel>(
+              label: 'التصنيف الرئيسي',
+              hint: 'اختر التصنيف الرئيسي',
+              value: selectedCategory,
+              items: state.categories,
+              itemLabel: (c) => c.name,
+              onChanged: (category) {
+                if (category == null) return;
+                context.read<AddAdBloc>().add(
+                      UpdateCategoryEvent(categoryId: category.id),
+                    );
+                context
+                    .read<AddAdBloc>()
+                    .add(LoadSubCategoriesForCategoryEvent(category.id));
+              },
+            ),
+            _buildDropdown<CategoryModel>(
+              label: 'التصنيف الفرعي',
+              hint: state.categoryId == null
+                  ? 'اختر التصنيف الرئيسي أولاً'
+                  : 'اختر التصنيف الفرعي',
+              value: selectedSubCategory,
+              items: state.subCategories,
+              itemLabel: (c) => c.name,
+              onChanged: state.categoryId == null
+                  ? (_) {}
+                  : (subCategory) {
+                      if (subCategory == null || state.categoryId == null) {
+                        return;
+                      }
+                      context.read<AddAdBloc>().add(
+                            UpdateCategoryEvent(
+                              categoryId: state.categoryId!,
+                              subCategoryId: subCategory.id,
+                            ),
+                          );
+                    },
+            ),
+            _buildDropdown<CityModel>(
+              label: 'الموقع',
+              hint: 'اختر الموقع',
+              value: selectedCity,
+              items: state.cities,
+              itemLabel: (c) => c.name,
+              onChanged: (city) {
+                if (city == null) return;
+                context.read<AddAdBloc>().add(
+                      UpdateLocationEvent(
+                        location: city.name,
+                        cityId: city.id,
+                      ),
+                    );
+              },
+            ),
+            const AppHintSection(
+              title:
+                  "💡 نصيحة : إختيار التصنيف يساعد المشترين فى الوصول إلى إعلانك بكل سهولة",
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mostkdm/core/di/service_locator.dart';
 import 'package:mostkdm/features/search/presentation/bloc/search_bloc.dart';
 import 'package:mostkdm/features/search/presentation/section/search_empty_section.dart';
 import 'package:mostkdm/features/search/presentation/section/search_result_section.dart';
 import 'package:mostkdm/features/search/presentation/section/search_section.dart';
 import 'package:mostkdm/features/search/presentation/section/search_suggestions_section.dart';
 
-/// Owns the SearchBloc + the search field's controller, so SearchView
-/// itself can stay a plain, stateless composition of AppBar + this
-/// section.
 class SearchContentSection extends StatelessWidget {
   const SearchContentSection({super.key});
 
   @override
+
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SearchBloc()
+      create: (_) => getIt<SearchBloc>()
         ..add(const GetSearchHistoryEvent())
         ..add(const GetTopKeywordsEvent()),
       child: const _SearchContentBody(),

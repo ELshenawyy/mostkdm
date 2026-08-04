@@ -7,9 +7,13 @@ sealed class MyAdsState extends Equatable {
   List<Object> get props => [];
 }
 
-final class MyAdsInitial extends MyAdsState {}
+final class MyAdsInitial extends MyAdsState {
+  const MyAdsInitial();
+}
 
-final class MyAdsLoading extends MyAdsState {}
+final class MyAdsLoading extends MyAdsState {
+  const MyAdsLoading();
+}
 
 final class MyAdsLoaded extends MyAdsState {
   final List<AdModel> ads;

@@ -13,9 +13,9 @@ abstract class SubCategoriesRepository {
 class SubCategoriesRepositoryImpl implements SubCategoriesRepository {
   final SubCategoryRemoteDataSource _remoteDataSource;
 
-  SubCategoriesRepositoryImpl({SubCategoryRemoteDataSource? remoteDataSource})
-      : _remoteDataSource =
-            remoteDataSource ?? SubCategoryRemoteDataSourceImpl();
+  SubCategoriesRepositoryImpl(this._remoteDataSource);
+  
+
   @override
   Future<Either<AppException, CategoryAdsResult>> getCategoryAds({
     required int categoryId,

@@ -1,33 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
 import 'package:mostkdm/core/widgets/text_field_widget.dart';
-import 'package:mostkdm/features/advertisement/data/models/ad_details_model.dart';
+import 'package:mostkdm/features/advertisement/presentation/bloc/add_ad_bloc.dart';
 import 'package:mostkdm/features/auth/presentation/sections/app_hint_section.dart';
 
-class ContactMethodsSection extends StatefulWidget {
-    final AdDetailsModel? ad;
+// TODO: تأكد من القيم دي مع الباك اند -- عندنا مثال واحد بس مؤكد
+// (whatsapp) من الكولكشن، الباقي تخمين منطقي.
+class _ContactOption {
+  final String value;
+  final String title;
+  final String subtitle;
+  final IconData icon;
 
-  const ContactMethodsSection({super.key, this.ad});
+  const _ContactOption({
+    required this.value,
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+  });
+}
+
+const List<_ContactOption> _contactOptions = [
+  _ContactOption(
+    value: 'whatsapp',
+    title: 'واتساب',
+    subtitle: 'التواصل عبر واتساب',
+    icon: Icons.sms_outlined,
+  ),
+  _ContactOption(
+    value: 'chat',
+    title: 'الرسائل',
+    subtitle: 'إرسال رسائل داخل التطبيق',
+    icon: Icons.message_outlined,
+  ),
+  _ContactOption(
+    value: 'call',
+    title: 'المكالمات الهاتفية',
+    subtitle: 'التواصل المباشر بالهاتف',
+    icon: Icons.call_outlined,
+  ),
+];
+
+class ContactMethodsSection extends StatefulWidget {
+  const ContactMethodsSection({super.key});
 
   @override
   State<ContactMethodsSection> createState() => _ContactMethodsSectionState();
 }
 
 class _ContactMethodsSectionState extends State<ContactMethodsSection> {
-  bool _whatsapp = false;
-  bool _messages = false;
-  bool _calls = false;
-  final _phoneController = TextEditingController();
+  late final TextEditingController _phoneController;
 
   @override
-void initState() {
-  super.initState();
-  if (widget.ad != null) {
-    // لما يبقى عندك phone في الـ model
-    // _phoneController.text = widget.ad!.phone;
+  void initState() {
+    super.initState();
+    _phoneController = TextEditingController(
+      text: context.read<AddAdBloc>().state.connectionNumber,
+    );
   }
-}
 
   @override
   void dispose() {
@@ -35,99 +67,99 @@ void initState() {
     super.dispose();
   }
 
+  void _notifyBloc(String connectionType) {
+    context.read<AddAdBloc>().add(
+          UpdateContactEvent(
+            connectionType: connectionType,
+            connectionNumber: _phoneController.text,
+          ),
+        );
+  }
+
   Widget _buildContactOption({
-    required String title,
-    required String subtitle,
-    required IconData icon,
-    required bool value,
-    required void Function(bool) onChanged,
+    required _ContactOption option,
+    required String? selectedValue,
   }) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: value
-              ? AppColors.primaryColor
-              : AppColors.primaryColor.withValues(alpha: 0.1),
+    final isSelected = option.value == selectedValue;
+    return GestureDetector(
+      onTap: () => _notifyBloc(option.value),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected
+                ? AppColors.primaryColor
+                : AppColors.primaryColor.withValues(alpha: 0.1),
+          ),
         ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Icon(icon, color: AppColors.primaryColor, size: 24),
-          const SizedBox(width: 12),
-          Row(
-            children: [
-              Column(
+        child: Row(
+          children: [
+            Icon(option.icon, color: AppColors.primaryColor, size: 24),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title,
+                  Text(option.title,
                       style: AppTextStyle.headline2.copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppColors.secondaryColor)),
-                  Text(subtitle, style: AppTextStyle.textFieldHeader),
+                  Text(option.subtitle, style: AppTextStyle.textFieldHeader),
                 ],
               ),
-            ],
-          ),
-          Spacer(),
-          Radio<bool>(
-            value: true,
-            groupValue: value,
-            activeColor: AppColors.primaryColor,
-            onChanged: (v) => onChanged(v ?? false),
-          ),
-        ],
+            ),
+            
+            Radio<String>(
+              value: option.value,
+              groupValue: selectedValue,
+              activeColor: AppColors.primaryColor,
+              onChanged: (v) {
+                if (v != null) _notifyBloc(v);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'طرق التواصل المسموحة',
-          style: AppTextStyle.headline3,
-        ),
-        const SizedBox(height: 12),
-        AppTextField(
-          label: 'رقم الجوال',
-          controller: _phoneController,
-          hintText: 'مثال  0514786748',
-          keyboardType: TextInputType.phone,
-          fillColor: AppColors.surface,
-        ),
-        const SizedBox(height: 16),
-        _buildContactOption(
-          title: 'واتساب',
-          subtitle: 'التواصل عبر واتساب',
-          icon: Icons.sms_outlined,
-          value: _whatsapp,
-          onChanged: (v) => setState(() => _whatsapp = v),
-        ),
-        _buildContactOption(
-          title: 'الرسائل',
-          subtitle: 'إرسال رسائل داخل التطبيق',
-          icon: Icons.message_outlined,
-          value: _messages,
-          onChanged: (v) => setState(() => _messages = v),
-        ),
-        _buildContactOption(
-          title: 'المكالمات الهاتفية',
-          subtitle: 'التواصل المباشر بالهاتف',
-          icon: Icons.call_outlined,
-          value: _calls,
-          onChanged: (v) => setState(() => _calls = v),
-        ),
-        const SizedBox(height: 16),
-        AppHintSection(
-            title: "💡 ملاحظة : رقمك آمن ولا يظهر إلا للمشترين المهتمين فقط"),
-      ],
+    return BlocBuilder<AddAdBloc, AddAdState>(
+      buildWhen: (previous, current) =>
+          previous.connectionType != current.connectionType,
+      builder: (context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('طرق التواصل المسموحة', style: AppTextStyle.headline3),
+            const SizedBox(height: 12),
+            AppTextField(
+              label: 'رقم الجوال',
+              controller: _phoneController,
+              hintText: 'مثال  0514786748',
+              keyboardType: TextInputType.phone,
+              fillColor: AppColors.surface,
+              onChanged: (_) => _notifyBloc(state.connectionType),
+            ),
+            const SizedBox(height: 16),
+            ..._contactOptions.map(
+              (option) => _buildContactOption(
+                option: option,
+                selectedValue:
+                    state.connectionType.isEmpty ? null : state.connectionType,
+              ),
+            ),
+            const SizedBox(height: 16),
+            const AppHintSection(
+              title: "💡 ملاحظة : رقمك آمن ولا يظهر إلا للمشترين المهتمين فقط",
+            ),
+          ],
+        );
+      },
     );
   }
 }

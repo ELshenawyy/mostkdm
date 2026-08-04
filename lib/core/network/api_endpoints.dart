@@ -34,8 +34,10 @@ class ApiEndpoints {
   static const String allAds = '/v1/ads';
   static String adDetails(String id) => '/ads/$id';
   
-
+  // add & edit 
   static const String myAds = '/v1/user/ads';
   static String toggleAdActive(int id) => '/v1/ads/$id/toggle-active';
   static String userAd(int id) => '/v1/ads/$id';
+
+  static const String createAd = '/v1/ads';
 }

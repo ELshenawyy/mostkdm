@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mostkdm/core/cache/cache_helper.dart';
+import 'package:mostkdm/core/di/service_locator.dart';
 import 'package:mostkdm/core/network/dio_client.dart';
 import 'package:mostkdm/core/router/app_router.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
@@ -7,7 +8,7 @@ import 'package:mostkdm/core/theme/app_colors.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CacheHelper().init(); 
-
+    setupServiceLocator();    
   await DioClient().init();
   runApp(const MyApp());
 }

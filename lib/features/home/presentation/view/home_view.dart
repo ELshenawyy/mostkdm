@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mostkdm/core/di/service_locator.dart';
 import 'package:mostkdm/core/widgets/app_header.dart';
 import 'package:mostkdm/features/home/presentation/bloc/home_bloc.dart';
 import 'package:mostkdm/features/home/presentation/section/home_banner_section.dart';
@@ -15,7 +16,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => HomeBloc()..add(const GetHomeEvent()),
+      create: (_) => getIt<HomeBloc>()..add(const GetHomeEvent()),
       child: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
           return SingleChildScrollView(

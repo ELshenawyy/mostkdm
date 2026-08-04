@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mostkdm/core/di/service_locator.dart';
 import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 
+import 'package:mostkdm/features/advertisement/presentation/bloc/my_ads_bloc.dart';
 import 'package:mostkdm/features/advertisement/presentation/view/my_ads_view.dart';
 import 'package:mostkdm/features/chat/presentation/view/chat_view.dart';
 import 'package:mostkdm/features/home/presentation/view/home_view.dart';
@@ -27,12 +29,22 @@ class _MainViewState extends State<MainView> {
     MoreView(),
   ];
 
+  Future<void> _handleAddAdTap() async {
+    await context.push(RouteNames.addAd);
+    if (mounted) {
+      // MyAdsBloc singleton دلوقتي في GetIt -- نقدر نوصلها مباشرة من
+      // هنا من غير أي حيلة (Key remount) زي اللي كنا مضطرين نعملها
+      // قبل كده.
+      getIt<MyAdsBloc>().add(const GetMyAdsEvent());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_currentIndex],
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push(RouteNames.addAd),
+        onPressed: _handleAddAdTap,
         backgroundColor: AppColors.secondaryColor,
         shape: const CircleBorder(),
         child: const Icon(Icons.add, color: Colors.white, size: 40),

@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mostkdm/core/di/service_locator.dart';
 import 'package:mostkdm/core/widgets/local_app_bar.dart';
 import 'package:mostkdm/features/advertisement/presentation/bloc/my_ads_bloc.dart';
 import 'package:mostkdm/features/advertisement/presentation/section/my_ads_list_section.dart';
 
-/// Composition بحتة -- كل الـ UI الفعلي (الكارت، تأكيد الحذف، الحالة
-/// الفاضية) في MyAdsListSection/NoAdsSection/MyAdCard. هنا بس بنبني
-/// الـ Bloc ونوصل الـ state بالـ section المناسبة.
+
 class MyAdsView extends StatelessWidget {
   const MyAdsView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => MyAdsBloc()..add(const GetMyAdsEvent()),
+    final bloc = getIt<MyAdsBloc>()..add(const GetMyAdsEvent());
+    return BlocProvider.value(
+      value: bloc,
       child: const _MyAdsViewBody(),
     );
   }
@@ -51,10 +51,10 @@ class _MyAdsViewBody extends StatelessWidget {
                         ads: ads,
                         onToggle: (adId) => context
                             .read<MyAdsBloc>()
-                            .add(ToggleMyAdActiveEvent( adId: adId)),
+                            .add(ToggleMyAdActiveEvent(adId: (adId))),
                         onDelete: (adId) => context
                             .read<MyAdsBloc>()
-                            .add(DeleteMyAdEvent(adId:  adId)),
+                            .add(DeleteMyAdEvent(adId: adId)),
                       ),
                   };
                 },

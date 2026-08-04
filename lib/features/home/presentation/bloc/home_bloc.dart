@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mostkdm/features/home/data/datasource/home_remote_data_source.dart';
 import 'package:mostkdm/features/advertisement/data/models/ad_model.dart';
 
 import 'package:mostkdm/features/home/data/models/home_model.dart';
@@ -12,8 +11,8 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final HomeRepository _repository;
 
-  HomeBloc()
-      : _repository = HomeRepositoryImpl(HomeRemoteDataSourceImpl()),
+  HomeBloc({required HomeRepository repository})
+      : _repository = repository,
         super(const HomeInitial()) {
     on<GetHomeEvent>(_onGetHome);
     on<SearchEvent>(_onSearch);

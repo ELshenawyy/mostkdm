@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mostkdm/features/advertisement/data/models/ad_model.dart';
 import 'package:mostkdm/features/advertisement/data/models/category_model.dart';
-import 'package:mostkdm/features/search/data/datasource/search_remote_data_source.dart';
 import 'package:mostkdm/features/search/data/models/city_model.dart';
 import 'package:mostkdm/features/search/data/models/search_history_item.dart';
 import 'package:mostkdm/features/search/data/repository/search_repository.dart';
@@ -16,11 +15,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   List<SearchHistoryItem> _history = [];
   List<String> _trending = [];
 
-  SearchBloc({SearchRepository? repository})
-      : _repository = repository ??
-            SearchRepositoryImpl(
-              remoteDataSource: SearchRemoteDataSourceImpl(),
-            ),
+  SearchBloc({required SearchRepository repository})
+      : _repository = repository,
         super(const SearchInitial()) {
     on<SearchKeywordEvent>(_onSearch);
     on<GetSearchHistoryEvent>(_onGetSearchHistory);

@@ -1,31 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
 import 'package:mostkdm/core/widgets/text_field_widget.dart';
-import 'package:mostkdm/features/advertisement/data/models/ad_details_model.dart';
+import 'package:mostkdm/features/advertisement/presentation/bloc/add_ad_bloc.dart';
 import 'package:mostkdm/features/auth/presentation/sections/app_hint_section.dart';
 
 class BasicInfoSection extends StatefulWidget {
-  final AdDetailsModel? ad;
-
-  const BasicInfoSection({super.key, this.ad});
+  const BasicInfoSection({super.key});
 
   @override
   State<BasicInfoSection> createState() => _BasicInfoSectionState();
 }
 
 class _BasicInfoSectionState extends State<BasicInfoSection> {
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  final _priceController = TextEditingController();
+  late final TextEditingController _titleController;
+  late final TextEditingController _descriptionController;
+  late final TextEditingController _priceController;
+
   @override
   void initState() {
     super.initState();
-    if (widget.ad != null) {
-      _titleController.text = widget.ad!.title;
-      _descriptionController.text = widget.ad!.description;
-      _priceController.text = widget.ad!.price.toString();
-    }
+    // نبدأ بالقيم الحالية في الـ Bloc -- مهمة في وضع التعديل، لو
+    // PrefillFromAdEvent اتبعتت قبل ما الخطوة دي تتفتح.
+    final state = context.read<AddAdBloc>().state;
+    _titleController = TextEditingController(text: state.title);
+    _descriptionController = TextEditingController(text: state.description);
+    _priceController = TextEditingController(text: state.price);
   }
 
   @override
@@ -36,21 +37,29 @@ class _BasicInfoSectionState extends State<BasicInfoSection> {
     super.dispose();
   }
 
+  void _notifyBloc() {
+    context.read<AddAdBloc>().add(
+          UpdateBasicInfoEvent(
+            title: _titleController.text,
+            description: _descriptionController.text,
+            price: _priceController.text,
+          ),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'المعلومات الأساسية',
-          style: AppTextStyle.headline3,
-        ),
-        SizedBox(height: 16),
+        Text('المعلومات الأساسية', style: AppTextStyle.headline3),
+        const SizedBox(height: 16),
         AppTextField(
           fillColor: AppColors.surface,
           label: 'عنوان الإعلان',
           controller: _titleController,
           hintText: 'مثال: سيارة تويوتا 2023',
+          onChanged: (_) => _notifyBloc(),
         ),
         const SizedBox(height: 16),
         AppTextField(
@@ -59,6 +68,7 @@ class _BasicInfoSectionState extends State<BasicInfoSection> {
           label: 'الوصف',
           controller: _descriptionController,
           hintText: 'اكتب وصفاً تفصيلياً للإعلان',
+          onChanged: (_) => _notifyBloc(),
         ),
         const SizedBox(height: 16),
         AppTextField(
@@ -67,11 +77,13 @@ class _BasicInfoSectionState extends State<BasicInfoSection> {
           controller: _priceController,
           hintText: '0',
           keyboardType: TextInputType.number,
+          onChanged: (_) => _notifyBloc(),
         ),
         const SizedBox(height: 16),
-        AppHintSection(
-            title:
-                "💡 نصيحة : العنوان الواضح والوصف المفصل يزيدان من فرض بيع إعلانك"),
+        const AppHintSection(
+          title:
+              "💡 نصيحة : العنوان الواضح والوصف المفصل يزيدان من فرص بيع إعلانك",
+        ),
       ],
     );
   }

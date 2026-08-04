@@ -11,9 +11,8 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
   final CategoriesRemoteDataSource _remoteDataSource;
 
   
-  CategoriesRepositoryImpl({CategoriesRemoteDataSource? remoteDataSource})
-      : _remoteDataSource =
-            remoteDataSource ?? CategoriesRemoteDataSourceImpl();
+  CategoriesRepositoryImpl(this._remoteDataSource);
+      
   @override
   Future<Either<AppException, List<CategoryModel>>> getAllCategories() async {
     try {

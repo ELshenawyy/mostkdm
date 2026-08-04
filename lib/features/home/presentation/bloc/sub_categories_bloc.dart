@@ -6,8 +6,8 @@ import 'package:mostkdm/features/home/presentation/bloc/sub_categories_state.dar
 class SubCategoryBloc extends Bloc<SubCategoryEvent, SubCategoryState> {
   final SubCategoriesRepository _repository;
 
-  SubCategoryBloc({SubCategoriesRepository? repository})
-      : _repository = repository ?? SubCategoriesRepositoryImpl(),
+  SubCategoryBloc({required SubCategoriesRepository repository})
+      : _repository = repository,
         super(const SubCategoryInitial()) {
     on<GetCategoryAdsEvent>(_onGetCategoryAds);
   }
