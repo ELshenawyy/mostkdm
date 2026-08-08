@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mostkdm/core/network/api_consumer.dart';
+import 'package:mostkdm/core/network/dio_consumer.dart';
 import 'package:mostkdm/features/advertisement/data/datasource/ad_details_remote_data_source.dart';
 import 'package:mostkdm/features/advertisement/data/datasource/add_ads_remote_data_source.dart';
 import 'package:mostkdm/features/advertisement/data/datasource/my_ads_remote_data_source.dart';
@@ -17,6 +20,9 @@ import 'package:mostkdm/features/home/data/repository/sub_categories_repository.
 import 'package:mostkdm/features/home/presentation/bloc/categories_bloc.dart';
 import 'package:mostkdm/features/home/presentation/bloc/home_bloc.dart';
 import 'package:mostkdm/features/home/presentation/bloc/sub_categories_bloc.dart';
+import 'package:mostkdm/features/notification/data/datasourse/notification_remote_data_source.dart';
+import 'package:mostkdm/features/notification/data/repository/notification_repository.dart';
+import 'package:mostkdm/features/notification/presentation/bloc/notification_bloc.dart';
 import 'package:mostkdm/features/search/data/datasource/search_remote_data_source.dart';
 import 'package:mostkdm/features/search/data/repository/search_repository.dart';
 import 'package:mostkdm/features/search/presentation/bloc/search_bloc.dart';
@@ -24,6 +30,9 @@ import 'package:mostkdm/features/search/presentation/bloc/search_bloc.dart';
 final getIt = GetIt.instance;
 
 void setupServiceLocator() {
+
+  getIt.registerLazySingleton<Dio>(() => Dio());
+  getIt.registerLazySingleton<ApiConsumer>(() => DioConsumer());
   // Home Feature
   getIt.registerLazySingleton<HomeRemoteDataSource>(
     () => HomeRemoteDataSourceImpl(),
@@ -105,5 +114,16 @@ void setupServiceLocator() {
   getIt.registerFactory<SubCategoryBloc>(
     () => SubCategoryBloc(repository: getIt()),
   );
-  
+  // notification
+
+  getIt.registerLazySingleton<NotificationRemoteDataSource>(
+    () => NotificationRemoteDataSourceImpl(getIt()),
+  );
+
+  getIt.registerLazySingleton<NotificationRepository>(
+    () => NotificationRepositoryImpl(getIt()),
+  );
+  getIt.registerFactory<NotificationBloc>(
+    () => NotificationBloc(repository: getIt()),
+  );
 }

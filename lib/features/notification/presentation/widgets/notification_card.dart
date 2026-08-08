@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
 import 'package:mostkdm/core/widgets/AppConfirmBottomSheet.dart';
+
 class NotificationCard extends StatelessWidget {
   final String title;
   final String subtitle;
@@ -24,9 +25,10 @@ class NotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  
     return Dismissible(
       key: UniqueKey(),
-      direction: DismissDirection.endToStart, 
+      direction: DismissDirection.endToStart,
       background: Container(
         alignment: Alignment.centerLeft,
         padding: const EdgeInsets.only(left: 16),
@@ -34,7 +36,8 @@ class NotificationCard extends StatelessWidget {
           color: AppColors.backgroundColor,
           borderRadius: BorderRadius.circular(12),
         ),
-        child:  Icon(Icons.delete_outline, color: AppColors.errorIconColor, size: 24),
+        child: Icon(Icons.delete_outline,
+            color: AppColors.errorIconColor, size: 24),
       ),
       confirmDismiss: (_) async {
         bool confirmed = false;
@@ -60,7 +63,8 @@ class NotificationCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
+                    border:
+                        Border.all(color: Colors.red.withValues(alpha: 0.3)),
                   ),
                   child: const Icon(Icons.notifications_off_outlined,
                       color: Colors.red, size: 24),
@@ -105,24 +109,23 @@ class NotificationCard extends StatelessWidget {
                             ),
                           ),
                         const SizedBox(width: 5),
-                        CircleAvatar(
-                          radius: 22,
-                          backgroundImage: userImage != null
-                              ? AssetImage(userImage!)
-                              : null,
-                          child: userImage == null
-                              ? const Icon(Icons.person_outline)
-                              : null,
-                        ),
+                       CircleAvatar(
+  radius: 22,
+  backgroundColor: AppColors.primaryColor.withValues(alpha: 0.1),
+  child: Icon(
+    Icons.notifications_active_outlined,
+    color: AppColors.primaryColor,
+    size: 20,
+  ),
+),
                         const SizedBox(width: 8),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(title,
-                                style:
-                                    AppTextStyle.headline3.copyWith(fontSize: 14)),
-                            Text(subtitle,
-                                style: AppTextStyle.textFieldHeader),
+                                style: AppTextStyle.headline3
+                                    .copyWith(fontSize: 14)),
+                            Text(subtitle, style: AppTextStyle.textFieldHeader),
                           ],
                         ),
                       ],

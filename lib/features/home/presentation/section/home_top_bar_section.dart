@@ -15,7 +15,7 @@ class HomeTopBarSection extends StatelessWidget {
         Image(image: const AssetImage(AppImages.logo), height: 40),
         const Spacer(),
         GestureDetector(
-          onTap: () => context.push(RouteNames.showNotification),
+          onTap: () => context.push(RouteNames.notifications),
           child: Container(
             decoration: BoxDecoration(
               color: AppColors.primaryHintColorWithOpacity,

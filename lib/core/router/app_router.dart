@@ -123,7 +123,7 @@ GoRoute(
     ),
     GoRoute(
       path: RouteNames.showNotification,
-      builder: (context, state) => NotificationsView(),
+      builder: (context, state) => const NotificationView(),
     ),
     GoRoute(
       path: RouteNames.chatDetails,
@@ -169,7 +169,7 @@ GoRoute(
         builder: (context, state) => FavoritesView()),
     GoRoute(
         path: RouteNames.notifications,
-        builder: (context, state) => NotificationsView()),
+        builder: (context, state) => const NotificationView()),
     GoRoute(
       path: RouteNames.commission,
       builder: (context, state) => const CommissionView(),

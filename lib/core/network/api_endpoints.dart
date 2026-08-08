@@ -40,4 +40,13 @@ class ApiEndpoints {
   static String userAd(int id) => '/v1/ads/$id';
 
   static const String createAd = '/v1/ads';
+
+
+  // notification
+  static const String notifications = '/notifications';
+  static const String notificationsCount = '/notifications-count';
+  static const String markAllAsRead = '/notifications/mark-all-read';
+  static String deleteNotification(String id) => '/notifications/$id';
+  static const String deleteAllNotifications = '/notifications/all';
+
 }
