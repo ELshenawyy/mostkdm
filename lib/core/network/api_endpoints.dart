@@ -49,4 +49,9 @@ class ApiEndpoints {
   static String deleteNotification(String id) => '/notifications/$id';
   static const String deleteAllNotifications = '/notifications/all';
 
+  // chat
+  static const String getChats = '/v1/chats';
+  static const String sendMessage = '/v1/chats/send-message';
+  static String getMessages(int roomId) => '/v1/chats/$roomId/messages';
+
 }

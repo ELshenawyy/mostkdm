@@ -12,11 +12,12 @@ class LocalAppBar extends StatelessWidget {
     super.key,
     required this.title,
     this.icon,
-    this.onIconTap,  this.isLight = false,
+    this.onIconTap,
+    this.isLight = false,
   });
 
   @override
- Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     final textColor = isLight ? AppColors.surface : AppColors.secondaryColor;
     final iconBgColor = isLight
         ? AppColors.surface.withValues(alpha: 0.15)
@@ -44,9 +45,15 @@ class LocalAppBar extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          Text(title,
-              style: AppTextStyle.headline1
-                  .copyWith(color: textColor, fontSize: 16)),
+          Expanded(
+            child: Text(title,
+                style: AppTextStyle.headline1.copyWith(
+                    color: textColor,
+                    fontSize: 16,
+                    overflow: TextOverflow.ellipsis
+                    ),
+                maxLines: 1),
+          ),
           const Spacer(),
           if (icon != null)
             GestureDetector(

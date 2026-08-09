@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart'; // أو طريقة Navigation المتبعة عندك
-import 'package:mostkdm/core/router/app_router.dart';
-import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/widgets/AppConfirmBottomSheet.dart';
 import 'package:mostkdm/core/widgets/local_app_bar.dart';
@@ -41,7 +38,7 @@ class _NotificationsListSectionState extends State<NotificationsListSection> {
             subtitle: 'هل أنت متأكد من أنك تريد حذف جميع الإشعارات',
             confirmLabel: 'حذف',
             onConfirm: () {
-              Navigator.pop(context); // إغلاق الـ Bottom Sheet
+              Navigator.pop(context);
               context
                   .read<NotificationBloc>()
                   .add(DeleteAllNotificationsEvent());
@@ -99,13 +96,12 @@ class _NotificationsListSectionState extends State<NotificationsListSection> {
             return const NotificationsEmptySection();
           }
 
-          // تصفية القائمة بناءً على الـ Tab المحدد
           final filteredNotifications = _selectedTab == 0
               ? allNotifications
               : allNotifications.where((n) => !n.isRead).toList();
 
           return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 18.0),
+            padding: const EdgeInsets.only(top: 18.0),
             child: Column(
               children: [
                 LocalAppBar(
@@ -119,7 +115,6 @@ class _NotificationsListSectionState extends State<NotificationsListSection> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      // Tab 1: الكل
                       GestureDetector(
                         onTap: () => setState(() => _selectedTab = 0),
                         child: Column(
@@ -127,9 +122,9 @@ class _NotificationsListSectionState extends State<NotificationsListSection> {
                             Text(
                               'الكل',
                               style: TextStyle(
-                                color: _selectedTab == 1
-                                    ? Colors.grey
-                                    : AppColors.secondaryColor,
+                                color: _selectedTab == 0
+                                    ? AppColors.secondaryColor
+                                    : Colors.grey,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'Cairo',
@@ -146,7 +141,6 @@ class _NotificationsListSectionState extends State<NotificationsListSection> {
                         ),
                       ),
                       const SizedBox(width: 16),
-                      // Tab 2: الغير مقروء
                       GestureDetector(
                         onTap: () => setState(() => _selectedTab = 1),
                         child: Column(
@@ -176,52 +170,47 @@ class _NotificationsListSectionState extends State<NotificationsListSection> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                if (filteredNotifications.isEmpty)
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 30.0),
-                    child: Text(
-                      'لا توجد إشعارات غير مقروءة',
-                      style: TextStyle(fontFamily: 'Cairo', color: Colors.grey),
-                    ),
-                  )
-                else
-                  ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: filteredNotifications.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 12),
-                    itemBuilder: (context, i) {
-                      final item = filteredNotifications[i];
-                      return NotificationCard(
-                        title: item.title,
-                        subtitle: item.message,
-                        time: item.createdAt,
-                        isRead: item.isRead,
-                        onDelete: () {
-                          context.read<NotificationBloc>().add(
-                                DeleteNotificationEvent(
-                                    notificationId: item.id),
-                              );
-                        },
-                        onTap: () {
-                          if (!item.isRead) {
-                            context.read<NotificationBloc>().add(
-                                  MarkAllNotificationsAsReadEvent(),
-                                );
-                          }
-
-                          // 3. التوجيه لصفحة تفاصيل الإعلان في حال وجود adId مرتبطة بالإشعار
-                          // if (item.id != null) {
-                          //   context.push(
-                          //     RouteNames.adsDetails,
-                          //     extra: item.id,
-                          //   );
-                          // }
-                        },
-                      );
-                    },
-                  ),
+                Expanded(
+                  child: filteredNotifications.isEmpty
+                      ? const Center(
+                          child: Text(
+                            'لا توجد إشعارات غير مقروءة',
+                            style: TextStyle(
+                              fontFamily: 'Cairo',
+                              color: Colors.grey,
+                            ),
+                          ),
+                        )
+                      : ListView.separated(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
+                          itemCount: filteredNotifications.length,
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(height: 12),
+                          itemBuilder: (context, i) {
+                            final item = filteredNotifications[i];
+                            return NotificationCard(
+                              title: item.title,
+                              subtitle: item.message,
+                              time: item.createdAt,
+                              isRead: item.isRead,
+                              onDelete: () {
+                                context.read<NotificationBloc>().add(
+                                      DeleteNotificationEvent(
+                                          notificationId: item.id),
+                                    );
+                              },
+                              onTap: () {
+                                if (!item.isRead) {
+                                  context.read<NotificationBloc>().add(
+                                        MarkAllNotificationsAsReadEvent(),
+                                      );
+                                }
+                              },
+                            );
+                          },
+                        ),
+                ),
               ],
             ),
           );

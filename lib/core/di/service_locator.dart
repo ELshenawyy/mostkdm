@@ -11,6 +11,9 @@ import 'package:mostkdm/features/advertisement/data/repository/my_ads_repository
 import 'package:mostkdm/features/advertisement/presentation/bloc/ad_details_bloc.dart';
 import 'package:mostkdm/features/advertisement/presentation/bloc/add_ad_bloc.dart';
 import 'package:mostkdm/features/advertisement/presentation/bloc/my_ads_bloc.dart';
+import 'package:mostkdm/features/chat/data/datasource/get_chats_remote_data_souece.dart';
+import 'package:mostkdm/features/chat/data/repository/chats_repository.dart';
+import 'package:mostkdm/features/chat/presentation/bloc/chats_bloc.dart';
 import 'package:mostkdm/features/home/data/datasource/categories_remote_data_source.dart';
 import 'package:mostkdm/features/home/data/datasource/home_remote_data_source.dart';
 import 'package:mostkdm/features/home/data/datasource/sub_categories_remote_data_source.dart';
@@ -126,4 +129,19 @@ void setupServiceLocator() {
   getIt.registerFactory<NotificationBloc>(
     () => NotificationBloc(repository: getIt()),
   );
+
+  // chat
+  getIt.registerLazySingleton<ChatsRemoteDataSource>(
+    () => ChatsRemoteDataSourceImpl(api: getIt()),
+  );
+
+  getIt.registerLazySingleton<ChatsRepository>(
+    () => GetChatsRepositoryImpl(remoteDataSource: getIt()),
+  );
+
+  getIt.registerFactory<ChatBloc>(
+    () => ChatBloc(chatRepository: getIt()),
+  );
+
+
 }

@@ -25,7 +25,6 @@ class NotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  
     return Dismissible(
       key: UniqueKey(),
       direction: DismissDirection.endToStart,
@@ -109,24 +108,27 @@ class NotificationCard extends StatelessWidget {
                             ),
                           ),
                         const SizedBox(width: 5),
-                       CircleAvatar(
-  radius: 22,
-  backgroundColor: AppColors.primaryColor.withValues(alpha: 0.1),
-  child: Icon(
-    Icons.notifications_active_outlined,
-    color: AppColors.primaryColor,
-    size: 20,
-  ),
-),
+                        CircleAvatar(
+                          radius: 22,
+                          backgroundColor:
+                              AppColors.primaryColor.withValues(alpha: 0.1),
+                          child: Icon(
+                            Icons.notifications_active_outlined,
+                            color: AppColors.primaryColor,
+                            size: 20,
+                          ),
+                        ),
                         const SizedBox(width: 8),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(title,
-                                style: AppTextStyle.headline3
-                                    .copyWith(fontSize: 14)),
-                            Text(subtitle, style: AppTextStyle.textFieldHeader),
-                          ],
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(title,
+                                  style: AppTextStyle.headline3
+                                      .copyWith(fontSize: 14)),
+                              Text(subtitle, style: AppTextStyle.textFieldHeader),
+                            ],
+                          ),
                         ),
                       ],
                     ),

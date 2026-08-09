@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
+import 'package:mostkdm/features/chat/presentation/bloc/chats_bloc.dart';
+import 'package:mostkdm/features/chat/presentation/bloc/chats_event.dart';
 
 class ChatInputSection extends StatefulWidget {
-  const ChatInputSection({super.key});
+  final int roomId;
+
+  const ChatInputSection({super.key, required this.roomId});
 
   @override
   State<ChatInputSection> createState() => _ChatInputSectionState();
@@ -11,6 +16,19 @@ class ChatInputSection extends StatefulWidget {
 
 class _ChatInputSectionState extends State<ChatInputSection> {
   final _controller = TextEditingController();
+
+  void _sendMessage() {
+    final text = _controller.text.trim();
+    if (text.isNotEmpty) {
+      context.read<ChatBloc>().add(
+            SendMessageEvent(
+              roomId: widget.roomId,
+              message: text,
+            ),
+          );
+      _controller.clear();
+    }
+  }
 
   @override
   void dispose() {
@@ -22,7 +40,7 @@ class _ChatInputSectionState extends State<ChatInputSection> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppColors.backgroundColor,
       ),
       child: Row(
@@ -38,20 +56,24 @@ class _ChatInputSectionState extends State<ChatInputSection> {
                 hintStyle: AppTextStyle.textFieldLabel,
                 filled: true,
                 fillColor: AppColors.surface,
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide.none,
                 ),
-                suffixIcon:
-                    const Icon(Icons.attach_file_outlined, color: AppColors.secondaryColor),
+                suffixIcon: const Icon(
+                  Icons.attach_file_outlined,
+                  color: AppColors.secondaryColor,
+                ),
               ),
             ),
           ),
           const SizedBox(width: 8),
           GestureDetector(
-            onTap: () {},
+            onTap: _sendMessage,
             child: Container(
               width: 44,
               height: 44,
@@ -59,7 +81,11 @@ class _ChatInputSectionState extends State<ChatInputSection> {
                 color: AppColors.secondaryColor,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child:  Icon(Icons.send, color: AppColors.surface, size: 20),
+              child: const Icon(
+                Icons.send,
+                color: AppColors.surface,
+                size: 20,
+              ),
             ),
           ),
         ],

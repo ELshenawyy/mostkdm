@@ -6,23 +6,42 @@ class MessageBubble extends StatelessWidget {
   final String message;
   final String time;
   final bool isSender;
+  final String? userImage;
 
   const MessageBubble({
     super.key,
     required this.message,
     required this.time,
     this.isSender = false,
+    this.userImage,
   });
 
   Widget _avatar() {
+    final bool isValidUrl = userImage != null &&
+        userImage!.isNotEmpty &&
+        (Uri.tryParse(userImage!)?.hasAbsolutePath ?? false);
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(100),
-      child: Image.asset(
-        AppImages.car,
-        width: 36,
-        height: 36,
-        fit: BoxFit.cover,
-      ),
+      child: isValidUrl
+          ? Image.network(
+              userImage!,
+              width: 36,
+              height: 36,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => Image.asset(
+                AppImages.car,
+                width: 36,
+                height: 36,
+                fit: BoxFit.cover,
+              ),
+            )
+          : Image.asset(
+              AppImages.car,
+              width: 36,
+              height: 36,
+              fit: BoxFit.cover,
+            ),
     );
   }
 
@@ -78,14 +97,14 @@ class MessageBubble extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: isSender
                 ? [
-                    _bubble(context),
+                    Flexible(child: _bubble(context)),
                     const SizedBox(width: 8),
                     _avatar(),
                   ]
                 : [
                     _avatar(),
                     const SizedBox(width: 8),
-                    _bubble(context),
+                    Flexible(child: _bubble(context)), 
                   ],
           ),
         ],
