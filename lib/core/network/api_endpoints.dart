@@ -59,4 +59,9 @@ class ApiEndpoints {
   static const String walletTransactions = '/v1/wallet/transactions';
   static const String rechargeWallet = '/v1/wallet/recharge';
 
+
+  // commission
+  static const String calculateCommission = '/v1/ads/calculate-commission';
+  static const String payCommission = '/v1/ads/pay-commission';
+
 }

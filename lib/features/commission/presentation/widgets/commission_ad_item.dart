@@ -33,10 +33,24 @@ class CommissionAdItem extends StatelessWidget {
         ),
         child: Row(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child:
-                  Image.asset(image, width: 56, height: 56, fit: BoxFit.cover),
+            Expanded(
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.asset(
+                    image,
+                    width: 56,
+                    height: 56,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        width: 56,
+                        height: 56,
+                        color: Colors.grey[200],
+                        child: const Icon(Icons.image_not_supported,
+                            color: Colors.grey),
+                      );
+                    },
+                  )),
             ),
             const SizedBox(width: 8),
             Column(

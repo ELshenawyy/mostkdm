@@ -14,6 +14,9 @@ import 'package:mostkdm/features/advertisement/presentation/bloc/my_ads_bloc.dar
 import 'package:mostkdm/features/chat/data/datasource/get_chats_remote_data_souece.dart';
 import 'package:mostkdm/features/chat/data/repository/chats_repository.dart';
 import 'package:mostkdm/features/chat/presentation/bloc/chats_bloc.dart';
+import 'package:mostkdm/features/commission/data/datasource/commission_remote_data_source.dart';
+import 'package:mostkdm/features/commission/data/repository/commision_repository.dart';
+import 'package:mostkdm/features/commission/presentation/bloc/commission_bloc.dart';
 import 'package:mostkdm/features/home/data/datasource/categories_remote_data_source.dart';
 import 'package:mostkdm/features/home/data/datasource/home_remote_data_source.dart';
 import 'package:mostkdm/features/home/data/datasource/sub_categories_remote_data_source.dart';
@@ -155,5 +158,18 @@ void setupServiceLocator() {
 
   getIt.registerFactory<WalletBloc>(
     () => WalletBloc(getIt()),
+  );
+
+  // commission
+  getIt.registerLazySingleton<CommissionRemoteDataSource>(
+    () => CommissionRemoteDataSourceImpl(getIt()),
+  );
+
+  getIt.registerLazySingleton<CommissionRepository>(
+    () => CommissionRepositoryImpl(getIt()),
+  );
+
+  getIt.registerFactory<CommissionBloc>(
+    () => CommissionBloc(getIt()),
   );
 }

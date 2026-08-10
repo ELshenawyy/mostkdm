@@ -1,21 +1,17 @@
-// features/commission/presentation/sections/commission_payment_section.dart
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
 import 'package:mostkdm/core/widgets/app_button.dart';
+import 'package:mostkdm/features/commission/presentation/bloc/commission_bloc.dart';
+import 'package:mostkdm/features/commission/presentation/bloc/commission_event.dart';
+import 'package:mostkdm/features/commission/presentation/bloc/commission_state.dart';
+
 import 'package:mostkdm/features/commission/presentation/widgets/commission_ad_item.dart';
 import 'package:mostkdm/features/commission/presentation/widgets/commission_summary_card.dart';
 
 class CommissionPaymentSection extends StatefulWidget {
-  final String salePrice;
-  final Map<String, dynamic> ad;
-
-  const CommissionPaymentSection({
-    super.key,
-    required this.salePrice,
-    required this.ad,
-  });
+  const CommissionPaymentSection({super.key});
 
   @override
   State<CommissionPaymentSection> createState() =>
@@ -25,50 +21,67 @@ class CommissionPaymentSection extends StatefulWidget {
 class _CommissionPaymentSectionState extends State<CommissionPaymentSection> {
   int _selectedPayment = 0;
 
-  String get _commission {
-    final price = double.tryParse(widget.salePrice) ?? 0;
-    return (price * 0.05).toStringAsFixed(0);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 16),
-        CommissionAdItem(
-          image: widget.ad['image'] as String,
-          title: widget.ad['title'] as String,
-          price: widget.ad['price'] as String,
-          isPaid: widget.ad['isPaid'] as bool,
-        ),
-        const SizedBox(height: 16),
-        Text('تأكيد الدفع', style: AppTextStyle.headline3),
-        const SizedBox(height: 4),
-        Text(
-          'راجع التفاصيل وأختر طريقة الدفع',
-          style: AppTextStyle.textFieldHeader,
-        ),
-        const SizedBox(height: 16),
-        CommissionSummaryCard(
-          salePrice: widget.salePrice,
-          commissionRate: '5%',
-          commissionAmount: _commission,
-        ),
-        const SizedBox(height: 16),
-        Text('وسيلة الدفع', style: AppTextStyle.headline3),
-        const SizedBox(height: 12),
-        _buildPaymentOption(0, 'المحفظة', 'الرصيد: 850 ريال',
-            Icons.account_balance_wallet_outlined),
-        const SizedBox(height: 8),
-        _buildPaymentOption(
-            1, 'بطاقة بنكية', 'فيزا • مدى • ماستركارد', Icons.credit_card),
-        const SizedBox(height: 24),
-        AppButton(
-          label: 'دفع',
-          onTap: () {},
-        ),
-      ],
+    return BlocBuilder<CommissionBloc, CommissionState>(
+      builder: (context, state) {
+        final ad = state.selectedAd ?? {};
+        final calcModel = state.calculationModel;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16),
+            if (ad.isNotEmpty)
+              CommissionAdItem(
+                image: ad['image'] as String? ?? '',
+                title: ad['title'] as String? ?? '',
+                price: ad['price'] as String? ?? '',
+                isPaid: ad['isPaid'] as bool? ?? false,
+              ),
+            const SizedBox(height: 16),
+            Text('تأكيد الدفع', style: AppTextStyle.headline3),
+            const SizedBox(height: 4),
+            Text(
+              'راجع التفاصيل وأختر طريقة الدفع',
+              style: AppTextStyle.textFieldHeader,
+            ),
+            const SizedBox(height: 16),
+            CommissionSummaryCard(
+              salePrice: '${calcModel?.price ?? 0}',
+              commissionRate: '${calcModel?.commissionPercentage ?? 5}%',
+              commissionAmount: '${calcModel?.commissionAmount ?? 0}',
+            ),
+            const SizedBox(height: 16),
+            Text('وسيلة الدفع', style: AppTextStyle.headline3),
+            const SizedBox(height: 12),
+            _buildPaymentOption(
+              0,
+              'المحفظة',
+              'الرصيد: 850 ريال',
+              Icons.account_balance_wallet_outlined,
+            ),
+            const SizedBox(height: 8),
+            _buildPaymentOption(
+              1,
+              'بطاقة بنكية',
+              'فيزا • مدى • ماستركارد',
+              Icons.credit_card,
+            ),
+            const SizedBox(height: 24),
+            AppButton(
+              label: 'دفع',
+              isLoading: state.isPayLoading,
+              onTap: () {
+                final method = _selectedPayment == 0 ? 'wallet' : 'card';
+                context.read<CommissionBloc>().add(
+                      PayCommissionEvent(paymentMethod: method),
+                    );
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
