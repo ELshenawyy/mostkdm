@@ -32,6 +32,9 @@ import 'package:mostkdm/features/notification/presentation/bloc/notification_blo
 import 'package:mostkdm/features/search/data/datasource/search_remote_data_source.dart';
 import 'package:mostkdm/features/search/data/repository/search_repository.dart';
 import 'package:mostkdm/features/search/presentation/bloc/search_bloc.dart';
+import 'package:mostkdm/features/subscription/data/datasource/packages_remote_data_source.dart';
+import 'package:mostkdm/features/subscription/data/repository/packages_repository.dart';
+import 'package:mostkdm/features/subscription/presentation/bloc/packages_bloc.dart';
 import 'package:mostkdm/features/wallet/data/datasource/wallet_remote_data_source.dart';
 import 'package:mostkdm/features/wallet/data/repository/wallet_repository.dart';
 import 'package:mostkdm/features/wallet/presentation/bloc/wallet_bloc.dart';
@@ -171,5 +174,18 @@ void setupServiceLocator() {
 
   getIt.registerFactory<CommissionBloc>(
     () => CommissionBloc(getIt()),
+  );
+
+  // package
+  getIt.registerLazySingleton<PackagesRemoteDataSource>(
+    () => PackagesRemoteDataSourceImpl(getIt()),
+  );
+
+  getIt.registerLazySingleton<PackagesRepository>(
+    () => PackagesRepositoryImpl(getIt()),
+  );
+
+  getIt.registerFactory<PackagesBloc>(
+    () => PackagesBloc(getIt()),
   );
 }

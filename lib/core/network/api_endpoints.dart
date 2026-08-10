@@ -64,4 +64,11 @@ class ApiEndpoints {
   static const String calculateCommission = '/v1/ads/calculate-commission';
   static const String payCommission = '/v1/ads/pay-commission';
 
+  // packages
+  static const String packages = '/v1/packages';
+
+  // subscriptions
+  static const String subscriptions = '/v1/subscriptions/store';
+
+
 }

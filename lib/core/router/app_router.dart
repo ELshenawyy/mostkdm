@@ -28,9 +28,11 @@ import 'package:mostkdm/features/settings/presentation/view/edit_profile_view.da
 import 'package:mostkdm/features/settings/presentation/view/more_view.dart';
 import 'package:mostkdm/features/policies/presentation/policy_view.dart';
 import 'package:mostkdm/features/settings/presentation/view/profile_view.dart';
+import 'package:mostkdm/features/subscription/data/models/packages_model.dart';
 import 'package:mostkdm/features/subscription/presentation/view/package_details_view.dart';
 import 'package:mostkdm/features/subscription/presentation/view/subscriptions_view.dart';
 import 'package:mostkdm/features/wallet/presentation/view/bank_account_view.dart';
+import 'package:mostkdm/features/wallet/presentation/view/payment_web_view_screen.dart';
 
 import 'package:mostkdm/features/wallet/presentation/view/wallet_view.dart';
 
@@ -158,11 +160,12 @@ GoRoute(
       builder: (context, state) => const SubscriptionsView(),
     ),
     GoRoute(
-      path: RouteNames.packageDetails,
-      builder: (context, state) => PackageDetailsView(
-        isActive: (state.extra ?? false) as bool,
-      ),
-    ),
+  path: RouteNames.packageDetails,
+  builder: (context, state) {
+    final package = state.extra as PackageModel;
+    return PackageDetailsView(package: package);
+  },
+),
 
     GoRoute(
         path: RouteNames.favorites,
@@ -185,5 +188,12 @@ GoRoute(
         );
       },
     ),
+    GoRoute(
+  path: RouteNames.paymentWebView,
+  builder: (context, state) {
+    final paymentUrl = state.extra as String;
+    return PaymentWebViewScreen(paymentUrl: paymentUrl);
+  },
+),
   ],
 );

@@ -34,4 +34,6 @@ abstract class RouteNames {
   static const commission = '/commission';
 
   static const policy = '/policy';
+
+  static const paymentWebView = '/paymentWebView';
 }

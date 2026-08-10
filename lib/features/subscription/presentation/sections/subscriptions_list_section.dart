@@ -1,69 +1,85 @@
 import 'package:flutter/material.dart';
-import 'package:mostkdm/core/theme/app_text_style.dart';
-import 'package:mostkdm/core/widgets/app_subscription_card.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mostkdm/core/router/router_names.dart';
+import 'package:mostkdm/core/theme/app_colors.dart';
+import 'package:mostkdm/core/widgets/app_subscription_card.dart';
+import 'package:mostkdm/features/subscription/presentation/bloc/packages_bloc.dart';
 
 class SubscriptionsListSection extends StatelessWidget {
   const SubscriptionsListSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // الباقة الشهرية
-        AppSubscriptionCard(
-          title: 'الباقة الشهرية',
-          subtitle: 'وفر حتى 60% من الباقات الشهرية وأحصل على مزايا حصرية',
-          price: '250',
-          icon: Icons.check_circle_outline,
-          badge: 'الأكثر مبيعاً',
-          features: const [
-            SubscriptionFeature(
-                title: 'إعلانات متعددة',
-                subtitle: 'من 5 إعلانات حتى 40 إعلان شهرياً'),
-            SubscriptionFeature(
-                title: 'خصومات كبيرة', subtitle: 'وفر حتى 1000 ريال'),
-          ],
-          buttonLabel: 'إشتراك',
-          onTap: () => context.push(RouteNames.packageDetails),
-        ),
-        const SizedBox(height: 24),
-        // الباقة النصف سنوية
-        AppSubscriptionCard(
-          title: 'الباقة النصف سنوية',
-          subtitle: 'وفر حتى 60% من الباقات الشهرية وأحصل على مزايا حصرية',
-          price: '500',
-          icon: Icons.check_circle_outline,
-          badge: 'الفرق الثاني',
-          features: const [
-            SubscriptionFeature(
-                title: 'دعم متواصل', subtitle: 'خدمة عملاء على مدار 24 ساعة'),
-            SubscriptionFeature(
-                title: 'إعلانات متقدمة',
-                subtitle: 'مقارنة الإعلانات برقم عالية'),
-          ],
-          buttonLabel: 'إشتراك',
-          onTap: () => context.push(RouteNames.packageDetails),
-        ),
-        const SizedBox(height: 24),
-        // الباقة السنوية
-        AppSubscriptionCard(
-          title: 'الباقة السنوية',
-          subtitle: 'وفر حتى 60% من الباقات الشهرية وأحصل على مزايا حصرية',
-          price: '850',
-          badge: 'الأفضل قيمة',
-          features: const [
-            SubscriptionFeature(
-                title: 'إعلانات مفتوحة', subtitle: 'وفر حتى 100 إعلان شهرياً'),
-            SubscriptionFeature(
-                title: 'خصومات كبيرة', subtitle: 'وفر حتى 2000 ريال'),
-          ],
-          buttonLabel: 'إشتراك',
-          onTap: () => context.push(RouteNames.packageDetails),
-        ),
-      ],
+    return BlocBuilder<PackagesBloc, PackagesState>(
+      builder: (context, state) {
+        if (state is PackagesLoading) {
+          return const Center(
+            child: Padding(
+              padding: EdgeInsets.all(32.0),
+              child: CircularProgressIndicator(color: AppColors.primaryColor),
+            ),
+          );
+        }
+
+        if (state is PackagesError) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Text(state.message, style: const TextStyle(color: Colors.red)),
+                  const SizedBox(height: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<PackagesBloc>().add(const GetPackagesEvent());
+                    },
+                    child: const Text('إعادة المحاولة'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
+        if (state is PackagesLoaded) {
+          if (state.packagesList.isEmpty) {
+            return const Center(child: Text('لا توجد باقات متاحة حالياً'));
+          }
+
+          return ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: state.packagesList.length,
+            separatorBuilder: (context, index) => const SizedBox(height: 24),
+            itemBuilder: (context, index) {
+              final package = state.packagesList[index];
+
+              return AppSubscriptionCard(
+                title: package.title,
+                subtitle: package.content,
+                price: package.price.toString(),
+                icon: package.isActive
+                    ? Icons.check_circle
+                    : Icons.check_circle_outline,
+                badge: package.typeLabel.isNotEmpty ? package.typeLabel : null,
+                features: package.features
+                    .map((f) => SubscriptionFeature(
+                          title: f.title,
+                          subtitle: f.description,
+                        ))
+                    .toList(),
+                buttonLabel: package.isActive ? 'تجديد الإشتراك' : 'إشتراك',
+                onTap: () {
+                  context.push(RouteNames.packageDetails, extra: package);
+                },
+              );
+            },
+          );
+        }
+
+        return const SizedBox.shrink();
+      },
     );
   }
 }

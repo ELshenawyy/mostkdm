@@ -1,155 +1,193 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mostkdm/core/di/service_locator.dart';
+import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
 import 'package:mostkdm/core/widgets/app_button.dart';
 import 'package:mostkdm/core/widgets/app_header.dart';
 import 'package:mostkdm/core/widgets/app_subscription_card.dart';
 import 'package:mostkdm/core/widgets/local_app_bar.dart';
+import 'package:mostkdm/features/subscription/data/models/packages_model.dart';
+import 'package:mostkdm/features/subscription/presentation/bloc/packages_bloc.dart';
 
 class PackageDetailsView extends StatefulWidget {
-  final bool isActive;
+  final PackageModel package;
 
-  const PackageDetailsView({super.key, this.isActive = false});
+  const PackageDetailsView({super.key, required this.package});
 
   @override
   State<PackageDetailsView> createState() => _PackageDetailsViewState();
 }
 
 class _PackageDetailsViewState extends State<PackageDetailsView> {
-  int _selectedPayment = 0;
+  int _selectedPayment = 0; // 0: wallet, 1: online (Moyasar)
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            AppHeader(
-              height: 120,
-              child: SafeArea(
-                child: Column(
-                  children: [
-                    LocalAppBar(
-                      title: 'تفاصيل الباقة',
-                      isLight: true,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Transform.translate(
-              offset: const Offset(0, -30),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children: [
-                    // الكارد
-                    AppSubscriptionCard(
-                      title: 'الباقة الشهرية',
-                      subtitle:
-                          'وفر حتى 60% من الباقات الشهرية وأحصل على مزايا حصرية',
-                      badge: 'الأكثر مبيعاً',
-                      buttonLabel:
-                          widget.isActive ? 'تجديد الإشتراك' : 'إشتراك',
-                      onTap: () {},
-                      icon: widget.isActive
-                          ? Icons.check_circle
-                          : Icons.circle_outlined,
-                      features: const [
-                        SubscriptionFeature(
-                          title: 'تاريخ بدء الإشتراك',
-                          subtitle: '2026/3/20',
-                        ),
-                        SubscriptionFeature(
-                          title: 'تاريخ نهاية الإشتراك',
-                          subtitle: '2026/20/4',
-                        ),
-                        SubscriptionFeature(
-                          title: 'إعلانات متبقية',
-                          subtitle: '7 إعلانات متبقية',
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'إختيار وسيلة الدفع',
-                          style: AppTextStyle.headline1.copyWith(
-                            fontSize: 18,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text('قم بإختيار وسيلة الدفع للإشتراك في الباقة',
-                            style: AppTextStyle.headline2),
-                      ],
-                    ),
+    final package = widget.package;
 
-                    const SizedBox(height: 12),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: AppColors.surface,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: AppColors.primaryColor.withValues(alpha: 0.1),
-                        ),
-                      ),
+    return BlocProvider(
+      create: (context) => getIt<PackagesBloc>(),
+      child: BlocConsumer<PackagesBloc, PackagesState>(
+        listener: (context, state) {
+          if (state is PackageSubscriptionSuccess) {
+            final paymentUrl = state.subscription.paymentUrl;
+
+            // 1. لو في payment_url (دفع إلكتروني عبر بوابة دفع مثل Moyasar)
+            if (paymentUrl != null && paymentUrl.isNotEmpty) {
+              context.push(RouteNames.paymentWebView, extra: paymentUrl);
+            } else {
+              // 2. لو الدفع بالمحفظة وتم الخصم بنجاح
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('تم الإشتراك في الباقة بنجاح!'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+              context.pop();
+            }
+          }
+
+          if (state is PackageSubscriptionError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+        builder: (context, state) {
+          final isLoading = state is PackageSubscriptionLoading;
+
+          return Scaffold(
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  AppHeader(
+                    height: 120,
+                    child: SafeArea(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (widget.isActive)
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: Colors.green,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: const Text('نشط',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 12)),
-                              ),
-                            ),
-                          if (!widget.isActive) ...[
-                            const SizedBox(height: 12),
-                            _buildPaymentOption(0, 'الدفع بالمحفظة'),
-                            const SizedBox(height: 8),
-                            _buildPaymentOption(1, 'بوابة دفع إلكترونية'),
-                            const SizedBox(height: 16),
-                            AppButton(
-                              label: 'إشتراك',
-                              onTap: () {},
-                            ),
-                            const SizedBox(height: 12),
-                            AppButton(
-                              label: 'ترقية الباقة',
-                              onTap: () {},
-                              kind: AppButtonKind.secondary,
-                            ),
-                          ] else ...[
-                            const SizedBox(height: 16),
-                            AppButton(
-                              label: 'تجديد الإشتراك',
-                              onTap: () {},
-                            ),
-                          ],
+                        children: const [
+                          LocalAppBar(
+                            title: 'تفاصيل الباقة',
+                            isLight: true,
+                          ),
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Transform.translate(
+                    offset: const Offset(0, -30),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Dynamic Subscription Card
+                          AppSubscriptionCard(
+                            title: package.title,
+                            subtitle: package.content,
+                            price: package.price.toString(),
+                            badge: package.typeLabel.isNotEmpty
+                                ? package.typeLabel
+                                : null,
+                            buttonLabel:
+                                package.isActive ? 'تجديد الإشتراك' : 'إشتراك',
+                            // 👈 ربط زرار الكارد بـ API التجديد والاشتراك
+                            onTap: () => _onSubscribePressed(context, package.id),
+                            icon: package.isActive
+                                ? Icons.check_circle
+                                : Icons.circle_outlined,
+                            features: package.features
+                                .map((f) => SubscriptionFeature(
+                                      title: f.title,
+                                      subtitle: f.description,
+                                    ))
+                                .toList(),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'إختيار وسيلة الدفع',
+                            style: AppTextStyle.headline1.copyWith(fontSize: 18),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'قم بإختيار وسيلة الدفع للإشتراك في الباقة',
+                            style: AppTextStyle.headline2,
+                          ),
+                          const SizedBox(height: 12),
+                          Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: AppColors.surface,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: AppColors.primaryColor
+                                    .withValues(alpha: 0.1),
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (package.isActive) ...[
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: Colors.green,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: const Text(
+                                        'نشط',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 12),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                ],
+                                _buildPaymentOption(0, 'الدفع بالمحفظة'),
+                                const SizedBox(height: 8),
+                                _buildPaymentOption(1, 'بوابة دفع إلكترونية'),
+                                const SizedBox(height: 16),
+                                AppButton(
+                                  label: package.isActive
+                                      ? 'تجديد الإشتراك'
+                                      : 'إشتراك',
+                                  isLoading: isLoading,
+                                  onTap: () =>
+                                      _onSubscribePressed(context, package.id),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                ],
               ),
             ),
-            const SizedBox(height: 24),
-          ],
-        ),
+          );
+        },
       ),
     );
+  }
+
+  void _onSubscribePressed(BuildContext context, int packageId) {
+    final paymentMethod = _selectedPayment == 0 ? 'wallet' : 'online';
+    context.read<PackagesBloc>().add(
+          SubscribeToPackageEvent(
+            packageId: packageId,
+            paymentMethod: paymentMethod,
+          ),
+        );
   }
 
   Widget _buildPaymentOption(int index, String label) {
