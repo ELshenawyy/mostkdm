@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
+import 'package:mostkdm/features/wallet/data/models/wallet_balance_model.dart';
 
 class WalletBalanceSection extends StatelessWidget {
   final VoidCallback? onRechargeTap;
+  final WalletBalanceModel? balance;
 
-  const WalletBalanceSection({super.key, this.onRechargeTap});
+  const WalletBalanceSection({super.key, this.onRechargeTap, this.balance});
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +40,14 @@ class WalletBalanceSection extends StatelessWidget {
                       Text('الرصيد الحالى',
                           style: AppTextStyle.headline3
                               .copyWith(color: Colors.white)),
-                      Text('1000 @',
-                          style: AppTextStyle.headline1.copyWith(
-                            color: Colors.white,
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                          )),
+                      Text(
+                        '${balance?.balance ?? 0} ${balance?.currency ?? ''}',
+                        style: AppTextStyle.headline1.copyWith(
+                          color: Colors.white,
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       Text('متاح للإستخدام',
                           style: AppTextStyle.headline3
                               .copyWith(color: Colors.white)),

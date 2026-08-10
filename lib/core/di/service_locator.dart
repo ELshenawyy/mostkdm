@@ -29,11 +29,13 @@ import 'package:mostkdm/features/notification/presentation/bloc/notification_blo
 import 'package:mostkdm/features/search/data/datasource/search_remote_data_source.dart';
 import 'package:mostkdm/features/search/data/repository/search_repository.dart';
 import 'package:mostkdm/features/search/presentation/bloc/search_bloc.dart';
+import 'package:mostkdm/features/wallet/data/datasource/wallet_remote_data_source.dart';
+import 'package:mostkdm/features/wallet/data/repository/wallet_repository.dart';
+import 'package:mostkdm/features/wallet/presentation/bloc/wallet_bloc.dart';
 
 final getIt = GetIt.instance;
 
 void setupServiceLocator() {
-
   getIt.registerLazySingleton<Dio>(() => Dio());
   getIt.registerLazySingleton<ApiConsumer>(() => DioConsumer());
   // Home Feature
@@ -64,7 +66,6 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<AddAdRemoteDataSource>(
     () => AddAdRemoteDataSourceImpl(),
   );
-
 
   getIt.registerLazySingleton<AddAdRepository>(
     () => AddAdRepositoryImpl(),
@@ -143,5 +144,16 @@ void setupServiceLocator() {
     () => ChatBloc(chatRepository: getIt()),
   );
 
+  // wallet
+  getIt.registerLazySingleton<WalletRemoteDataSource>(
+    () => WalletRemoteDataSourceImpl(getIt()),
+  );
 
+  getIt.registerLazySingleton<WalletRepository>(
+    () => WalletRepositoryImpl(getIt()),
+  );
+
+  getIt.registerFactory<WalletBloc>(
+    () => WalletBloc(getIt()),
+  );
 }

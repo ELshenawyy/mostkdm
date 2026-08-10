@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
 import 'package:mostkdm/core/widgets/app_button.dart';
 import 'package:mostkdm/core/widgets/text_field_widget.dart';
+import 'package:mostkdm/features/wallet/presentation/bloc/wallet_bloc.dart';
 
 class RechargeBottomSheet extends StatefulWidget {
   const RechargeBottomSheet({super.key});
@@ -18,6 +20,26 @@ class _RechargeBottomSheetState extends State<RechargeBottomSheet> {
   void dispose() {
     _amountController.dispose();
     super.dispose();
+  }
+
+  void _onRechargePressed() {
+    final amountText = _amountController.text.trim();
+    final amount = double.tryParse(amountText);
+
+    if (amount != null && amount > 0) {
+      // 1. إرسال الحدث للـ Bloc لشحن الرصيد
+      context.read<WalletBloc>().add(RechargeWalletEvent( amount));
+
+      // 2. إغلاق الـ Bottom Sheet
+      Navigator.pop(context);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('برجاء إدخال مبلغ شحن صحيح'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override
@@ -41,8 +63,8 @@ class _RechargeBottomSheetState extends State<RechargeBottomSheet> {
             const SizedBox(height: 8),
             const Text(
               'قم بإدخال مبلغ الشحن الذي تريد شحنه',
-              style: AppTextStyle.headline2,),
-            
+              style: AppTextStyle.headline2,
+            ),
             const SizedBox(height: 24),
             AppTextField(
               label: 'مبلغ الشحن',
@@ -54,7 +76,7 @@ class _RechargeBottomSheetState extends State<RechargeBottomSheet> {
             const SizedBox(height: 24),
             AppButton(
               label: 'شحن',
-              onTap: () => Navigator.pop(context),
+              onTap: _onRechargePressed, // 👈 استدعاء الدالة عند الضغط
               kind: AppButtonKind.secondary,
             ),
             const SizedBox(height: 16),

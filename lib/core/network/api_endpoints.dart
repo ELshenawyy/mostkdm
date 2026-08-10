@@ -54,4 +54,9 @@ class ApiEndpoints {
   static const String sendMessage = '/v1/chats/send-message';
   static String getMessages(int roomId) => '/v1/chats/$roomId/messages';
 
+  // wallet
+  static const String walletBalance = '/v1/wallet';
+  static const String walletTransactions = '/v1/wallet/transactions';
+  static const String rechargeWallet = '/v1/wallet/recharge';
+
 }

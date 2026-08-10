@@ -1,25 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
-
 class TransactionItem extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final String amount;
-  final bool isPositive;
-  final String date;
+  final String type;
+  final String description;
+  final double amount;
+  final String status;
+  final String createdAt;
 
   const TransactionItem({
     super.key,
-    required this.title,
-    required this.subtitle,
+    required this.type,
+    required this.description,
     required this.amount,
-    required this.isPositive,
-    required this.date,
+    required this.status,
+    required this.createdAt,
   });
 
   @override
   Widget build(BuildContext context) {
+    final bool isSuccess = status.toLowerCase() == 'paid' ||
+        status.toLowerCase() == 'success' ||
+        status.toLowerCase() == 'completed';
+    final bool isPending = status.toLowerCase() == 'pending';
+
+    final Color statusColor = isSuccess
+        ? Colors.green
+        : isPending
+            ? Colors.orange
+            : Colors.red;
+
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -35,36 +45,48 @@ class TransactionItem extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: isPositive
-                  ? Colors.green.withValues(alpha: 0.1)
-                  : Colors.red.withValues(alpha: 0.1),
+              color: statusColor.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
-              isPositive ? Icons.arrow_downward : Icons.arrow_upward,
-              color: isPositive ? Colors.green : Colors.red,
+              isSuccess
+                  ? Icons.arrow_downward
+                  : isPending
+                      ? Icons.access_time
+                      : Icons.arrow_upward,
+              color: statusColor,
               size: 20,
             ),
           ),
           const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  type,
                   style: AppTextStyle.textFieldHeader
-                      .copyWith(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 4),
-              Text(subtitle,
-                  style: AppTextStyle.headline2.copyWith(fontSize: 12)),
-              const SizedBox(height: 4),
-              Text(date, style: TextStyle(fontSize: 11, color: Colors.grey)),
-            ],
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                if (description.isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    description,
+                    style: AppTextStyle.headline2.copyWith(fontSize: 12),
+                  ),
+                ],
+                const SizedBox(height: 4),
+                Text(
+                  createdAt,
+                  style: const TextStyle(fontSize: 11, color: Colors.grey),
+                ),
+              ],
+            ),
           ),
-          const Spacer(),
           Text(
-            '${isPositive ? '+' : '-'} $amount ₴',
+            '$amount ₴',
             style: TextStyle(
-              color: isPositive ? Colors.green : Colors.red,
+              color: statusColor,
               fontWeight: FontWeight.bold,
               fontSize: 14,
             ),
