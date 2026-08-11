@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
+import 'package:mostkdm/core/utils/date_formatter.dart';
 import 'package:mostkdm/features/advertisement/data/models/ad_details_model.dart';
 
 class AdTitlePriceSection extends StatelessWidget {
@@ -61,7 +62,7 @@ class AdTitlePriceSection extends StatelessWidget {
             const Icon(Icons.location_on_outlined,
                 size: 14, color: AppColors.primaryColor),
             const SizedBox(width: 12),
-            Text('منذ ${ad.daysAgo} ساعة',
+            Text(DateFormatter.formatTimeAgo(ad.createdAt),
                 style: const TextStyle(fontSize: 12, color: Colors.grey)),
             const SizedBox(width: 4),
             const Icon(Icons.access_time,

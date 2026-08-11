@@ -32,9 +32,7 @@ class _MainViewState extends State<MainView> {
   Future<void> _handleAddAdTap() async {
     await context.push(RouteNames.addAd);
     if (mounted) {
-      // MyAdsBloc singleton دلوقتي في GetIt -- نقدر نوصلها مباشرة من
-      // هنا من غير أي حيلة (Key remount) زي اللي كنا مضطرين نعملها
-      // قبل كده.
+     
       getIt<MyAdsBloc>().add(const GetMyAdsEvent());
     }
   }

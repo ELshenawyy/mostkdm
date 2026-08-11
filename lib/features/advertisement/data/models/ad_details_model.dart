@@ -1,4 +1,5 @@
-import 'package:mostkdm/features/advertisement/data/models/seller_model.dart';
+import 'package:mostkdm/features/advertisement/data/models/ad_model.dart';
+import 'package:mostkdm/features/favorite/data/model/seller_model.dart';
 
 class AdDetailsModel {
   final String id;
@@ -34,15 +35,17 @@ class AdDetailsModel {
     final userData = json['user_data'] as Map<String, dynamic>?;
 
     return AdDetailsModel(
-      id: ad['id'].toString(),
-      title: ad['title'].toString(),
-      price: ad['price'].toString(),
+      id: ad['id']?.toString() ?? '',
+      title: ad['title']?.toString() ?? '',
+      price: ad['price']?.toString() ?? '0',
       city: (ad['city'] as String?) ?? (ad['location']?.toString() ?? ''),
       visistedCount: ad['visisted_count'] is int
           ? ad['visisted_count']
           : (int.tryParse(ad['visisted_count']?.toString() ?? '') ?? 0),
-      createdAt: ad['created_at'].toString(),
-      images: (ad['images'] as List).map((e) => e.toString()).toList(),
+      createdAt: ad['created_at']?.toString() ?? '',
+      images: ad['images'] is List
+          ? (ad['images'] as List).map((e) => e.toString()).toList()
+          : [],
       specifications: const {},
       seller: userData != null
           ? SellerModel.fromJson(userData)
@@ -54,17 +57,28 @@ class AdDetailsModel {
               isFollowing: false,
               adsCount: 0,
             ),
-      description: ad['description'].toString(),
-      isPremium: ad['is_featured'] as bool ? ad['is_featured'] : false,
-      isFavorite: ad['is_favourite'] is bool ? ad['is_favourite'] : false,
+      description: ad['description']?.toString() ?? '',
+      isPremium: ad['is_featured'] == true,
+      isFavorite: ad['is_favourite'] == true,
     );
   }
 
-  int get daysAgo {
-    try {
-      return DateTime.now().difference(DateTime.parse(createdAt)).inDays;
-    } catch (_) {
-      return 0;
-    }
+  /// تحويل [AdDetailsModel] إلى [AdModel] لاستخدامه في الـ FavoritesBloc
+  AdModel toAdModel() {
+    return AdModel(
+      id: int.tryParse(id) ?? 0,
+      title: title,
+      price: price,
+      location: city,
+      cover: images.isNotEmpty ? images.first : '',
+      visitedCount: visistedCount,
+      isFavourite: isFavorite,
+      description: description,
+      isActive: true,
+      isActiveLabel: '',
+      latitude: "0.0",
+      longitude: "0.0",
+      createdAt: createdAt,
+    );
   }
 }

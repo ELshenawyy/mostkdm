@@ -22,7 +22,7 @@ class PackageDetailsView extends StatefulWidget {
 }
 
 class _PackageDetailsViewState extends State<PackageDetailsView> {
-  int _selectedPayment = 0; // 0: wallet, 1: online (Moyasar)
+  int _selectedPayment = 0; 
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +35,9 @@ class _PackageDetailsViewState extends State<PackageDetailsView> {
           if (state is PackageSubscriptionSuccess) {
             final paymentUrl = state.subscription.paymentUrl;
 
-            // 1. لو في payment_url (دفع إلكتروني عبر بوابة دفع مثل Moyasar)
             if (paymentUrl != null && paymentUrl.isNotEmpty) {
               context.push(RouteNames.paymentWebView, extra: paymentUrl);
             } else {
-              // 2. لو الدفع بالمحفظة وتم الخصم بنجاح
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('تم الإشتراك في الباقة بنجاح!'),
@@ -96,7 +94,6 @@ class _PackageDetailsViewState extends State<PackageDetailsView> {
                                 : null,
                             buttonLabel:
                                 package.isActive ? 'تجديد الإشتراك' : 'إشتراك',
-                            // 👈 ربط زرار الكارد بـ API التجديد والاشتراك
                             onTap: () => _onSubscribePressed(context, package.id),
                             icon: package.isActive
                                 ? Icons.check_circle
@@ -179,6 +176,7 @@ class _PackageDetailsViewState extends State<PackageDetailsView> {
       ),
     );
   }
+
 
   void _onSubscribePressed(BuildContext context, int packageId) {
     final paymentMethod = _selectedPayment == 0 ? 'wallet' : 'online';

@@ -61,27 +61,26 @@ final appRouter = GoRouter(
     ),
 
     GoRoute(
-  path: RouteNames.sendotp,
-  builder: (context, state) {
-    final args = state.extra as Map<String, dynamic>;
-    return OtpcodeView(
-      phoneNumber: args['phone'] as String,
-      isForgetPassword: args['isForgotPassword'] as bool? ?? false,
-    );
-  },
-),
-    
+      path: RouteNames.sendotp,
+      builder: (context, state) {
+        final args = state.extra as Map<String, dynamic>;
+        return OtpcodeView(
+          phoneNumber: args['phone'] as String,
+          isForgetPassword: args['isForgotPassword'] as bool? ?? false,
+        );
+      },
+    ),
 
     GoRoute(
-  path: RouteNames.changePassword,
-  builder: (context, state) {
-    final args = state.extra as Map<String, dynamic>?;
-    return ChangePasswordView(
-      phone: args?['phone'] as String?,
-      code: args?['code'] as String?,
-    );
-  },
-),
+      path: RouteNames.changePassword,
+      builder: (context, state) {
+        final args = state.extra as Map<String, dynamic>?;
+        return ChangePasswordView(
+          phone: args?['phone'] as String?,
+          code: args?['code'] as String?,
+        );
+      },
+    ),
 
     GoRoute(
       path: RouteNames.categories,
@@ -96,12 +95,12 @@ final appRouter = GoRouter(
       builder: (context, state) => const AdsView(),
     ),
     // في app_router.dart
-GoRoute(
-  path: RouteNames.subCategory,
-  builder: (context, state) => SubCategoryView(
-    category: state.extra as CategoryModel,
-  ),
-),
+    GoRoute(
+      path: RouteNames.subCategory,
+      builder: (context, state) => SubCategoryView(
+        category: state.extra as CategoryModel,
+      ),
+    ),
     GoRoute(
       path: RouteNames.search,
       builder: (context, state) => SearchView(),
@@ -160,12 +159,12 @@ GoRoute(
       builder: (context, state) => const SubscriptionsView(),
     ),
     GoRoute(
-  path: RouteNames.packageDetails,
-  builder: (context, state) {
-    final package = state.extra as PackageModel;
-    return PackageDetailsView(package: package);
-  },
-),
+      path: RouteNames.packageDetails,
+      builder: (context, state) {
+        final package = state.extra as PackageModel;
+        return PackageDetailsView(package: package);
+      },
+    ),
 
     GoRoute(
         path: RouteNames.favorites,
@@ -189,11 +188,11 @@ GoRoute(
       },
     ),
     GoRoute(
-  path: RouteNames.paymentWebView,
-  builder: (context, state) {
-    final paymentUrl = state.extra as String;
-    return PaymentWebViewScreen(paymentUrl: paymentUrl);
-  },
-),
+      path: RouteNames.paymentWebView,
+      builder: (context, state) {
+        final paymentUrl = state.extra as String;
+        return PaymentWebViewScreen(paymentUrl: paymentUrl);
+      },
+    ),
   ],
 );

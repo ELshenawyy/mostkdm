@@ -1,12 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
-import 'package:mostkdm/core/theme/app_images.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
 import 'package:mostkdm/core/widgets/app_button.dart';
 import 'package:mostkdm/features/advertisement/data/models/ad_details_model.dart';
-import 'package:mostkdm/features/advertisement/presentation/widget/contact_button.dart';
 import 'package:mostkdm/features/advertisement/presentation/section/header_section.dart';
+import 'package:mostkdm/features/advertisement/presentation/widget/contact_button.dart';
+import 'package:mostkdm/features/favorite/presentation/bloc/follow_bloc.dart';
 
 class SellerSection extends StatelessWidget {
   final AdDetailsModel ad;
@@ -46,31 +47,48 @@ class SellerSection extends StatelessWidget {
                         color: AppColors.textHintColor)
                     : null,
               ),
-              SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 100,
-                    child: Text(
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
                       ad.seller.name,
                       style: AppTextStyle.textFieldHeader,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
-                  ),
-                  Text(
-                    '${ad.seller.adsCount} إعلان آخر',
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
-                  ),
-                ],
+                    Text(
+                      '${ad.seller.adsCount} إعلان آخر',
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                  ],
+                ),
               ),
-              Spacer(),
-              AppButton(
-                label: 'متابعة',
-                onTap: () {},
-                kind: AppButtonKind.secondary,
-                width: 100,
+              const SizedBox(width: 8),
+
+              BlocBuilder<FollowBloc, FollowState>(
+                builder: (context, state) {
+                  bool isFollowing = false;
+                  if (state is FollowLoaded) {
+                    isFollowing = state.followersList
+                        .any((seller) => seller.id == ad.seller.id);
+                  }
+
+                  return AppButton(
+                    label: isFollowing ? 'مُتابَع' : 'متابعة',
+                    kind: isFollowing
+                        ? AppButtonKind.outline
+                        : AppButtonKind.secondary,
+                    width: 105,
+                    height: 38,
+                    onTap: () {
+                      context
+                          .read<FollowBloc>()
+                          .add(ToggleFollowEvent(userId: ad.seller.id));
+                    },
+                  );
+                },
               ),
             ],
           ),

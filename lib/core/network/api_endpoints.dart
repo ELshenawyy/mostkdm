@@ -70,5 +70,14 @@ class ApiEndpoints {
   // subscriptions
   static const String subscriptions = '/v1/subscriptions/store';
 
+  // Favorites % following
+  static const String getFavorites = '/favourites/ads';
+  static const String toggleFavorite = '/favourites/toggle-ad';
+
+  static const String getFollowingList = '/followed-users';
+  static const String followUser = '/follow-user';
+  static const String unFollowUser = '/unfollow-user';
+
+
 
 }

@@ -1,5 +1,3 @@
-// features/favorites/presentation/widgets/following_user_card.dart
-
 import 'package:flutter/material.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_images.dart';
@@ -35,15 +33,23 @@ class FollowingUserCard extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 22,
-            backgroundImage: userImage != null
-                ? AssetImage(userImage!)
-                : AssetImage(AppImages.car),
+           backgroundImage: (userImage != null && userImage!.isNotEmpty)
+                ? NetworkImage(userImage!) as ImageProvider
+                : const AssetImage(AppImages.car),
           ),
           const SizedBox(width: 4),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(name, style: AppTextStyle.textFieldHeader),
+              SizedBox(
+                width: 0.25 * MediaQuery.of(context).size.width,
+                child: Text(
+                  overflow: TextOverflow.ellipsis,
+                  name,
+                  style: AppTextStyle.textFieldHeader,
+                  maxLines: 1,
+                ),
+              ),
               Text('$adsCount إعلان',
                   style: const TextStyle(fontSize: 12, color: Colors.grey)),
             ],

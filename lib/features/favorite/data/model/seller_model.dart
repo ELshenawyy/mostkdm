@@ -1,4 +1,6 @@
-class SellerModel {
+import 'package:equatable/equatable.dart';
+
+class SellerModel extends Equatable {
   final int id;
   final String name;
   final String image;
@@ -25,4 +27,18 @@ class SellerModel {
       adsCount: json['user_ads_count'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'image': image,
+      'mobile': mobile,
+      'is_following': isFollowing,
+      'user_ads_count': adsCount,
+    };
+  }
+
+  @override
+  List<Object?> get props => [id, name, image, mobile, isFollowing, adsCount];
 }
