@@ -76,6 +76,13 @@ class _MoreListSectionState extends State<MoreListSection> {
                 icon: Icons.payment_outlined,
                 onTap: () => context.push(RouteNames.commission),
               ),
+                            const SizedBox(height: 8),
+
+               MoreItem(
+                title: 'تواصل معنا',
+                icon: Icons.contact_support_outlined,
+                onTap: () => context.push(RouteNames.contactUs),
+              ),
               const SizedBox(height: 8),
               MoreItem(
                 title: 'سياسة الخصوصية',

@@ -13,6 +13,7 @@ import 'package:mostkdm/features/auth/presentation/view/otp_code_view.dart';
 import 'package:mostkdm/features/chat/data/models/chat_model.dart';
 import 'package:mostkdm/features/chat/presentation/view/chat_details_view.dart';
 import 'package:mostkdm/features/commission/presentation/view/commission_view.dart';
+import 'package:mostkdm/features/contact_us/presentation/view/contact_us_view.dart';
 import 'package:mostkdm/features/favorite/presentation/view/favorites_view.dart';
 import 'package:mostkdm/features/home/presentation/bloc/home_bloc.dart';
 import 'package:mostkdm/features/home/presentation/section/home_featured_ads_section.dart';
@@ -172,6 +173,11 @@ final appRouter = GoRouter(
     GoRoute(
         path: RouteNames.notifications,
         builder: (context, state) => const NotificationView()),
+
+    GoRoute(
+      path: RouteNames.contactUs,
+      builder: (context, state) => const ContactUsView(),
+    ),
     GoRoute(
       path: RouteNames.commission,
       builder: (context, state) => const CommissionView(),

@@ -79,5 +79,9 @@ class ApiEndpoints {
   static const String unFollowUser = '/unfollow-user';
 
 
+  // contact_us
+  static const String contactUs = '/contact-us';
+
+
 
 }

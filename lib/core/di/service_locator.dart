@@ -17,6 +17,9 @@ import 'package:mostkdm/features/chat/presentation/bloc/chats_bloc.dart';
 import 'package:mostkdm/features/commission/data/datasource/commission_remote_data_source.dart';
 import 'package:mostkdm/features/commission/data/repository/commision_repository.dart';
 import 'package:mostkdm/features/commission/presentation/bloc/commission_bloc.dart';
+import 'package:mostkdm/features/contact_us/data/datasource/contact_us_remote_data_source.dart';
+import 'package:mostkdm/features/contact_us/data/repository/contact_us_repository.dart';
+import 'package:mostkdm/features/contact_us/presentation/bloc/contact_us_bloc.dart';
 import 'package:mostkdm/features/favorite/data/datasource/favorites_remote_data_source.dart';
 import 'package:mostkdm/features/favorite/data/datasource/follow_remote_data_source.dart';
 import 'package:mostkdm/features/favorite/data/repositories/favorites_repository.dart';
@@ -220,5 +223,18 @@ void setupServiceLocator() {
 
   getIt.registerFactory<FollowBloc>(
     () => FollowBloc(getIt()),
+  );
+
+  // contact us
+  getIt.registerLazySingleton<ContactUsRemoteDataSource>(
+    () => ContactUsRemoteDataSourceImpl(getIt()),
+  );
+
+  getIt.registerLazySingleton<ContactUsRepository>(
+    () => ContactUsRepositoryImpl(getIt()),
+  );
+
+  getIt.registerFactory<ContactUsBloc>(
+    () => ContactUsBloc(getIt()),
   );
 }

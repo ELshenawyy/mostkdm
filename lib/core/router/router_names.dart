@@ -31,6 +31,9 @@ abstract class RouteNames {
   static const notifications = '/notifications';
   static const favorites = '/favorites';
 
+    static const contactUs = '/contactUs';
+
+
   static const commission = '/commission';
 
   static const policy = '/policy';
