@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
 import 'package:mostkdm/core/widgets/app_button.dart';
@@ -9,6 +10,27 @@ import 'package:mostkdm/features/search/presentation/bloc/search_bloc.dart';
 
 class FilterBottomSheet extends StatefulWidget {
   const FilterBottomSheet({super.key});
+
+  static Future<void> show(BuildContext context, SearchBloc searchBloc) {
+    searchBloc.add(const LoadFilterOptionsEvent());
+
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: true,
+      enableDrag: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => DraggableScrollableSheet(
+        initialChildSize: 0.8,
+        minChildSize: 0.5,
+        maxChildSize: 0.95,
+        builder: (_, controller) => BlocProvider.value(
+          value: searchBloc,
+          child: const FilterBottomSheet(),
+        ),
+      ),
+    );
+  }
 
   @override
   State<FilterBottomSheet> createState() => _FilterBottomSheetState();
@@ -23,7 +45,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   CategoryModel? _selectedCategory;
   CategoryModel? _selectedSubCategory;
   CityModel? _selectedCity;
-  // null = أي نوع (no filter sent), true = مميز, false = عادي
   bool? _isFeatured;
 
   final _fromController = TextEditingController();
@@ -33,12 +54,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     _AdTypeOption(label: 'مميز', value: true),
     _AdTypeOption(label: 'عادي', value: false),
   ];
-
-  @override
-  void initState() {
-    super.initState();
-    context.read<SearchBloc>().add(const LoadFilterOptionsEvent());
-  }
 
   @override
   void dispose() {
@@ -69,6 +84,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             priceTo: double.tryParse(_toController.text),
           ),
         );
+
     Navigator.pop(context);
   }
 
@@ -88,114 +104,117 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           setState(() => _subCategories = state.subCategories);
         }
       },
-      child: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.only(top: 24),
-          padding: const EdgeInsets.all(24),
-          decoration: const BoxDecoration(
-            color: AppColors.backgroundColor,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(24),
-              topRight: Radius.circular(24),
-            ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Transform.translate(
-                offset: const Offset(0, -50),
-                child: Center(
-                  child: Container(
-                    width: 58,
-                    height: 58,
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(
-                          color: AppColors.secondaryColor, width: 1.5),
-                    ),
-                    child: const Icon(
-                      Icons.filter_alt_outlined,
-                      color: AppColors.secondaryColor,
-                      size: 29,
-                    ),
-                  ),
-                ),
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.topCenter,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(top: 29),
+            padding: const EdgeInsets.only(top: 40, left: 24, right: 24, bottom: 24),
+            decoration: const BoxDecoration(
+              color: AppColors.backgroundColor,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(24),
+                topRight: Radius.circular(24),
               ),
-              Center(child: Text('فلتر حسب', style: AppTextStyle.headline1)),
-              const SizedBox(height: 16),
-              if (!_optionsLoaded)
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 24),
-                  child: Center(child: CircularProgressIndicator()),
-                )
-              else ...[
-                _buildDropdown<CategoryModel>(
-                  label: 'القسم الرئيسي',
-                  hint: 'اختر القسم الرئيسي',
-                  value: _selectedCategory,
-                  items: _categories,
-                  itemLabel: (c) => c.name,
-                  onChanged: _onCategoryChanged,
-                ),
-                const SizedBox(height: 12),
-                _buildDropdown<CategoryModel>(
-                  label: 'القسم الفرعي',
-                  hint: _selectedCategory == null
-                      ? 'اختر القسم الرئيسي أولاً'
-                      : 'اختر القسم الفرعي',
-                  value: _selectedSubCategory,
-                  items: _subCategories,
-                  itemLabel: (c) => c.name,
-                  onChanged: _selectedCategory == null
-                      ? null
-                      : (val) => setState(() => _selectedSubCategory = val),
-                ),
-                const SizedBox(height: 12),
-                _buildDropdown<CityModel>(
-                  label: 'المدينة',
-                  hint: 'اختر المدينة',
-                  value: _selectedCity,
-                  items: _cities,
-                  itemLabel: (c) => c.name,
-                  onChanged: (val) => setState(() => _selectedCity = val),
-                ),
-                const SizedBox(height: 12),
-                _buildDropdown<_AdTypeOption>(
-                  label: 'نوع الإعلان',
-                  hint: 'اختر نوع الإعلان',
-                  value: _isFeatured == null
-                      ? null
-                      : _adTypeOptions
-                          .firstWhere((o) => o.value == _isFeatured),
-                  items: _adTypeOptions,
-                  itemLabel: (o) => o.label,
-                  onChanged: (val) =>
-                      setState(() => _isFeatured = val?.value),
-                ),
-                const SizedBox(height: 16),
-                Row(
+            ),
+            child: Skeletonizer(
+              enabled: !_optionsLoaded,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Expanded(
-                      child: _buildPriceField('إلى (ريال)', _toController),
+                    Center(child: Text('فلتر حسب', style: AppTextStyle.headline1)),
+                    const SizedBox(height: 16),
+                    _buildDropdown<CategoryModel>(
+                      label: 'القسم الرئيسي',
+                      hint: 'اختر القسم الرئيسي',
+                      value: _selectedCategory,
+                      items: _categories,
+                      itemLabel: (c) => c.name,
+                      onChanged: _onCategoryChanged,
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _buildPriceField('من (ريال)', _fromController),
+                    const SizedBox(height: 12),
+                    _buildDropdown<CategoryModel>(
+                      label: 'القسم الفرعي',
+                      hint: _selectedCategory == null
+                          ? 'اختر القسم الرئيسي أولاً'
+                          : 'اختر القسم الفرعي',
+                      value: _selectedSubCategory,
+                      items: _subCategories,
+                      itemLabel: (c) => c.name,
+                      onChanged: _selectedCategory == null
+                          ? null
+                          : (val) => setState(() => _selectedSubCategory = val),
+                    ),
+                    const SizedBox(height: 12),
+                    _buildDropdown<CityModel>(
+                      label: 'المدينة',
+                      hint: 'اختر المدينة',
+                      value: _selectedCity,
+                      items: _cities,
+                      itemLabel: (c) => c.name,
+                      onChanged: (val) => setState(() => _selectedCity = val),
+                    ),
+                    const SizedBox(height: 12),
+                    _buildDropdown<_AdTypeOption>(
+                      label: 'نوع الإعلان',
+                      hint: 'اختر نوع الإعلان',
+                      value: _isFeatured == null
+                          ? null
+                          : _adTypeOptions
+                              .firstWhere((o) => o.value == _isFeatured),
+                      items: _adTypeOptions,
+                      itemLabel: (o) => o.label,
+                      onChanged: (val) => setState(() => _isFeatured = val?.value),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildPriceField('إلى (ريال)', _toController),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: _buildPriceField('من (ريال)', _fromController),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    AppButton(
+                      label: 'أظهر النتائج',
+                      kind: AppButtonKind.secondary,
+                      onTap: _applyFilter,
                     ),
                   ],
                 ),
-                const SizedBox(height: 24),
-                AppButton(
-                  label: 'أظهر النتائج',
-                  kind: AppButtonKind.secondary,
-                  onTap: _applyFilter,
-                ),
-              ],
-              const SizedBox(height: 16),
-            ],
+              ),
+            ),
           ),
-        ),
+
+          Positioned(
+            top: 0,
+            child: Skeleton.ignore(
+              child: Container(
+                width: 58,
+                height: 58,
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColors.secondaryColor,
+                    width: 1.5,
+                  ),
+                ),
+                child: const Icon(
+                  Icons.filter_alt_outlined,
+                  color: AppColors.secondaryColor,
+                  size: 29,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -226,8 +245,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             ),
           ),
           items: items
-              .map((e) =>
-                  DropdownMenuItem(value: e, child: Text(itemLabel(e))))
+              .map((e) => DropdownMenuItem(value: e, child: Text(itemLabel(e))))
               .toList(),
           onChanged: onChanged,
         ),

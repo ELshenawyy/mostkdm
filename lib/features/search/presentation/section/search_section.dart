@@ -12,6 +12,7 @@ class SearchSection extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
   final bool autofocus;
+  final VoidCallback? onFilterTap; 
 
   const SearchSection({
     super.key,
@@ -20,6 +21,7 @@ class SearchSection extends StatelessWidget {
     this.onChanged,
     this.onSubmitted,
     this.autofocus = false,
+    this.onFilterTap, 
   });
 
   @override
@@ -34,30 +36,14 @@ class SearchSection extends StatelessWidget {
         autofocus: isInteractive && autofocus,
         onFieldTap:
             isInteractive ? null : () => context.push(RouteNames.search),
-        onFilterTap: () {
-          // Grab the SearchBloc from THIS context (a descendant of the
-          // provider) before opening the modal -- showModalBottomSheet
-          // inserts its content into the Navigator's Overlay, which is
-          // NOT a descendant of this widget tree, so context.read
-          // inside FilterBottomSheet itself would throw
-          // ProviderNotFoundException without this.
-          final searchBloc = context.read<SearchBloc>();
-
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent,
-            builder: (_) => BlocProvider.value(
-              value: searchBloc,
-              child: DraggableScrollableSheet(
-                initialChildSize: 0.8,
-                minChildSize: 0.8,
-                maxChildSize: 1,
-                builder: (_, controller) => const FilterBottomSheet(),
-              ),
-            ),
-          );
-        },
+        onFilterTap: onFilterTap ??
+            () {
+              if (isInteractive) {
+                FilterBottomSheet.show(context, context.read<SearchBloc>());
+              } else {
+                context.push(RouteNames.search, extra: true);
+              }
+            },
       ),
     );
   }

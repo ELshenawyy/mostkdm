@@ -28,7 +28,6 @@ class SellerSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // عنوان
           const HeaderSection(
             label: 'بيانات المعلن',
           ),

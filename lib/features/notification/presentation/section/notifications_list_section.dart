@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/widgets/AppConfirmBottomSheet.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/widgets/local_app_bar.dart';
+import 'package:mostkdm/features/notification/data/models/notification_dummy_data.dart';
 import 'package:mostkdm/features/notification/presentation/bloc/notification_bloc.dart';
 import 'package:mostkdm/features/notification/presentation/section/notification_empty_section.dart';
 import 'package:mostkdm/features/notification/presentation/widgets/notification_card.dart';
@@ -80,98 +82,98 @@ class _NotificationsListSectionState extends State<NotificationsListSection> {
         }
       },
       builder: (context, state) {
-        if (state is NotificationLoading) {
-          return const Center(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 40.0),
-              child: CircularProgressIndicator(),
-            ),
-          );
+        final isLoading = state is NotificationLoading;
+
+        final allNotifications = isLoading
+            ? NotificationDummyData.dummyNotificationsList
+            : (state is NotificationLoaded ? state.notifications : []);
+
+        if (!isLoading && allNotifications.isEmpty) {
+          return const NotificationsEmptySection();
         }
 
-        if (state is NotificationLoaded) {
-          final allNotifications = state.notifications;
+        final filteredNotifications = _selectedTab == 0
+            ? allNotifications
+            : allNotifications.where((n) => !n.isRead).toList();
 
-          if (allNotifications.isEmpty) {
-            return const NotificationsEmptySection();
-          }
-
-          final filteredNotifications = _selectedTab == 0
-              ? allNotifications
-              : allNotifications.where((n) => !n.isRead).toList();
-
-          return Padding(
-            padding: const EdgeInsets.only(top: 18.0),
-            child: Column(
-              children: [
-                LocalAppBar(
+        return Padding(
+          padding: const EdgeInsets.only(top: 18.0),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: LocalAppBar(
                   title: "الاشعارات",
                   icon: Icons.delete_outlined,
-                  onIconTap: _showDeleteAllSheet,
+                  onIconTap: isLoading ? null : _showDeleteAllSheet,
+                  prefixIcon: Icons.arrow_back_outlined,
                 ),
-                const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      GestureDetector(
-                        onTap: () => setState(() => _selectedTab = 0),
-                        child: Column(
-                          children: [
-                            Text(
-                              'الكل',
-                              style: TextStyle(
-                                color: _selectedTab == 0
-                                    ? AppColors.secondaryColor
-                                    : Colors.grey,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Cairo',
-                              ),
+              ),
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () => setState(() => _selectedTab = 0),
+                      child: Column(
+                        children: [
+                          Text(
+                            'الكل',
+                            style: TextStyle(
+                              color: _selectedTab == 0
+                                  ? AppColors.secondaryColor
+                                  : Colors.grey,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Cairo',
                             ),
-                            if (_selectedTab == 0)
-                              Container(
-                                margin: const EdgeInsets.only(top: 4),
-                                height: 2,
-                                width: 30,
-                                color: AppColors.primaryColor,
-                              ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      GestureDetector(
-                        onTap: () => setState(() => _selectedTab = 1),
-                        child: Column(
-                          children: [
-                            Text(
-                              'الغير مقروء',
-                              style: TextStyle(
-                                color: _selectedTab == 1
-                                    ? AppColors.secondaryColor
-                                    : Colors.grey,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Cairo',
-                              ),
+                          ),
+                          if (_selectedTab == 0)
+                            Container(
+                              margin: const EdgeInsets.only(top: 4),
+                              height: 2,
+                              width: 30,
+                              color: AppColors.primaryColor,
                             ),
-                            if (_selectedTab == 1)
-                              Container(
-                                margin: const EdgeInsets.only(top: 4),
-                                height: 2,
-                                width: 60,
-                                color: AppColors.primaryColor,
-                              ),
-                          ],
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(width: 16),
+                    GestureDetector(
+                      onTap: () => setState(() => _selectedTab = 1),
+                      child: Column(
+                        children: [
+                          Text(
+                            'الغير مقروء',
+                            style: TextStyle(
+                              color: _selectedTab == 1
+                                  ? AppColors.secondaryColor
+                                  : Colors.grey,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Cairo',
+                            ),
+                          ),
+                          if (_selectedTab == 1)
+                            Container(
+                              margin: const EdgeInsets.only(top: 4),
+                              height: 2,
+                              width: 60,
+                              color: AppColors.primaryColor,
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 12),
-                Expanded(
-                  child: filteredNotifications.isEmpty
+              ),
+              const SizedBox(height: 12),
+              Expanded(
+                child: Skeletonizer(
+                  enabled: isLoading,
+                  child: (!isLoading && filteredNotifications.isEmpty)
                       ? const Center(
                           child: Text(
                             'لا توجد إشعارات غير مقروءة',
@@ -194,29 +196,31 @@ class _NotificationsListSectionState extends State<NotificationsListSection> {
                               subtitle: item.message,
                               time: item.createdAt,
                               isRead: item.isRead,
-                              onDelete: () {
-                                context.read<NotificationBloc>().add(
-                                      DeleteNotificationEvent(
-                                          notificationId: item.id),
-                                    );
-                              },
-                              onTap: () {
-                                if (!item.isRead) {
-                                  context.read<NotificationBloc>().add(
-                                        MarkAllNotificationsAsReadEvent(),
-                                      );
-                                }
-                              },
+                              onDelete: isLoading
+                                  ? null
+                                  : () {
+                                      context.read<NotificationBloc>().add(
+                                            DeleteNotificationEvent(
+                                                notificationId: item.id),
+                                          );
+                                    },
+                              onTap: isLoading
+                                  ? null
+                                  : () {
+                                      if (!item.isRead) {
+                                        context.read<NotificationBloc>().add(
+                                              MarkAllNotificationsAsReadEvent(),
+                                            );
+                                      }
+                                    },
                             );
                           },
                         ),
                 ),
-              ],
-            ),
-          );
-        }
-
-        return const SizedBox.shrink();
+              ),
+            ],
+          ),
+        );
       },
     );
   }

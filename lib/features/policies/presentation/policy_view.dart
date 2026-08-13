@@ -27,9 +27,13 @@ class PolicyView extends StatelessWidget {
               child: SafeArea(
                 child: Column(
                   children: [
-                    LocalAppBar(
-                      title: title,
-                      isLight: true,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: LocalAppBar(
+                        title: title,
+                        isLight: true,
+                        prefixIcon: Icons.arrow_back_outlined,
+                      ),
                     ),
                   ],
                 ),

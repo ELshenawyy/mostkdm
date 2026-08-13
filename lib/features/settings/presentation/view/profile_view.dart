@@ -19,9 +19,13 @@ class ProfileView extends StatelessWidget {
               child: SafeArea(
                 child: Column(
                   children: [
-                    LocalAppBar(
-                      title: 'الملف الشخصي',
-                      isLight: true,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: LocalAppBar(
+                        title: 'الملف الشخصي',
+                        isLight: true,
+                        prefixIcon: Icons.arrow_back_outlined,
+                      ),
                     ),
                   ],
                 ),

@@ -1,36 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mostkdm/core/di/service_locator.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:mostkdm/core/utils/core_dummy_data.dart';
 import 'package:mostkdm/features/search/presentation/bloc/search_bloc.dart';
 import 'package:mostkdm/features/search/presentation/section/search_empty_section.dart';
 import 'package:mostkdm/features/search/presentation/section/search_result_section.dart';
 import 'package:mostkdm/features/search/presentation/section/search_section.dart';
 import 'package:mostkdm/features/search/presentation/section/search_suggestions_section.dart';
+import 'package:mostkdm/features/search/presentation/widget/filter_bottom_sheet.dart';
 
-class SearchContentSection extends StatelessWidget {
+class SearchContentSection extends StatefulWidget {
   const SearchContentSection({super.key});
 
   @override
-
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<SearchBloc>()
-        ..add(const GetSearchHistoryEvent())
-        ..add(const GetTopKeywordsEvent()),
-      child: const _SearchContentBody(),
-    );
-  }
+  State<SearchContentSection> createState() => _SearchContentSectionState();
 }
 
-class _SearchContentBody extends StatefulWidget {
-  const _SearchContentBody();
+class _SearchContentSectionState extends State<SearchContentSection> {
+  final TextEditingController _controller = TextEditingController();
 
   @override
-  State<_SearchContentBody> createState() => _SearchContentBodyState();
-}
-
-class _SearchContentBodyState extends State<_SearchContentBody> {
-  final TextEditingController _controller = TextEditingController();
+  void initState() {
+    super.initState();
+    final bloc = context.read<SearchBloc>();
+    if (bloc.state is SearchInitial) {
+      bloc
+        ..add(const GetSearchHistoryEvent())
+        ..add(const GetTopKeywordsEvent());
+    }
+  }
 
   @override
   void dispose() {
@@ -61,57 +59,73 @@ class _SearchContentBodyState extends State<_SearchContentBody> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SearchSection(
-          isInteractive: true,
-          controller: _controller,
-          autofocus: true,
-          onChanged: _onChanged,
-          onSubmitted: _onSubmitted,
+        Skeleton.ignore(
+          child: SearchSection(
+            isInteractive: true,
+            controller: _controller,
+            autofocus: true,
+            onChanged: _onChanged,
+            onSubmitted: _onSubmitted,
+            onFilterTap: () => FilterBottomSheet.show(context, context.read<SearchBloc>()),
+          ),
         ),
         Expanded(
           child: BlocBuilder<SearchBloc, SearchState>(
-            // FilterOptionsLoaded/SubCategoriesLoaded only matter to the
-            // filter bottom sheet -- ignore them here so opening the
-            // filter doesn't flicker/reset whatever this body is
-            // currently showing (results or suggestions).
             buildWhen: (previous, current) =>
-                current is! FilterOptionsLoaded &&
-                current is! SubCategoriesLoaded,
+                current is! FilterOptionsLoaded && current is! SubCategoriesLoaded,
             builder: (context, state) {
-              return switch (state) {
-                SearchInitial() ||
-                SearchLoading() =>
-                  const Center(child: CircularProgressIndicator()),
-                SearchError(:final message) => Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Text(message, textAlign: TextAlign.center),
-                    ),
-                  ),
-                SearchSuggestionsLoaded(:final history, :final trending) =>
-                  SearchSuggestionsSection(
-                    history: history,
-                    trending: trending,
-                    onSelectKeyword: _onSelectSuggestion,
-                    onDeleteHistory: (id) => context
-                        .read<SearchBloc>()
-                        .add(DeleteSearchHistoryItemEvent(id)),
-                  ),
-                SearchSuccess(:final ads) => ads.isEmpty
-                    ? const SearchEmptySection()
-                    : SingleChildScrollView(
-                        child: SearchResultsSection(ads: ads),
-                      ),
-                // Unreachable in practice because of buildWhen above --
-                // still required so the switch is exhaustive over every
-                // SearchState subtype.
-                FilterOptionsLoaded() || SubCategoriesLoaded() =>
-                  const SizedBox.shrink(),
-              };
+              final isSearching = state is SearchLoading;
+              final isInitialLoading = state is SearchInitial;
+
+              return Skeletonizer(
+                enabled: isSearching || isInitialLoading,
+                child: _buildSearchBody(state, isSearching, isInitialLoading),
+              );
             },
           ),
         ),
       ],
     );
+  }
+
+  Widget _buildSearchBody(SearchState state, bool isSearching, bool isInitialLoading) {
+    if (isSearching) {
+      return SingleChildScrollView(
+        child: SearchResultsSection(ads: CoreDummyData.dummyAdsList),
+      );
+    }
+
+    if (isInitialLoading) {
+      return SearchSuggestionsSection(
+        history: CoreDummyData.searchHistory,
+        trending: CoreDummyData.trendingKeywords,
+        onSelectKeyword: (_) {},
+        onDeleteHistory: (_) {},
+      );
+    }
+
+    return switch (state) {
+      SearchError(:final message) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Text(message, textAlign: TextAlign.center),
+          ),
+        ),
+      SearchSuggestionsLoaded(:final history, :final trending) =>
+        SearchSuggestionsSection(
+          history: history,
+          trending: trending,
+          onSelectKeyword: _onSelectSuggestion,
+          onDeleteHistory: (id) => context
+              .read<SearchBloc>()
+              .add(DeleteSearchHistoryItemEvent(id)),
+        ),
+      SearchSuccess(:final ads) => ads.isEmpty
+          ? const SearchEmptySection()
+          : SingleChildScrollView(
+              child: SearchResultsSection(ads: ads),
+            ),
+      _ => const SizedBox.shrink(),
+    };
   }
 }

@@ -31,7 +31,6 @@ class MyAdCard extends StatelessWidget {
       views: '${ad.visitedCount} مشاهدة',
       bottomWidget: Row(
         children: [
-          // edit
           GestureDetector(
             onTap: onEdit,
             child: Container(
@@ -45,7 +44,6 @@ class MyAdCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          // delete
           GestureDetector(
             onTap: onDelete,
             child: Container(

@@ -9,6 +9,7 @@ class SearchResultsSection extends StatelessWidget {
 
   const SearchResultsSection({super.key, required this.ads});
 
+
   int _daysAgo(String createdAt) {
     try {
       return DateTime.now().difference(DateTime.parse(createdAt)).inDays;

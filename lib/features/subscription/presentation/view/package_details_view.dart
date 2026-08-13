@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:mostkdm/core/di/service_locator.dart';
 import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
@@ -9,25 +10,24 @@ import 'package:mostkdm/core/widgets/app_button.dart';
 import 'package:mostkdm/core/widgets/app_header.dart';
 import 'package:mostkdm/core/widgets/app_subscription_card.dart';
 import 'package:mostkdm/core/widgets/local_app_bar.dart';
+import 'package:mostkdm/features/subscription/data/models/packages_dummy_data.dart';
 import 'package:mostkdm/features/subscription/data/models/packages_model.dart';
 import 'package:mostkdm/features/subscription/presentation/bloc/packages_bloc.dart';
 
 class PackageDetailsView extends StatefulWidget {
-  final PackageModel package;
+  final PackageModel? package;
 
-  const PackageDetailsView({super.key, required this.package});
+  const PackageDetailsView({super.key, this.package});
 
   @override
   State<PackageDetailsView> createState() => _PackageDetailsViewState();
 }
 
 class _PackageDetailsViewState extends State<PackageDetailsView> {
-  int _selectedPayment = 0; 
+  int _selectedPayment = 0;
 
   @override
   Widget build(BuildContext context) {
-    final package = widget.package;
-
     return BlocProvider(
       create: (context) => getIt<PackagesBloc>(),
       child: BlocConsumer<PackagesBloc, PackagesState>(
@@ -58,7 +58,10 @@ class _PackageDetailsViewState extends State<PackageDetailsView> {
           }
         },
         builder: (context, state) {
-          final isLoading = state is PackageSubscriptionLoading;
+          final isSubscribing = state is PackageSubscriptionLoading;
+          final isPageLoading = state is PackagesLoading;
+          
+          final currentPackage = widget.package ?? PackagesDummyData.dummyPackage;
 
           return Scaffold(
             body: SingleChildScrollView(
@@ -69,9 +72,13 @@ class _PackageDetailsViewState extends State<PackageDetailsView> {
                     child: SafeArea(
                       child: Column(
                         children: const [
-                          LocalAppBar(
-                            title: 'تفاصيل الباقة',
-                            isLight: true,
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16.0),
+                            child: LocalAppBar(
+                              title: 'تفاصيل الباقة',
+                              isLight: true,
+                              prefixIcon: Icons.arrow_back_outlined,
+                            ),
                           ),
                         ],
                       ),
@@ -81,89 +88,104 @@ class _PackageDetailsViewState extends State<PackageDetailsView> {
                     offset: const Offset(0, -30),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Dynamic Subscription Card
-                          AppSubscriptionCard(
-                            title: package.title,
-                            subtitle: package.content,
-                            price: package.price.toString(),
-                            badge: package.typeLabel.isNotEmpty
-                                ? package.typeLabel
-                                : null,
-                            buttonLabel:
-                                package.isActive ? 'تجديد الإشتراك' : 'إشتراك',
-                            onTap: () => _onSubscribePressed(context, package.id),
-                            icon: package.isActive
-                                ? Icons.check_circle
-                                : Icons.circle_outlined,
-                            features: package.features
-                                .map((f) => SubscriptionFeature(
+                      child: Skeletonizer(
+                        enabled: isPageLoading,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Dynamic Subscription Card
+                            AppSubscriptionCard(
+                              title: currentPackage.title,
+                              subtitle: currentPackage.content,
+                              price: currentPackage.price.toString(),
+                              badge: currentPackage.typeLabel.isNotEmpty
+                                  ? currentPackage.typeLabel
+                                  : null,
+                              buttonLabel: currentPackage.isActive
+                                  ? 'تجديد الإشتراك'
+                                  : 'إشتراك',
+                              onTap: () {
+                                if (isPageLoading || isSubscribing) return;
+                                _onSubscribePressed(context, currentPackage.id);
+                              },
+                              icon: currentPackage.isActive
+                                  ? Icons.check_circle
+                                  : Icons.circle_outlined,
+                              features: currentPackage.features
+                                  .map<SubscriptionFeature>(
+                                    (f) => SubscriptionFeature(
                                       title: f.title,
                                       subtitle: f.description,
-                                    ))
-                                .toList(),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            'إختيار وسيلة الدفع',
-                            style: AppTextStyle.headline1.copyWith(fontSize: 18),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'قم بإختيار وسيلة الدفع للإشتراك في الباقة',
-                            style: AppTextStyle.headline2,
-                          ),
-                          const SizedBox(height: 12),
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: AppColors.surface,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: AppColors.primaryColor
-                                    .withValues(alpha: 0.1),
-                              ),
+                                    ),
+                                  )
+                                  .toList(),
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                if (package.isActive) ...[
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 4),
-                                      decoration: BoxDecoration(
-                                        color: Colors.green,
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: const Text(
-                                        'نشط',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 12),
+                            const SizedBox(height: 16),
+                            Text(
+                              'إختيار وسيلة الدفع',
+                              style:
+                                  AppTextStyle.headline1.copyWith(fontSize: 18),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'قم بإختيار وسيلة الدفع للإشتراك في الباقة',
+                              style: AppTextStyle.headline2,
+                            ),
+                            const SizedBox(height: 12),
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: AppColors.surface,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: AppColors.primaryColor
+                                      .withValues(alpha: 0.1),
+                                ),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (currentPackage.isActive) ...[
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 4),
+                                        decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        child: const Text(
+                                          'نشط',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12),
+                                        ),
                                       ),
                                     ),
+                                    const SizedBox(height: 12),
+                                  ],
+                                  _buildPaymentOption(0, 'الدفع بالمحفظة'),
+                                  const SizedBox(height: 8),
+                                  _buildPaymentOption(1, 'بوابة دفع إلكترونية'),
+                                  const SizedBox(height: 16),
+                                  AppButton(
+                                    label: currentPackage.isActive
+                                        ? 'تجديد الإشتراك'
+                                        : 'إشتراك',
+                                    isLoading: isSubscribing,
+                                    onTap: () {
+                                      if (isPageLoading || isSubscribing) return;
+                                      _onSubscribePressed(
+                                          context, currentPackage.id);
+                                    },
                                   ),
-                                  const SizedBox(height: 12),
                                 ],
-                                _buildPaymentOption(0, 'الدفع بالمحفظة'),
-                                const SizedBox(height: 8),
-                                _buildPaymentOption(1, 'بوابة دفع إلكترونية'),
-                                const SizedBox(height: 16),
-                                AppButton(
-                                  label: package.isActive
-                                      ? 'تجديد الإشتراك'
-                                      : 'إشتراك',
-                                  isLoading: isLoading,
-                                  onTap: () =>
-                                      _onSubscribePressed(context, package.id),
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -176,7 +198,6 @@ class _PackageDetailsViewState extends State<PackageDetailsView> {
       ),
     );
   }
-
 
   void _onSubscribePressed(BuildContext context, int packageId) {
     final paymentMethod = _selectedPayment == 0 ? 'wallet' : 'online';

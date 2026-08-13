@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mostkdm/features/favorite/data/model/following_dummy_data.dart';
 import 'package:mostkdm/features/favorite/presentation/bloc/follow_bloc.dart';
-import 'package:mostkdm/features/favorite/presentation/section/following_empty_section.dart';
 import 'package:mostkdm/features/favorite/presentation/widget/following_user_card.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:mostkdm/core/router/router_names.dart';
+import 'package:mostkdm/features/favorite/presentation/section/favorites_empty_section.dart';
 
 class FollowingUsersSection extends StatelessWidget {
   const FollowingUsersSection({super.key});
@@ -11,11 +15,7 @@ class FollowingUsersSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FollowBloc, FollowState>(
       builder: (context, state) {
-        if (state is FollowLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+        final isLoading = state is FollowLoading;
 
         if (state is FollowError) {
           return Center(
@@ -28,7 +28,7 @@ class FollowingUsersSection extends StatelessWidget {
                   const SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () {
-                      context.read<FollowBloc>().add(GetFollowersEvent());
+                      context.read<FollowBloc>().add(const GetFollowersEvent());
                     },
                     child: const Text('إعادة المحاولة'),
                   ),
@@ -38,33 +38,48 @@ class FollowingUsersSection extends StatelessWidget {
           );
         }
 
-        if (state is FollowLoaded) {
-          if (state.followersList.isEmpty) {
-            return const FollowingEmptySection();
+        if (state is FollowLoaded || isLoading) {
+          final usersList = isLoading
+              ? FollowingDummyData.dummySellersList
+              : (state as FollowLoaded).followersList;
+
+          if (!isLoading && usersList.isEmpty) {
+            return const FavoritesEmptySection();
           }
 
-          final reversedList = state.followersList.reversed.toList();
+          return Skeletonizer(
+            enabled: isLoading,
+            child: ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(16),
+              itemCount: usersList.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              itemBuilder: (context, i) {
+                final seller = usersList[i];
 
-          return ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(16),
-            itemCount: reversedList.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
-            itemBuilder: (context, i) {
-              final follower = reversedList[i];
-
-              return FollowingUserCard(
-                name: follower.name,
-                adsCount: follower.adsCount,
-                onUnfollow: () {
-                  // إرسال الـ ID للـ Bloc للتحديث الفوري بدون setState
-                  context
-                      .read<FollowBloc>()
-                      .add(ToggleFollowEvent(userId: follower.id));
-                },
-              );
-            },
+                return GestureDetector(
+                  onTap: isLoading
+                      ? null
+                      : () => context.push(
+                            RouteNames.profile,
+                            extra: seller.id,
+                          ),
+                  child: FollowingUserCard(
+                    name: seller.name,
+                    adsCount: seller.adsCount,
+                    userImage: seller.image,
+                    onUnfollow: isLoading
+                        ? null
+                        : () {
+                            context.read<FollowBloc>().add(
+                                  ToggleFollowEvent(userId: seller.id),
+                                );
+                          },
+                  ),
+                );
+              },
+            ),
           );
         }
 

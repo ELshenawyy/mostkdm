@@ -38,9 +38,13 @@ class _FavoritesViewState extends State<FavoritesView>
             child: SafeArea(
               child: Column(
                 children: [
-                  LocalAppBar(
-                    title: 'المفضلة والمتابعة',
-                    isLight: true,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: LocalAppBar(
+                      title: 'المفضلة والمتابعة',
+                      isLight: true,
+                      prefixIcon: Icons.arrow_back_outlined,
+                    ),
                   ),
                 ],
               ),

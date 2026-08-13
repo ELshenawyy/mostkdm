@@ -60,9 +60,15 @@ class _PaymentWebViewScreenState extends State<PaymentWebViewScreen> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: SafeArea(
-          child: LocalAppBar(
-            title: 'إتمام الدفع',
-            isLight: false,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
+            child: LocalAppBar(
+              title: 'إتمام الدفع',
+              prefixIcon: Icons.arrow_back_outlined,
+            ),
           ),
         ),
       ),

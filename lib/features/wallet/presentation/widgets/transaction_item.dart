@@ -50,10 +50,10 @@ class TransactionItem extends StatelessWidget {
             ),
             child: Icon(
               isSuccess
-                  ? Icons.arrow_downward
+                  ? Icons.arrow_upward
                   : isPending
                       ? Icons.access_time
-                      : Icons.arrow_upward,
+                      : Icons.arrow_downward,
               color: statusColor,
               size: 20,
             ),

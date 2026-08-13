@@ -27,9 +27,13 @@ class _BankAccountViewState extends State<BankAccountView> {
                 child: Column(
                   
                   children: [
-                    LocalAppBar(
-                      title: 'المحفظة',
-                      isLight: true,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: LocalAppBar(
+                        title: 'المحفظة',
+                        isLight: true,
+                        prefixIcon: Icons.arrow_back_outlined,
+                      ),
                     ),
                   ],
                 ),

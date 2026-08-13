@@ -5,15 +5,18 @@ import 'package:mostkdm/core/theme/app_text_style.dart';
 
 class LocalAppBar extends StatelessWidget {
   final String title;
+  final IconData? prefixIcon;
   final IconData? icon;
   final VoidCallback? onIconTap;
   final bool isLight;
+
   const LocalAppBar({
     super.key,
     required this.title,
     this.icon,
     this.onIconTap,
     this.isLight = false,
+    this.prefixIcon,
   });
 
   @override
@@ -24,56 +27,63 @@ class LocalAppBar extends StatelessWidget {
         : AppColors.textHintColor.withValues(alpha: 0.10);
     final iconColor = isLight ? AppColors.surface : AppColors.secondaryColor;
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 12, left: 16, right: 16),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () => context.pop(),
-            child: Container(
-              width: 34,
-              height: 34,
-              decoration: BoxDecoration(
-                color: iconBgColor,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.arrow_back_outlined,
-                color: iconColor,
-                size: 17.4,
-              ),
-            ),
-          ),
-          const Spacer(),
-          Expanded(
-            child: Text(title,
-                style: AppTextStyle.headline1.copyWith(
-                    color: textColor,
-                    fontSize: 16,
-                    overflow: TextOverflow.ellipsis
+    return Row(
+      children: [
+        SizedBox(
+          width: 34,
+          height: 34,
+          child: prefixIcon != null
+              ? GestureDetector(
+                  onTap: () => context.pop(),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: iconBgColor,
+                      shape: BoxShape.circle,
                     ),
-                maxLines: 1),
-          ),
-          const Spacer(),
-          if (icon != null)
-            GestureDetector(
-              onTap: onIconTap,
-              child: Container(
-                width: 34,
-                height: 34,
-                decoration: BoxDecoration(
-                  color: iconBgColor,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  icon,
-                  color: AppColors.errorIconColor,
-                  size: 17.4,
-                ),
-              ),
+                    child: Icon(
+                      prefixIcon ?? Icons.arrow_back_ios,
+                      color: iconColor,
+                      size: 17.4,
+                    ),
+                  ),
+                )
+              : null,
+        ),
+
+        Expanded(
+          child: Text(
+            title,
+            textAlign: TextAlign.center, 
+            style: AppTextStyle.headline1.copyWith(
+              color: textColor,
+              fontSize: 16,
+              overflow: TextOverflow.ellipsis,
             ),
-        ],
-      ),
+            maxLines: 1,
+          ),
+        ),
+
+        SizedBox(
+          width: 34,
+          height: 34,
+          child: icon != null
+              ? GestureDetector(
+                  onTap: onIconTap,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: iconBgColor,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      icon,
+                      color: AppColors.errorIconColor,
+                      size: 17.4,
+                    ),
+                  ),
+                )
+              : null,
+        ),
+      ],
     );
   }
 }

@@ -109,9 +109,8 @@ final appRouter = GoRouter(
     GoRoute(
       path: RouteNames.adsDetails,
       builder: (context, state) {
-        final adId = state.extra as String;
-
-        return AdsDatailsView(
+final adId = (state.extra as String?) ?? '1';
+        return AdDetailsView(
           adId: adId,
         );
       },

@@ -41,7 +41,7 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
 
   @override
   Future<void> markAllNotificationsAsRead() async {
-    final response = await _api.put(ApiEndpoints.markAllAsRead);
+    final response = await _api.post(ApiEndpoints.markAllAsRead);
     return response;
   }
 }

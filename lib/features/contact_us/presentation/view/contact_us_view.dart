@@ -44,9 +44,13 @@ class ContactUsView extends StatelessWidget {
                     child: SafeArea(
                       child: Column(
                         children: [
-                          LocalAppBar(
-                            title: 'إتصل بنا',
-                            isLight: true,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: LocalAppBar(
+                              title: 'إتصل بنا',
+                              isLight: true,
+                              prefixIcon: Icons.arrow_back_outlined,
+                            ),
                           ),
                         ],
                       ),

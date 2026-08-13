@@ -41,15 +41,15 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   }
 
   Future<void> _onMarkAllNotificationsAsReadEvent(
-    MarkAllNotificationsAsReadEvent event,
-    Emitter<NotificationState> emit,
-  ) async {
-    final result = await _repository.markAllNotificationsAsRead();
-    result.fold(
-      (error) => emit(NotificationError(message: error.message)),
-      (_) => emit(NotificationCountLoaded(count: 0)),
-    );
-  }
+  MarkAllNotificationsAsReadEvent event,
+  Emitter<NotificationState> emit,
+) async {
+  final result = await _repository.markAllNotificationsAsRead();
+  result.fold(
+    (error) => emit(NotificationError(message: error.message)),
+    (_) => add(GetNotificationsEvent()), 
+  );
+}
 
   Future<void> _onDeleteNotificationEvent(
     DeleteNotificationEvent event,

@@ -20,9 +20,13 @@ class EditProfileView extends StatelessWidget {
                 height: 170,
                 child: Column(
                   children: [
-                    const LocalAppBar(
-                      title: 'تعديل الملف الشخصي',
-                      isLight: true,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: const LocalAppBar(
+                        title: 'تعديل الملف الشخصي',
+                        isLight: true,
+                        prefixIcon: Icons.arrow_back_outlined,
+                      ),
                     ),
                   ],
                 ),

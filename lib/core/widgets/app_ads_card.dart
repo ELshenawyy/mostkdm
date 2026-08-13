@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:mostkdm/core/theme/app_colors.dart';
 import 'package:mostkdm/core/theme/app_text_style.dart';
 
@@ -31,8 +32,11 @@ class AppAdCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // التأكد من حالة الـ Skeletonizer
+    final isSkeletonEnabled = Skeletonizer.of(context).enabled;
+
     return GestureDetector(
-      onTap: onTap,
+      onTap: isSkeletonEnabled ? null : onTap,
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.surface,
@@ -48,36 +52,42 @@ class AppAdCard extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(12)),
-                  child: CachedNetworkImage(
-                    imageUrl: image,
-                    width: double.infinity,
+                  child: SizedBox(
                     height: 151,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(
-                      height: 151,
-                      color: AppColors.backgroundColor,
-                      child: const Center(
-                          child: CircularProgressIndicator(strokeWidth: 2)),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      height: 151,
-                      color: AppColors.backgroundColor,
-                      child: const Icon(
-                        Icons.image_not_supported_outlined,
-                        size: 40,
-                      ),
-                    ),
+                    width: double.infinity,
+                    // أثناء الـ Skeleton نكتفي بـ Container رمادي ليأخذ تأثير اللمعة بدون محاولة تحميل صورة
+                    child: isSkeletonEnabled || image.isEmpty
+                        ? Container(color: AppColors.backgroundColor)
+                        : CachedNetworkImage(
+                            imageUrl: image,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Container(
+                              color: AppColors.backgroundColor,
+                              child: const Center(
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => Container(
+                              color: AppColors.backgroundColor,
+                              child: const Icon(
+                                Icons.image_not_supported_outlined,
+                                size: 40,
+                              ),
+                            ),
+                          ),
                   ),
                 ),
                 Positioned(
                   top: 16,
                   left: 16,
-                  child: GestureDetector(
-                    onTap: onFavTap,
-                    child: Icon(
-                      isFavorite ? Icons.favorite : Icons.favorite_border,
-                      size: 18,
-                      color: AppColors.surface,
+                  child: Skeleton.ignore(
+                    child: GestureDetector(
+                      onTap: onFavTap,
+                      child: Icon(
+                        isFavorite ? Icons.favorite : Icons.favorite_border,
+                        size: 18,
+                        color: AppColors.surface,
+                      ),
                     ),
                   ),
                 ),
@@ -85,8 +95,8 @@ class AppAdCard extends StatelessWidget {
                   bottom: 8,
                   left: 8,
                   child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
                       color: AppColors.secondaryColor,
                       borderRadius: BorderRadius.circular(8),
@@ -94,9 +104,10 @@ class AppAdCard extends StatelessWidget {
                     child: Text(
                       '$price ₴',
                       style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13),
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                      ),
                     ),
                   ),
                 ),

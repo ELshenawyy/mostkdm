@@ -26,10 +26,11 @@ class _AdsViewBody extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
+          
           children: [
             const Padding(
-              padding: EdgeInsets.only(top: 20.0),
-              child: LocalAppBar(title: "الإعلانات"),
+              padding: EdgeInsets.only(top: 24,right: 12,left: 12),
+              child: LocalAppBar(title: "الإعلانات",prefixIcon: Icons.arrow_back_outlined,),
             ),
             BlocBuilder<AdsListBloc, AdsListState>(
               builder: (context, state) {

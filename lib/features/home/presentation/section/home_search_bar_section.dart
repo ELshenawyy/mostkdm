@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:go_router/go_router.dart';
 import 'package:mostkdm/core/router/router_names.dart';
 import 'package:mostkdm/core/widgets/app_search_field.dart';
-import 'package:mostkdm/features/search/presentation/widget/filter_bottom_sheet.dart';
 
 class HomeSearchSection extends StatelessWidget {
   const HomeSearchSection({super.key});
@@ -10,25 +10,13 @@ class HomeSearchSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         vertical: 12,
       ),
       child: AppSearchField(
         style: AppSearchFieldStyle.dark,
         onFieldTap: () => context.push(RouteNames.search),
-        onFilterTap: () {
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent,
-            builder: (_) => DraggableScrollableSheet(
-              initialChildSize: 0.8,
-              minChildSize: 0.8,
-              maxChildSize: 1,
-              builder: (_, controller) => const FilterBottomSheet(),
-            ),
-          );
-        },
+        onFilterTap: () => context.push(RouteNames.search, extra: true),
       ),
     );
   }

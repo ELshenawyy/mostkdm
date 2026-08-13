@@ -20,9 +20,9 @@ class AddAdView extends StatelessWidget {
           body: SafeArea(
             child: Column(
               children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12),
-                  child: LocalAppBar(title: 'إضافة إعلان جديد'),
+                Padding(
+                  padding:  EdgeInsets.symmetric(vertical: 12,horizontal: 12),
+                  child: LocalAppBar(title: 'إضافة إعلان جديد',prefixIcon: Icons.arrow_back_outlined,),
                 ),
                 const Expanded(child: AddAdStepperSection()),
               ],
@@ -57,8 +57,8 @@ class _EditAdViewBody extends StatelessWidget {
         child: Column(
           children: [
             const Padding(
-              padding: EdgeInsets.symmetric(vertical: 12),
-              child: LocalAppBar(title: 'تعديل الإعلان'),
+              padding: EdgeInsets.symmetric(vertical: 12,horizontal: 12),
+              child: LocalAppBar(title: 'تعديل الإعلان',prefixIcon: Icons.arrow_back_outlined,),
             ),
             Expanded(
               child: BlocConsumer<AdDetailsBloc, AdDetailsState>(

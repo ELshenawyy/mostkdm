@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:mostkdm/core/router/router_names.dart';
+import 'package:mostkdm/core/utils/core_dummy_data.dart'; // مسار ملف CoreDummyData الخاص بك
 import 'package:mostkdm/core/widgets/app_ads_card.dart';
 import 'package:mostkdm/features/favorite/presentation/bloc/favorite_bloc.dart';
 import 'package:mostkdm/features/favorite/presentation/bloc/favorite_event.dart';
@@ -15,14 +17,7 @@ class FavoriteAdsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FavoritesBloc, FavoriteState>(
       builder: (context, state) {
-        if (state is FavoriteLoading) {
-          return const Center(
-            child: Padding(
-              padding: EdgeInsets.all(32.0),
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
+        final isLoading = state is FavoriteLoading;
 
         if (state is FavoriteError) {
           return Center(
@@ -45,43 +40,52 @@ class FavoriteAdsSection extends StatelessWidget {
           );
         }
 
-        if (state is FavoriteLoaded) {
-          if (state.favoriteAds.isEmpty) {
+        if (state is FavoriteLoaded || isLoading) {
+          final adsList = isLoading
+              ? CoreDummyData.dummyAdsList
+              : (state as FavoriteLoaded).favoriteAds.reversed.toList();
+
+          if (!isLoading && adsList.isEmpty) {
             return const FavoritesEmptySection();
           }
-          final reversedList = state.favoriteAds.reversed.toList();
 
-          return ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(16),
-            itemCount: state.favoriteAds.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
-            itemBuilder: (context, i) {
-              final ad = reversedList[i];
-              
+          return Skeletonizer(
+            enabled: isLoading,
+            child: ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(16),
+              itemCount: adsList.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              itemBuilder: (context, i) {
+                final ad = adsList[i];
 
-              return AppAdCard(
-                image: ad.cover.isNotEmpty
-                    ? ad.cover
-                    : (ad.images.isNotEmpty ? ad.images.first : ''),
-                title: ad.title,
-                price: ad.price.toString(),
-                location: ad.location,
-                date: 'منذ ${ad.daysAgo} يوم',
-                views: '${ad.visitedCount} مشاهدة',
-                isFavorite: true,
-                onFavTap: () {
-                  context.read<FavoritesBloc>().add(
-                        ToggleFavoriteAdEvent(adId: ad.id, adItem: ad),
-                      );
-                },
-                onTap: () => context.push(
-                  RouteNames.adsDetails,
-                  extra: ad.id,
-                ),
-              );
-            },
+                return AppAdCard(
+                  image: ad.cover.isNotEmpty
+                      ? ad.cover
+                      : (ad.images.isNotEmpty ? ad.images.first : ''),
+                  title: ad.title,
+                  price: ad.price.toString(),
+                  location: ad.location,
+                  date: 'منذ ${ad.daysAgo} يوم',
+                  views: '${ad.visitedCount} مشاهدة',
+                  isFavorite: true,
+                  onFavTap: isLoading
+                      ? null
+                      : () {
+                          context.read<FavoritesBloc>().add(
+                                ToggleFavoriteAdEvent(adId: ad.id, adItem: ad),
+                              );
+                        },
+                  onTap: isLoading
+                      ? null
+                      : () => context.push(
+                            RouteNames.adsDetails,
+                            extra: ad.id,
+                          ),
+                );
+              },
+            ),
           );
         }
 
