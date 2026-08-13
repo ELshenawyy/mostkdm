@@ -7,7 +7,7 @@ import 'package:mostkdm/features/advertisement/data/models/category_model.dart';
 import 'package:mostkdm/features/home/presentation/widget/categories_item_widget.dart';
 
 class HomeCategoriesSection extends StatelessWidget {
-  final List<CategoryModel> categories; // ← جديد
+  final List<CategoryModel> categories; 
 
   const HomeCategoriesSection({super.key, required this.categories});
 

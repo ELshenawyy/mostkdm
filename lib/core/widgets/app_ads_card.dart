@@ -32,9 +32,7 @@ class AppAdCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // التأكد من حالة الـ Skeletonizer
-    final isSkeletonEnabled = Skeletonizer.of(context).enabled;
-
+final isSkeletonEnabled = Skeletonizer.maybeOf(context)?.enabled ?? false;
     return GestureDetector(
       onTap: isSkeletonEnabled ? null : onTap,
       child: Container(

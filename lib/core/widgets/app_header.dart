@@ -20,7 +20,10 @@ class AppHeader extends StatelessWidget {
           bottomRight: Radius.circular(50),
         ),
       ),
-      child: SafeArea(child: child),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child: SafeArea(child: child),
+      ),
     );
   }
 }

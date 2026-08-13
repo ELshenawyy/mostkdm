@@ -30,14 +30,14 @@ class CacheHelper {
   }
 
 String? getToken() {
-  return _prefs?.getString('token'); // ← مش _prefs!
+  return _prefs?.getString('token'); 
 }
 
 Future<void> saveToken(String token) async {
-  await _prefs?.setString('token', token); // ← مش _prefs!
+  await _prefs?.setString('token', token); 
 }
 
 Future<void> deleteToken() async {
-  await _prefs?.remove('token'); // ← مش _prefs!
+  await _prefs?.remove('token'); 
 }
 }

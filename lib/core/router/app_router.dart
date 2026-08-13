@@ -42,7 +42,7 @@ final appRouter = GoRouter(
   routes: [
     GoRoute(
       path: RouteNames.splash,
-      builder: (context, state) => const MainView(),
+      builder: (context, state) => const SplashView(),
     ),
     GoRoute(
       path: RouteNames.signup,
@@ -109,7 +109,7 @@ final appRouter = GoRouter(
     GoRoute(
       path: RouteNames.adsDetails,
       builder: (context, state) {
-final adId = (state.extra as String?) ?? '1';
+final adId = (state.extra?.toString()) ?? '1';
         return AdDetailsView(
           adId: adId,
         );

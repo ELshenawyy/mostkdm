@@ -64,7 +64,7 @@ class HomeView extends StatelessWidget {
                       Positioned(
                         left: 16,
                         right: 16,
-                        bottom: -200, 
+                        bottom: -180, 
                         child: HomeCategoriesSection(
                           categories: state is HomeSuccess
                               ? state.home.categories

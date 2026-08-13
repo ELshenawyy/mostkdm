@@ -18,6 +18,25 @@ class AdModel {
   final CategoryModel? category;
   final CategoryModel? subCategory;
 
+  const AdModel({
+    required this.id,
+    required this.title,
+    required this.cover,
+    required this.description,
+    required this.price,
+    required this.isActive,
+    required this.isActiveLabel,
+    required this.visitedCount,
+    required this.location,
+    required this.latitude,
+    required this.longitude,
+    required this.isFavourite,
+    required this.createdAt,
+    this.images = const [],
+    this.category,
+    this.subCategory,
+  });
+
   AdModel copyWith({
     bool? isActive,
     String? isActiveLabel,
@@ -42,24 +61,6 @@ class AdModel {
     );
   }
 
-  const AdModel({
-    required this.id,
-    required this.title,
-    required this.cover,
-    required this.description,
-    required this.price,
-    required this.isActive,
-    required this.isActiveLabel,
-    required this.visitedCount,
-    required this.location,
-    required this.latitude,
-    required this.longitude,
-    required this.isFavourite,
-    required this.createdAt,
-    this.images = const [],
-    this.category,
-    this.subCategory,
-  });
   int get daysAgo {
     try {
       return DateTime.now().difference(DateTime.parse(createdAt)).inDays;
@@ -80,7 +81,9 @@ class AdModel {
               : (int.tryParse(input['id']?.toString() ?? '') ?? 0),
           name: input['name']?.toString() ?? '',
           image: input['image']?.toString() ?? '',
-          isActive: input['is_active'] is bool ? input['is_active'] : true,
+          isActive: input['is_active'] is bool
+              ? input['is_active']
+              : (input['is_active'] == 1 || input['is_active'] == '1'),
           adsCount: input['ads_count'] is int
               ? input['ads_count']
               : (int.tryParse(input['ads_count']?.toString() ?? '') ?? 0),
@@ -101,6 +104,14 @@ class AdModel {
       return null;
     }
 
+    // دالة مساعدة لمعالجة الـ bool بأمان سواء جاء bool أو 1/0 أو "true"/"false"
+    bool parseBool(dynamic value) {
+      if (value is bool) return value;
+      if (value is int) return value == 1;
+      if (value is String) return value == '1' || value.toLowerCase() == 'true';
+      return false;
+    }
+
     return AdModel(
       id: json['id'] is int
           ? json['id']
@@ -109,18 +120,23 @@ class AdModel {
       cover: json['cover']?.toString() ?? '',
       description: json['description']?.toString() ?? '',
       price: json['price']?.toString() ?? '0.00',
-      isActive: json['is_active'] is bool ? json['is_active'] : false,
+      isActive: parseBool(json['is_active']),
       isActiveLabel: json['is_active_label']?.toString() ?? '',
-      visitedCount: json['visisted_count'] is int
-          ? json['visisted_count']
-          : (int.tryParse(json['visisted_count']?.toString() ?? '') ?? 0),
+      visitedCount: json['visited_count'] is int
+          ? json['visited_count']
+          : (int.tryParse(
+                  (json['visited_count'] ?? json['visisted_count'])?.toString() ?? '') ??
+              0),
       location: json['location']?.toString() ?? '',
       latitude: json['latitude']?.toString() ?? '0',
       longitude: json['longitude']?.toString() ?? '0',
-      isFavourite: json['is_favourite'] is bool ? json['is_favourite'] : false,
+      isFavourite: parseBool(json['is_favourite'] ?? json['is_favorite']),
       createdAt: json['created_at']?.toString() ?? '',
-      images: json['images'] != null
-          ? List<String>.from(json['images'].map((x) => x.toString()))
+      images: json['images'] is List
+          ? (json['images'] as List)
+              .map((item) => item?.toString() ?? '')
+              .where((item) => item.isNotEmpty)
+              .toList()
           : [],
       category: parseCategory(json['category']),
       subCategory: parseCategory(json['sub_category']),

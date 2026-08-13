@@ -1,3 +1,4 @@
+import 'package:mostkdm/core/cache/cache_helper.dart'; 
 import 'package:mostkdm/core/network/api_consumer.dart';
 import 'package:mostkdm/core/network/api_endpoints.dart';
 import 'package:mostkdm/core/network/dio_consumer.dart';
@@ -18,9 +19,7 @@ abstract class AuthRemoteDataSource {
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final ApiConsumer _api = DioConsumer();
 
-
   @override
-
   Future<AuthModel> login({
     required String mobile,
     required String password,
@@ -29,7 +28,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       ApiEndpoints.login,
       data: {'mobile': mobile, 'password': password},
     );
-    return AuthModel.fromJson(response);
+    
+    final authModel = AuthModel.fromJson(response);
+    
+    if (authModel.token != null && authModel.token!.isNotEmpty) {
+      await CacheHelper().saveToken(authModel.token!);
+    } else if (response['data']?['access_token'] != null) {
+      await CacheHelper().saveToken(response['data']['access_token']);
+    }
+
+    return authModel;
   }
 
   @override
@@ -46,7 +54,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-
   Future<String> verifyOtp({
     required String phone,
     required String otp,
@@ -55,7 +62,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       ApiEndpoints.verifyOtp,
       data: {'mobile': phone, 'code': otp},
     );
-    return response['data']['access_token'] ?? '';
+    
+    final token = response['data']?['access_token'] ?? '';
+    
+    if (token.isNotEmpty) {
+      await CacheHelper().saveToken(token);
+    }
+    
+    return token;
   }
 
   @override
@@ -91,7 +105,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       ApiEndpoints.verifyForgotOtp,
       data: {'mobile': phone, 'code': otp},
     );
-    return response['data']['access_token'] ?? '';
+    return response['data']?['access_token'] ?? '';
   }
 
   @override
@@ -122,6 +136,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> logout() async {
-    await _api.post(ApiEndpoints.logout);
+    try {
+      await _api.post(ApiEndpoints.logout);
+    } finally {
+      await CacheHelper().deleteToken();
+    }
   }
 }

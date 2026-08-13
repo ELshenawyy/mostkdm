@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:mostkdm/core/router/router_names.dart';
-import 'package:mostkdm/core/utils/core_dummy_data.dart'; // مسار ملف CoreDummyData الخاص بك
+import 'package:mostkdm/core/utils/core_dummy_data.dart'; 
 import 'package:mostkdm/core/widgets/app_ads_card.dart';
 import 'package:mostkdm/features/favorite/presentation/bloc/favorite_bloc.dart';
 import 'package:mostkdm/features/favorite/presentation/bloc/favorite_event.dart';
@@ -81,7 +81,7 @@ class FavoriteAdsSection extends StatelessWidget {
                       ? null
                       : () => context.push(
                             RouteNames.adsDetails,
-                            extra: ad.id,
+                            extra: ad.id.toString(),
                           ),
                 );
               },

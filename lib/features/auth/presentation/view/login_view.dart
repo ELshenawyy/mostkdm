@@ -32,21 +32,26 @@ class _LoginViewState extends State<LoginView> {
           }
         },
         child: Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  HeaderSection(
-                    title: 'مرحبا بعودتك',
-                    subtitle: 'سجل دخولك للمتابعة',
-                    imagePath: AppImages.onBoardingIcon,
+          resizeToAvoidBottomInset: true,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      HeaderSection(
+                        title: 'مرحبا بعودتك',
+                        subtitle: 'سجل دخولك للمتابعة',
+                        imagePath: AppImages.onBoardingIcon,
+                      ),
+                      LoginFormSection(
+                        formKey: _formKey,
+                      ),
+                    ],
                   ),
-                  LoginFormSection(
-                    formKey: _formKey,
-                  ),
-                ],
+                ),
               ),
             ),
           ),
